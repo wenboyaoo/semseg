@@ -17,6 +17,7 @@ import torch.multiprocessing as mp
 import torch.distributed as dist
 from tensorboardX import SummaryWriter
 
+from model.pspnet import PSPNet
 from util import dataset, transform, config
 from util.util import AverageMeter, poly_learning_rate, intersectionAndUnionGPU, find_free_port
 
@@ -26,8 +27,8 @@ cv2.setNumThreads(0)
 
 def get_parser():
     parser = argparse.ArgumentParser(description='PyTorch Semantic Segmentation')
-    parser.add_argument('--config', type=str, default='config/ade20k/ade20k_pspnet50.yaml', help='config file')
-    parser.add_argument('opts', help='see config/ade20k/ade20k_pspnet50.yaml for all options', default=None, nargs=argparse.REMAINDER)
+    parser.add_argument('--config', type=str, default='config/voc2012/voc2012_pspnet.yaml', help='config file')
+    parser.add_argument('opts', help='see config/voc2012/voc2012_pspnet.yaml for all options', default=None, nargs=argparse.REMAINDER)
     args = parser.parse_args()
     assert args.config is not None
     cfg = config.load_cfg_from_cfg_file(args.config)
@@ -57,27 +58,8 @@ def main_process():
 
 def check(args):
     assert args.classes > 1
-    assert args.zoom_factor in [1, 2, 4, 8]
-    if args.arch == 'psp':
-        assert (args.train_h - 1) % 8 == 0 and (args.train_w - 1) % 8 == 0
-    elif args.arch == 'psa':
-        if args.compact:
-            args.mask_h = (args.train_h - 1) // (8 * args.shrink_factor) + 1
-            args.mask_w = (args.train_w - 1) // (8 * args.shrink_factor) + 1
-        else:
-            assert (args.mask_h is None and args.mask_w is None) or (
-                        args.mask_h is not None and args.mask_w is not None)
-            if args.mask_h is None and args.mask_w is None:
-                args.mask_h = 2 * ((args.train_h - 1) // (8 * args.shrink_factor) + 1) - 1
-                args.mask_w = 2 * ((args.train_w - 1) // (8 * args.shrink_factor) + 1) - 1
-            else:
-                assert (args.mask_h % 2 == 1) and (args.mask_h >= 3) and (
-                        args.mask_h <= 2 * ((args.train_h - 1) // (8 * args.shrink_factor) + 1) - 1)
-                assert (args.mask_w % 2 == 1) and (args.mask_w >= 3) and (
-                        args.mask_w <= 2 * ((args.train_h - 1) // (8 * args.shrink_factor) + 1) - 1)
-    else:
-        raise Exception('architecture not supported yet'.format(args.arch))
-
+    assert args.split in ['train','val','test']
+    assert args.arch == 'psp'
 
 def main():
     args = get_parser()
@@ -119,18 +101,9 @@ def main_worker(gpu, ngpus_per_node, argss):
         dist.init_process_group(backend=args.dist_backend, init_method=args.dist_url, world_size=args.world_size, rank=args.rank)
 
     criterion = nn.CrossEntropyLoss(ignore_index=args.ignore_label)
-    if args.arch == 'psp':
-        from model.pspnet import PSPNet
-        model = PSPNet(layers=args.layers, classes=args.classes, zoom_factor=args.zoom_factor, criterion=criterion)
-        modules_ori = [model.layer0, model.layer1, model.layer2, model.layer3, model.layer4]
-        modules_new = [model.ppm, model.cls, model.aux]
-    elif args.arch == 'psa':
-        from model.psanet import PSANet
-        model = PSANet(layers=args.layers, classes=args.classes, zoom_factor=args.zoom_factor, psa_type=args.psa_type,
-                       compact=args.compact, shrink_factor=args.shrink_factor, mask_h=args.mask_h, mask_w=args.mask_w,
-                       normalization_factor=args.normalization_factor, psa_softmax=args.psa_softmax, criterion=criterion)
-        modules_ori = [model.layer0, model.layer1, model.layer2, model.layer3, model.layer4]
-        modules_new = [model.psa, model.cls, model.aux]
+    model = PSPNet(classes=args.classes, criterion=criterion)
+    modules_ori = [model.layer0, model.layer1, model.layer2, model.layer3, model.layer4]
+    modules_new = [model.ppm, model.cls, model.aux]
     params_list = []
     for module in modules_ori:
         params_list.append(dict(params=module.parameters(), lr=args.base_lr))
@@ -188,17 +161,13 @@ def main_worker(gpu, ngpus_per_node, argss):
     value_scale = 255
     mean = [0.485, 0.456, 0.406]
     mean = [item * value_scale for item in mean]
-    std = [0.229, 0.224, 0.225]
-    std = [item * value_scale for item in std]
 
     train_transform = transform.Compose([
         transform.RandScale([args.scale_min, args.scale_max]),
         transform.RandRotate([args.rotate_min, args.rotate_max], padding=mean, ignore_label=args.ignore_label),
         transform.RandomGaussianBlur(),
         transform.RandomHorizontalFlip(),
-        transform.Crop([args.train_h, args.train_w], crop_type='rand', padding=mean, ignore_label=args.ignore_label),
-        transform.ToTensor(),
-        transform.Normalize(mean=mean, std=std)])
+        dataset.dino_processor])
     train_data = dataset.SemData(split='train', data_root=args.data_root, data_list=args.train_list, transform=train_transform)
     if args.distributed:
         train_sampler = torch.utils.data.distributed.DistributedSampler(train_data)
@@ -206,10 +175,7 @@ def main_worker(gpu, ngpus_per_node, argss):
         train_sampler = None
     train_loader = torch.utils.data.DataLoader(train_data, batch_size=args.batch_size, shuffle=(train_sampler is None), num_workers=args.workers, pin_memory=True, sampler=train_sampler, drop_last=True)
     if args.evaluate:
-        val_transform = transform.Compose([
-            transform.Crop([args.train_h, args.train_w], crop_type='center', padding=mean, ignore_label=args.ignore_label),
-            transform.ToTensor(),
-            transform.Normalize(mean=mean, std=std)])
+        val_transform = dataset.dino_processor
         val_data = dataset.SemData(split='val', data_root=args.data_root, data_list=args.val_list, transform=val_transform)
         if args.distributed:
             val_sampler = torch.utils.data.distributed.DistributedSampler(val_data)
@@ -259,11 +225,6 @@ def train(train_loader, model, optimizer, epoch):
     max_iter = args.epochs * len(train_loader)
     for i, (input, target) in enumerate(train_loader):
         data_time.update(time.time() - end)
-        if args.zoom_factor != 8:
-            h = int((target.size()[1] - 1) / 8 * args.zoom_factor + 1)
-            w = int((target.size()[2] - 1) / 8 * args.zoom_factor + 1)
-            # 'nearest' mode doesn't support align_corners mode and 'bilinear' mode is fine for downsampling
-            target = F.interpolate(target.unsqueeze(1).float(), size=(h, w), mode='bilinear', align_corners=True).squeeze(1).long()
         input = input.cuda(non_blocking=True)
         target = target.cuda(non_blocking=True)
         output, main_loss, aux_loss = model(input, target)
@@ -358,7 +319,7 @@ def validate(val_loader, model, criterion):
         target = target.cuda(non_blocking=True)
         output = model(input)
         if args.zoom_factor != 8:
-            output = F.interpolate(output, size=target.size()[1:], mode='bilinear', align_corners=True)
+            output = F.interpolate(output, size=target.size()[1:], mode='bilinear', align_corners=False)
         loss = criterion(output, target)
 
         n = input.size(0)

@@ -1,2 +1,7 @@
-tensorboardX
-opencv-python
+tensorboardX>=2.6
+torch>=2.2
+torchvision>=0.17
+transformers>=4.56.0
+huggingface_hub>=0.24.2
+opencv-python>=4.8
+pyyaml>=6.0

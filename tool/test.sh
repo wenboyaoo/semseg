@@ -6,15 +6,13 @@
 ##SBATCH -c 10
 
 export PYTHONPATH=./
-eval "$(conda shell.bash hook)"
-conda activate pt140  # pytorch 1.4.0 env
 PYTHON=python
 
 dataset=$1
 exp_name=$2
-exp_dir=exp/${dataset}/${exp_name}
+exp_dir=exp/
 result_dir=${exp_dir}/result
-config=config/${dataset}/${dataset}_${exp_name}.yaml
+config=config.yaml
 now=$(date +"%Y%m%d_%H%M%S")
 
 mkdir -p ${result_dir}

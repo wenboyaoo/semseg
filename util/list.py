@@ -1,9 +1,6 @@
 import os
 
 root= "dataset/voc2012"
-
-img_dir = os.path.join(root,"JPEGImages")
-label_dir = os.path.join(root,"SegmentationClass")
 split_dir = os.path.join(root,"ImageSets/Segmentation")
 output_dir = os.path.join(root,"list")
 
@@ -17,8 +14,8 @@ for split in ["train","val"]:
     
     with open(txt_out, "w") as f:
         for name in names:
-            img_path = os.path.join(img_dir, f"{name}.jpg")
-            label_path = os.path.join(label_dir, f"{name}.png")
+            img_path = os.path.join("JPEGImages", f"{name}.jpg")
+            label_path = os.path.join("SegmentationClass", f"{name}.png")
             f.write(f"{img_path} {label_path}\n")
 
     print(f"{split} list saved to {txt_out}")
