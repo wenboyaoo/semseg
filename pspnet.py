@@ -26,10 +26,12 @@ class PPM(nn.Module):
 
 
 class PSPNet(nn.Module):
-    def __init__(self, bins=(1, 2, 3, 6), dropout=0.1, classes=2, use_ppm=True, backbone_name = "facebook/dinov3-convnext-tiny-pretrain-lvd1689m", criterion=nn.CrossEntropyLoss(ignore_index=255), zoom_factor=32):
+    def __init__(self, bins=(1, 2, 3, 6), dropout=0.1, classes=2, zoom_factor=32, use_ppm=True, backbone_name = "facebook/dinov3-convnext-tiny-pretrain-lvd1689m", criterion=nn.CrossEntropyLoss(ignore_index=255)):
         super(PSPNet, self).__init__()
         assert 768 % len(bins) == 0
         assert classes > 1
+        assert zoom_factor == 32
+        self.zoom_factor = zoom_factor
         self.use_ppm = use_ppm
         self.criterion = criterion
         self.zoom_factor = zoom_factor
@@ -62,12 +64,14 @@ class PSPNet(nn.Module):
 
     def forward(self, x, y=None):
         x_size = x.size()
+        assert (x_size[2]) % 32 == 0 and (x_size[3]) % 32 == 0
         h = x_size[2]
         w = x_size[3]
-        x = self.self.hidden_layers[0](x)
-        x = self.self.hidden_layers[1](x)
-        x_tmp = self.self.hidden_layers[2](x)
-        x = self.self.hidden_layers[3](x_tmp)
+
+        x = self.hidden_layers[0](x)
+        x = self.hidden_layers[1](x)
+        x_tmp = self.hidden_layers[2](x)
+        x = self.hidden_layers[3](x_tmp)
         if self.use_ppm:
             x = self.ppm(x)
         x = self.cls(x)
@@ -86,10 +90,8 @@ class PSPNet(nn.Module):
 
 
 if __name__ == '__main__':
-    import os
-    os.environ["CUDA_VISIBLE_DEVICES"] = '0'
-    input = torch.rand(4, 3, 473, 473)
-    model = PSPNet(bins=(1, 2, 3, 6), dropout=0.1, classes=21, zoom_factor=1, use_ppm=True, pretrained=True)
+    input = torch.rand(4, 3, 224, 224)
+    model = PSPNet(bins=(1, 2, 3, 6), dropout=0.1, classes=21, zoom_factor=32, use_ppm=True)
     model.eval()
     print(model)
     output = model(input)
