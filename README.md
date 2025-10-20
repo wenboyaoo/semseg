@@ -1,4 +1,4 @@
-# 基于 DINOv3 Backbone 的 PSPNet
+# DINOv3 作为 Backbone 的 PSPNet
 本仓库在 hszhao/semseg 的基础上修改，将 PSPNet 中的特征提取网络 ResNet 替换为 DINOv3 ConvNeXt Tiny，在 pascal voc 2012 数据集上训练和测试
 ## 修改内容
 在原始仓库 hszhao/semseg 的基础上进行了如下修改：
