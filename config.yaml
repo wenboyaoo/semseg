@@ -13,6 +13,7 @@ TRAIN:
   scale_max: 2.0  # maximum random scale
   rotate_min: -10  # minimum random rotate
   rotate_max: 10  # maximum random rotate
+  zoom_factor: 32
   ignore_label: 255
   aux_weight: 0.4
   train_gpu: [0]

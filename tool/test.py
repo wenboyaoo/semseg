@@ -124,7 +124,7 @@ def net_process(model, image, mean, std=None, flip=True):
     return output
 
 
-def scale_process(model, image, classes, crop_h, crop_w, h, w, mean, stride_rate=2/3):
+def scale_process(model, image, classes, crop_h, crop_w, h, w, mean, std=None, stride_rate=2/3):
     ori_h, ori_w, _ = image.shape
     pad_h = max(crop_h - ori_h, 0)
     pad_w = max(crop_w - ori_w, 0)
@@ -149,14 +149,14 @@ def scale_process(model, image, classes, crop_h, crop_w, h, w, mean, stride_rate
             s_w = e_w - crop_w
             image_crop = image[s_h:e_h, s_w:e_w].copy()
             count_crop[s_h:e_h, s_w:e_w] += 1
-            prediction_crop[s_h:e_h, s_w:e_w, :] += net_process(model, image_crop)
+            prediction_crop[s_h:e_h, s_w:e_w, :] += net_process(model, image_crop, mean, std)
     prediction_crop /= np.expand_dims(count_crop, 2)
     prediction_crop = prediction_crop[pad_h_half:pad_h_half+ori_h, pad_w_half:pad_w_half+ori_w]
     prediction = cv2.resize(prediction_crop, (w, h), interpolation=cv2.INTER_LINEAR)
     return prediction
 
 
-def test(test_loader, data_list, model, classes, mean, base_size, crop_h, crop_w, scales, gray_folder, color_folder, colors):
+def test(test_loader, data_list, model, classes, mean, std, base_size, crop_h, crop_w, scales, gray_folder, color_folder, colors):
     logger.info('>>>>>>>>>>>>>>>> Start Evaluation >>>>>>>>>>>>>>>>')
     data_time = AverageMeter()
     batch_time = AverageMeter()
@@ -177,7 +177,7 @@ def test(test_loader, data_list, model, classes, mean, base_size, crop_h, crop_w
             else:
                 new_h = round(long_size/float(w)*h)
             image_scale = cv2.resize(image, (new_w, new_h), interpolation=cv2.INTER_LINEAR)
-            prediction += scale_process(model, image_scale, classes, crop_h, crop_w, h, w, mean)
+            prediction += scale_process(model, image_scale, classes, crop_h, crop_w, h, w, mean, std)
         prediction /= len(scales)
         prediction = np.argmax(prediction, axis=2)
         batch_time.update(time.time() - end)
@@ -199,7 +199,6 @@ def test(test_loader, data_list, model, classes, mean, base_size, crop_h, crop_w
         cv2.imwrite(gray_path, gray)
         color.save(color_path)
     logger.info('<<<<<<<<<<<<<<<<< End Evaluation <<<<<<<<<<<<<<<<<')
-
 
 def cal_acc(data_list, pred_folder, classes, names):
     intersection_meter = AverageMeter()
