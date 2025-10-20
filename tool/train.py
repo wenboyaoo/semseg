@@ -17,7 +17,7 @@ import torch.multiprocessing as mp
 import torch.distributed as dist
 from tensorboardX import SummaryWriter
 
-from model.pspnet import PSPNet
+from pspnet import PSPNet
 from util import dataset, transform, config
 from util.util import AverageMeter, poly_learning_rate, intersectionAndUnionGPU, find_free_port
 
@@ -27,8 +27,8 @@ cv2.setNumThreads(0)
 
 def get_parser():
     parser = argparse.ArgumentParser(description='PyTorch Semantic Segmentation')
-    parser.add_argument('--config', type=str, default='config/voc2012/voc2012_pspnet.yaml', help='config file')
-    parser.add_argument('opts', help='see config/voc2012/voc2012_pspnet.yaml for all options', default=None, nargs=argparse.REMAINDER)
+    parser.add_argument('--config', type=str, default='config.yaml', help='config file')
+    parser.add_argument('opts', help='see config.yaml for all options', default=None, nargs=argparse.REMAINDER)
     args = parser.parse_args()
     assert args.config is not None
     cfg = config.load_cfg_from_cfg_file(args.config)
@@ -58,6 +58,8 @@ def main_process():
 
 def check(args):
     assert args.classes > 1
+    assert args.zoom_factor == 32
+    assert (args.train_h) % 32 == 0 and (args.train_w) % 32 == 0
     assert args.split in ['train','val','test']
     assert args.arch == 'psp'
 
@@ -101,8 +103,8 @@ def main_worker(gpu, ngpus_per_node, argss):
         dist.init_process_group(backend=args.dist_backend, init_method=args.dist_url, world_size=args.world_size, rank=args.rank)
 
     criterion = nn.CrossEntropyLoss(ignore_index=args.ignore_label)
-    model = PSPNet(classes=args.classes, criterion=criterion)
-    modules_ori = [model.layer0, model.layer1, model.layer2, model.layer3, model.layer4]
+    model = PSPNet(classes=args.classes, zoom_factor=args.zoom_factor,criterion=criterion)
+    modules_ori = model.hidden_layers
     modules_new = [model.ppm, model.cls, model.aux]
     params_list = []
     for module in modules_ori:
@@ -161,13 +163,17 @@ def main_worker(gpu, ngpus_per_node, argss):
     value_scale = 255
     mean = [0.485, 0.456, 0.406]
     mean = [item * value_scale for item in mean]
+    std = [0.229, 0.224, 0.225]
+    std = [item * value_scale for item in std]
 
     train_transform = transform.Compose([
         transform.RandScale([args.scale_min, args.scale_max]),
         transform.RandRotate([args.rotate_min, args.rotate_max], padding=mean, ignore_label=args.ignore_label),
         transform.RandomGaussianBlur(),
         transform.RandomHorizontalFlip(),
-        dataset.dino_processor])
+        transform.Crop([args.train_h, args.train_w], crop_type='rand', padding=mean, ignore_label=args.ignore_label),
+        transform.ToTensor(),
+        transform.Normalize(mean=mean, std=std)])
     train_data = dataset.SemData(split='train', data_root=args.data_root, data_list=args.train_list, transform=train_transform)
     if args.distributed:
         train_sampler = torch.utils.data.distributed.DistributedSampler(train_data)
@@ -175,7 +181,10 @@ def main_worker(gpu, ngpus_per_node, argss):
         train_sampler = None
     train_loader = torch.utils.data.DataLoader(train_data, batch_size=args.batch_size, shuffle=(train_sampler is None), num_workers=args.workers, pin_memory=True, sampler=train_sampler, drop_last=True)
     if args.evaluate:
-        val_transform = dataset.dino_processor
+        val_transform = transform.Compose([
+            transform.ApplyHFProcessor(dataset.dino_processor),
+            transform.ToLabelTensor(),
+        ])
         val_data = dataset.SemData(split='val', data_root=args.data_root, data_list=args.val_list, transform=val_transform)
         if args.distributed:
             val_sampler = torch.utils.data.distributed.DistributedSampler(val_data)

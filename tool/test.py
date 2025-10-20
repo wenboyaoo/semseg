@@ -12,7 +12,7 @@ import torch.nn.functional as F
 import torch.nn.parallel
 import torch.utils.data
 
-from model.pspnet import PSPNet
+from pspnet import PSPNet
 from util import dataset, transform, config
 from util.util import AverageMeter, intersectionAndUnion, check_makedirs, colorize
 
@@ -21,8 +21,8 @@ cv2.ocl.setUseOpenCL(False)
 
 def get_parser():
     parser = argparse.ArgumentParser(description='PyTorch Semantic Segmentation')
-    parser.add_argument('--config', type=str, default='config/voc2012/voc2012_pspnet.yaml', help='config file')
-    parser.add_argument('opts', help='see config/voc2012/voc2012_pspnet.yaml for all options', default=None, nargs=argparse.REMAINDER)
+    parser.add_argument('--config', type=str, default='config.yaml', help='config file')
+    parser.add_argument('opts', help='see config.yaml for all options', default=None, nargs=argparse.REMAINDER)
     args = parser.parse_args()
     assert args.config is not None
     cfg = config.load_cfg_from_cfg_file(args.config)
@@ -44,6 +44,8 @@ def get_logger():
 
 def check(args):
     assert args.classes > 1
+    assert args.zoom_factor == 32
+    assert (args.train_h) % 32 == 0 and (args.train_w) % 32 == 0
     assert args.split in ['train','val','test']
     assert args.arch == 'psp'
 
@@ -79,7 +81,7 @@ def main():
     names = [line.rstrip('\n') for line in open(args.names_path)]
 
     if not args.has_prediction:
-        model = PSPNet(classes=args.classes)
+        model = PSPNet(classes=args.classes, zoom_factor=args.zoom_factor)
         logger.info(model)
         model = torch.nn.DataParallel(model).cuda()
         cudnn.benchmark = True
@@ -95,9 +97,15 @@ def main():
         cal_acc(test_data.data_list, gray_folder, args.classes, names)
 
 
-def net_process(model, image, flip=True):
-    inputs = dataset.dino_processor(images=image, return_tensors="pt")
-    input = inputs["pixel_values"].cuda()
+def net_process(model, image, mean, std=None, flip=True):
+    input = torch.from_numpy(image.transpose((2, 0, 1))).float()
+    if std is None:
+        for t, m in zip(input, mean):
+            t.sub_(m)
+    else:
+        for t, m, s in zip(input, mean, std):
+            t.sub_(m).div_(s)
+    input = input.unsqueeze(0).cuda()
     if flip:
         input = torch.cat([input, input.flip(3)], 0)
     with torch.no_grad():
@@ -105,7 +113,7 @@ def net_process(model, image, flip=True):
     _, _, h_i, w_i = input.shape
     _, _, h_o, w_o = output.shape
     if (h_o != h_i) or (w_o != w_i):
-        output = F.interpolate(output, (h_i, w_i), mode='bilinear', align_corners=False)
+        output = F.interpolate(output, (h_i, w_i), mode='bilinear', align_corners=True)
     output = F.softmax(output, dim=1)
     if flip:
         output = (output[0] + output[1].flip(2)) / 2

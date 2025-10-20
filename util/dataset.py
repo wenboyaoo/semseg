@@ -49,18 +49,6 @@ def make_dataset(split='train', data_root=None, data_list=None):
     print("Checking image&label pair {} list done!".format(split))
     return image_label_list
 
-class HFProcessorTransform:
-    def __init__(self, processor):
-        super().__init__()
-        self.processor = processor
-
-    def __call__(self, img):
-        out = self.processor(images=img, return_tensors="pt")
-        return out['pixel_values'].squeeze(0)
-
-pretrained_model_name = "facebook/dinov3-convnext-tiny-pretrain-lvd1689m"
-dino_processor = AutoImageProcessor.from_pretrained(pretrained_model_name)
-
 class SemData(Dataset):
     def __init__(self, split='train', data_root=None, data_list=None, transform=None):
         self.split = split

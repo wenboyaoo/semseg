@@ -1,8 +1,7 @@
 import torch
 from torch import nn
 import torch.nn.functional as F
-
-import model.dinov3 as models
+from transformers import AutoModel
 
 
 class PPM(nn.Module):
@@ -27,14 +26,19 @@ class PPM(nn.Module):
 
 
 class PSPNet(nn.Module):
-    def __init__(self, bins=(1, 2, 3, 6), dropout=0.1, classes=2,use_ppm=True, criterion=nn.CrossEntropyLoss(ignore_index=255)):
+    def __init__(self, bins=(1, 2, 3, 6), dropout=0.1, classes=2, use_ppm=True, backbone_name = "facebook/dinov3-convnext-tiny-pretrain-lvd1689m", criterion=nn.CrossEntropyLoss(ignore_index=255), zoom_factor=32):
         super(PSPNet, self).__init__()
         assert 768 % len(bins) == 0
         assert classes > 1
         self.use_ppm = use_ppm
         self.criterion = criterion
-        convnext = models.DinoV3ConvNeXtTiny()
-        self.layer0, self.layer1, self.layer2, self.layer3 = convnext.layers[0], convnext.layers[1], convnext.layers[2], convnext.layers[3]
+        self.zoom_factor = zoom_factor
+        self.backbone_name = backbone_name
+        self.backbone = AutoModel.from_pretrained(self.backbone_name, output_hidden_states=True)
+        self.hidden_layers = list(self.backbone.stages)
+        for layer in self.hidden_layers:
+            for param in layer.parameters():
+                param.requires_grad = True
 
         fea_dim = 768
         if use_ppm:
@@ -60,11 +64,10 @@ class PSPNet(nn.Module):
         x_size = x.size()
         h = x_size[2]
         w = x_size[3]
-
-        x = self.layer0(x)
-        x = self.layer1(x)
-        x_tmp = self.layer2(x)
-        x = self.layer3(x_tmp)
+        x = self.self.hidden_layers[0](x)
+        x = self.self.hidden_layers[1](x)
+        x_tmp = self.self.hidden_layers[2](x)
+        x = self.self.hidden_layers[3](x_tmp)
         if self.use_ppm:
             x = self.ppm(x)
         x = self.cls(x)
