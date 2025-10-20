@@ -1,0 +1,1791 @@
+[2025-10-20 07:55:55,069 INFO test.py line 57 30680] arch: psp
+aux_weight: 0.4
+base_lr: 0.01
+base_size: 512
+batch_size: 16
+batch_size_val: 8
+classes: 21
+colors_path: data/voc2012/voc2012_colors.txt
+data_root: dataset/voc2012
+dist_backend: nccl
+dist_url: tcp://127.0.0.1:6789
+epochs: 50
+evaluate: False
+has_prediction: False
+ignore_label: 255
+index_start: 0
+index_step: 0
+manual_seed: None
+model_path: exp/voc2012/pspnet50/model/train_epoch_50.pth
+momentum: 0.9
+multiprocessing_distributed: False
+names_path: data/voc2012/voc2012_names.txt
+power: 0.9
+print_freq: 10
+rank: 0
+resume: None
+rotate_max: 10
+rotate_min: -10
+save_folder: exp/voc2012/pspnet50/result/epoch_50/val/ss
+save_freq: 1
+save_path: exp/voc2012/pspnet50/model
+scale_max: 2.0
+scale_min: 0.5
+scales: [1.0]
+split: val
+start_epoch: 0
+sync_bn: False
+test_gpu: [0]
+test_h: 224
+test_list: dataset/voc2012/list/val.txt
+test_w: 224
+train_gpu: [0]
+train_h: 224
+train_list: dataset/voc2012/list/train.txt
+train_w: 224
+val_list: dataset/voc2012/list/val.txt
+weight: None
+weight_decay: 0.0001
+workers: 16
+world_size: 1
+zoom_factor: 32
+[2025-10-20 07:55:55,069 INFO test.py line 58 30680] => creating model ...
+[2025-10-20 07:55:55,069 INFO test.py line 59 30680] Classes: 21
+Totally 1449 samples in val set.
+Starting Checking image&label pair val list...
+Checking image&label pair val list done!
+[2025-10-20 07:55:55,482 INFO test.py line 84 30680] PSPNet(
+  (criterion): CrossEntropyLoss()
+  (backbone): DINOv3ConvNextModel(
+    (stages): ModuleList(
+      (0): DINOv3ConvNextStage(
+        (downsample_layers): ModuleList(
+          (0): Conv2d(3, 96, kernel_size=(4, 4), stride=(4, 4))
+          (1): DINOv3ConvNextLayerNorm((96,), eps=1e-06, elementwise_affine=True)
+        )
+        (layers): ModuleList(
+          (0-2): 3 x DINOv3ConvNextLayer(
+            (depthwise_conv): Conv2d(96, 96, kernel_size=(7, 7), stride=(1, 1), padding=(3, 3), groups=96)
+            (layer_norm): DINOv3ConvNextLayerNorm((96,), eps=1e-06, elementwise_affine=True)
+            (pointwise_conv1): Linear(in_features=96, out_features=384, bias=True)
+            (activation_fn): GELUActivation()
+            (pointwise_conv2): Linear(in_features=384, out_features=96, bias=True)
+            (drop_path): Identity()
+          )
+        )
+      )
+      (1): DINOv3ConvNextStage(
+        (downsample_layers): ModuleList(
+          (0): DINOv3ConvNextLayerNorm((96,), eps=1e-06, elementwise_affine=True)
+          (1): Conv2d(96, 192, kernel_size=(2, 2), stride=(2, 2))
+        )
+        (layers): ModuleList(
+          (0-2): 3 x DINOv3ConvNextLayer(
+            (depthwise_conv): Conv2d(192, 192, kernel_size=(7, 7), stride=(1, 1), padding=(3, 3), groups=192)
+            (layer_norm): DINOv3ConvNextLayerNorm((192,), eps=1e-06, elementwise_affine=True)
+            (pointwise_conv1): Linear(in_features=192, out_features=768, bias=True)
+            (activation_fn): GELUActivation()
+            (pointwise_conv2): Linear(in_features=768, out_features=192, bias=True)
+            (drop_path): Identity()
+          )
+        )
+      )
+      (2): DINOv3ConvNextStage(
+        (downsample_layers): ModuleList(
+          (0): DINOv3ConvNextLayerNorm((192,), eps=1e-06, elementwise_affine=True)
+          (1): Conv2d(192, 384, kernel_size=(2, 2), stride=(2, 2))
+        )
+        (layers): ModuleList(
+          (0-8): 9 x DINOv3ConvNextLayer(
+            (depthwise_conv): Conv2d(384, 384, kernel_size=(7, 7), stride=(1, 1), padding=(3, 3), groups=384)
+            (layer_norm): DINOv3ConvNextLayerNorm((384,), eps=1e-06, elementwise_affine=True)
+            (pointwise_conv1): Linear(in_features=384, out_features=1536, bias=True)
+            (activation_fn): GELUActivation()
+            (pointwise_conv2): Linear(in_features=1536, out_features=384, bias=True)
+            (drop_path): Identity()
+          )
+        )
+      )
+      (3): DINOv3ConvNextStage(
+        (downsample_layers): ModuleList(
+          (0): DINOv3ConvNextLayerNorm((384,), eps=1e-06, elementwise_affine=True)
+          (1): Conv2d(384, 768, kernel_size=(2, 2), stride=(2, 2))
+        )
+        (layers): ModuleList(
+          (0-2): 3 x DINOv3ConvNextLayer(
+            (depthwise_conv): Conv2d(768, 768, kernel_size=(7, 7), stride=(1, 1), padding=(3, 3), groups=768)
+            (layer_norm): DINOv3ConvNextLayerNorm((768,), eps=1e-06, elementwise_affine=True)
+            (pointwise_conv1): Linear(in_features=768, out_features=3072, bias=True)
+            (activation_fn): GELUActivation()
+            (pointwise_conv2): Linear(in_features=3072, out_features=768, bias=True)
+            (drop_path): Identity()
+          )
+        )
+      )
+    )
+    (layer_norm): LayerNorm((768,), eps=1e-06, elementwise_affine=True)
+    (pool): AdaptiveAvgPool2d(output_size=1)
+  )
+  (ppm): PPM(
+    (features): ModuleList(
+      (0): Sequential(
+        (0): AdaptiveAvgPool2d(output_size=1)
+        (1): Conv2d(768, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (2): BatchNorm2d(192, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (3): ReLU(inplace=True)
+      )
+      (1): Sequential(
+        (0): AdaptiveAvgPool2d(output_size=2)
+        (1): Conv2d(768, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (2): BatchNorm2d(192, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (3): ReLU(inplace=True)
+      )
+      (2): Sequential(
+        (0): AdaptiveAvgPool2d(output_size=3)
+        (1): Conv2d(768, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (2): BatchNorm2d(192, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (3): ReLU(inplace=True)
+      )
+      (3): Sequential(
+        (0): AdaptiveAvgPool2d(output_size=6)
+        (1): Conv2d(768, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (2): BatchNorm2d(192, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (3): ReLU(inplace=True)
+      )
+    )
+  )
+  (cls): Sequential(
+    (0): Conv2d(1536, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU(inplace=True)
+    (3): Dropout2d(p=0.1, inplace=False)
+    (4): Conv2d(512, 21, kernel_size=(1, 1), stride=(1, 1))
+  )
+  (aux): Sequential(
+    (0): Conv2d(384, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU(inplace=True)
+    (3): Dropout2d(p=0.1, inplace=False)
+    (4): Conv2d(256, 21, kernel_size=(1, 1), stride=(1, 1))
+  )
+)
+[2025-10-20 07:55:55,741 INFO test.py line 88 30680] => loading checkpoint 'exp/voc2012/pspnet50/model/train_epoch_50.pth'
+[2025-10-20 07:55:56,000 INFO test.py line 91 30680] => loaded checkpoint 'exp/voc2012/pspnet50/model/train_epoch_50.pth'
+[2025-10-20 07:55:56,000 INFO test.py line 159 30680] >>>>>>>>>>>>>>>> Start Evaluation >>>>>>>>>>>>>>>>
+[2025-10-20 07:56:05,566 INFO test.py line 185 30680] Test: [10/1449] Data 0.014 (0.037) Batch 0.134 (0.956).
+[2025-10-20 07:56:07,005 INFO test.py line 185 30680] Test: [20/1449] Data 0.015 (0.026) Batch 0.164 (0.550).
+[2025-10-20 07:56:08,422 INFO test.py line 185 30680] Test: [30/1449] Data 0.012 (0.022) Batch 0.183 (0.414).
+[2025-10-20 07:56:09,742 INFO test.py line 185 30680] Test: [40/1449] Data 0.016 (0.020) Batch 0.139 (0.344).
+[2025-10-20 07:56:11,070 INFO test.py line 185 30680] Test: [50/1449] Data 0.013 (0.019) Batch 0.198 (0.301).
+[2025-10-20 07:56:12,713 INFO test.py line 185 30680] Test: [60/1449] Data 0.012 (0.018) Batch 0.182 (0.279).
+[2025-10-20 07:56:14,173 INFO test.py line 185 30680] Test: [70/1449] Data 0.013 (0.018) Batch 0.184 (0.260).
+[2025-10-20 07:56:15,592 INFO test.py line 185 30680] Test: [80/1449] Data 0.017 (0.017) Batch 0.200 (0.245).
+[2025-10-20 07:56:17,003 INFO test.py line 185 30680] Test: [90/1449] Data 0.014 (0.017) Batch 0.121 (0.233).
+[2025-10-20 07:56:18,444 INFO test.py line 185 30680] Test: [100/1449] Data 0.016 (0.017) Batch 0.122 (0.224).
+[2025-10-20 07:56:19,783 INFO test.py line 185 30680] Test: [110/1449] Data 0.015 (0.017) Batch 0.095 (0.216).
+[2025-10-20 07:56:21,005 INFO test.py line 185 30680] Test: [120/1449] Data 0.012 (0.016) Batch 0.091 (0.208).
+[2025-10-20 07:56:22,314 INFO test.py line 185 30680] Test: [130/1449] Data 0.015 (0.016) Batch 0.095 (0.202).
+[2025-10-20 07:56:23,663 INFO test.py line 185 30680] Test: [140/1449] Data 0.016 (0.016) Batch 0.123 (0.198).
+[2025-10-20 07:56:25,033 INFO test.py line 185 30680] Test: [150/1449] Data 0.017 (0.016) Batch 0.137 (0.194).
+[2025-10-20 07:56:26,327 INFO test.py line 185 30680] Test: [160/1449] Data 0.016 (0.016) Batch 0.155 (0.190).
+[2025-10-20 07:56:27,644 INFO test.py line 185 30680] Test: [170/1449] Data 0.014 (0.016) Batch 0.121 (0.186).
+[2025-10-20 07:56:43,197 INFO test.py line 185 30680] Test: [180/1449] Data 0.016 (0.095) Batch 0.145 (0.262).
+[2025-10-20 07:56:44,461 INFO test.py line 185 30680] Test: [190/1449] Data 0.012 (0.090) Batch 0.129 (0.255).
+[2025-10-20 07:56:45,848 INFO test.py line 185 30680] Test: [200/1449] Data 0.014 (0.086) Batch 0.209 (0.249).
+[2025-10-20 07:56:47,364 INFO test.py line 185 30680] Test: [210/1449] Data 0.016 (0.083) Batch 0.156 (0.245).
+[2025-10-20 07:56:48,690 INFO test.py line 185 30680] Test: [220/1449] Data 0.016 (0.080) Batch 0.091 (0.239).
+[2025-10-20 07:56:50,049 INFO test.py line 185 30680] Test: [230/1449] Data 0.016 (0.077) Batch 0.155 (0.235).
+[2025-10-20 07:56:51,454 INFO test.py line 185 30680] Test: [240/1449] Data 0.015 (0.074) Batch 0.201 (0.231).
+[2025-10-20 07:56:52,972 INFO test.py line 185 30680] Test: [250/1449] Data 0.016 (0.072) Batch 0.183 (0.228).
+[2025-10-20 07:56:54,323 INFO test.py line 185 30680] Test: [260/1449] Data 0.021 (0.070) Batch 0.189 (0.224).
+[2025-10-20 07:56:55,716 INFO test.py line 185 30680] Test: [270/1449] Data 0.014 (0.068) Batch 0.156 (0.221).
+[2025-10-20 07:56:57,053 INFO test.py line 185 30680] Test: [280/1449] Data 0.016 (0.066) Batch 0.172 (0.218).
+[2025-10-20 07:56:58,496 INFO test.py line 185 30680] Test: [290/1449] Data 0.020 (0.064) Batch 0.189 (0.215).
+[2025-10-20 07:56:59,898 INFO test.py line 185 30680] Test: [300/1449] Data 0.014 (0.062) Batch 0.150 (0.213).
+[2025-10-20 07:57:01,398 INFO test.py line 185 30680] Test: [310/1449] Data 0.016 (0.061) Batch 0.122 (0.211).
+[2025-10-20 07:57:02,869 INFO test.py line 185 30680] Test: [320/1449] Data 0.014 (0.059) Batch 0.147 (0.209).
+[2025-10-20 07:57:04,120 INFO test.py line 185 30680] Test: [330/1449] Data 0.013 (0.058) Batch 0.089 (0.206).
+[2025-10-20 07:57:05,296 INFO test.py line 185 30680] Test: [340/1449] Data 0.012 (0.057) Batch 0.131 (0.204).
+[2025-10-20 07:57:06,611 INFO test.py line 185 30680] Test: [350/1449] Data 0.016 (0.056) Batch 0.103 (0.202).
+[2025-10-20 07:57:07,817 INFO test.py line 185 30680] Test: [360/1449] Data 0.014 (0.054) Batch 0.133 (0.199).
+[2025-10-20 07:57:09,084 INFO test.py line 185 30680] Test: [370/1449] Data 0.013 (0.053) Batch 0.144 (0.198).
+[2025-10-20 07:57:10,428 INFO test.py line 185 30680] Test: [380/1449] Data 0.015 (0.052) Batch 0.121 (0.196).
+[2025-10-20 07:57:11,776 INFO test.py line 185 30680] Test: [390/1449] Data 0.014 (0.051) Batch 0.153 (0.194).
+[2025-10-20 07:57:13,142 INFO test.py line 185 30680] Test: [400/1449] Data 0.014 (0.050) Batch 0.084 (0.193).
+[2025-10-20 07:57:14,638 INFO test.py line 185 30680] Test: [410/1449] Data 0.014 (0.050) Batch 0.154 (0.192).
+[2025-10-20 07:57:15,877 INFO test.py line 185 30680] Test: [420/1449] Data 0.015 (0.049) Batch 0.122 (0.190).
+[2025-10-20 07:57:17,300 INFO test.py line 185 30680] Test: [430/1449] Data 0.016 (0.048) Batch 0.124 (0.189).
+[2025-10-20 07:57:18,804 INFO test.py line 185 30680] Test: [440/1449] Data 0.014 (0.047) Batch 0.155 (0.188).
+[2025-10-20 07:57:20,307 INFO test.py line 185 30680] Test: [450/1449] Data 0.015 (0.047) Batch 0.155 (0.187).
+[2025-10-20 07:57:21,544 INFO test.py line 185 30680] Test: [460/1449] Data 0.019 (0.046) Batch 0.157 (0.186).
+[2025-10-20 07:57:23,004 INFO test.py line 185 30680] Test: [470/1449] Data 0.014 (0.045) Batch 0.193 (0.185).
+[2025-10-20 07:57:24,503 INFO test.py line 185 30680] Test: [480/1449] Data 0.013 (0.045) Batch 0.179 (0.184).
+[2025-10-20 07:57:25,886 INFO test.py line 185 30680] Test: [490/1449] Data 0.013 (0.044) Batch 0.102 (0.183).
+[2025-10-20 07:57:27,221 INFO test.py line 185 30680] Test: [500/1449] Data 0.017 (0.043) Batch 0.185 (0.182).
+[2025-10-20 07:57:28,494 INFO test.py line 185 30680] Test: [510/1449] Data 0.015 (0.043) Batch 0.138 (0.181).
+[2025-10-20 07:57:29,854 INFO test.py line 185 30680] Test: [520/1449] Data 0.015 (0.042) Batch 0.153 (0.180).
+[2025-10-20 07:57:31,201 INFO test.py line 185 30680] Test: [530/1449] Data 0.015 (0.042) Batch 0.089 (0.180).
+[2025-10-20 07:57:32,620 INFO test.py line 185 30680] Test: [540/1449] Data 0.015 (0.041) Batch 0.119 (0.179).
+[2025-10-20 07:57:45,797 INFO test.py line 185 30680] Test: [550/1449] Data 0.015 (0.062) Batch 0.178 (0.200).
+[2025-10-20 07:57:47,141 INFO test.py line 185 30680] Test: [560/1449] Data 0.012 (0.061) Batch 0.121 (0.198).
+[2025-10-20 07:57:48,632 INFO test.py line 185 30680] Test: [570/1449] Data 0.015 (0.060) Batch 0.137 (0.198).
+[2025-10-20 07:57:49,923 INFO test.py line 185 30680] Test: [580/1449] Data 0.016 (0.060) Batch 0.098 (0.196).
+[2025-10-20 07:57:51,339 INFO test.py line 185 30680] Test: [590/1449] Data 0.013 (0.059) Batch 0.132 (0.195).
+[2025-10-20 07:57:52,750 INFO test.py line 185 30680] Test: [600/1449] Data 0.013 (0.058) Batch 0.183 (0.195).
+[2025-10-20 07:57:54,085 INFO test.py line 185 30680] Test: [610/1449] Data 0.014 (0.057) Batch 0.122 (0.194).
+[2025-10-20 07:57:55,432 INFO test.py line 185 30680] Test: [620/1449] Data 0.014 (0.057) Batch 0.133 (0.193).
+[2025-10-20 07:57:56,648 INFO test.py line 185 30680] Test: [630/1449] Data 0.011 (0.056) Batch 0.092 (0.191).
+[2025-10-20 07:57:58,020 INFO test.py line 185 30680] Test: [640/1449] Data 0.012 (0.055) Batch 0.140 (0.191).
+[2025-10-20 07:57:59,286 INFO test.py line 185 30680] Test: [650/1449] Data 0.013 (0.055) Batch 0.115 (0.190).
+[2025-10-20 07:58:00,528 INFO test.py line 185 30680] Test: [660/1449] Data 0.013 (0.054) Batch 0.087 (0.189).
+[2025-10-20 07:58:01,950 INFO test.py line 185 30680] Test: [670/1449] Data 0.013 (0.053) Batch 0.139 (0.188).
+[2025-10-20 07:58:03,405 INFO test.py line 185 30680] Test: [680/1449] Data 0.013 (0.053) Batch 0.147 (0.187).
+[2025-10-20 07:58:04,581 INFO test.py line 185 30680] Test: [690/1449] Data 0.017 (0.052) Batch 0.090 (0.186).
+[2025-10-20 07:58:05,874 INFO test.py line 185 30680] Test: [700/1449] Data 0.013 (0.052) Batch 0.117 (0.186).
+[2025-10-20 07:58:07,303 INFO test.py line 185 30680] Test: [710/1449] Data 0.013 (0.051) Batch 0.088 (0.185).
+[2025-10-20 07:58:08,691 INFO test.py line 185 30680] Test: [720/1449] Data 0.018 (0.051) Batch 0.126 (0.184).
+[2025-10-20 07:58:10,109 INFO test.py line 185 30680] Test: [730/1449] Data 0.013 (0.050) Batch 0.150 (0.184).
+[2025-10-20 07:58:11,523 INFO test.py line 185 30680] Test: [740/1449] Data 0.016 (0.050) Batch 0.090 (0.183).
+[2025-10-20 07:58:12,958 INFO test.py line 185 30680] Test: [750/1449] Data 0.014 (0.049) Batch 0.125 (0.183).
+[2025-10-20 07:58:14,441 INFO test.py line 185 30680] Test: [760/1449] Data 0.017 (0.049) Batch 0.141 (0.182).
+[2025-10-20 07:58:15,663 INFO test.py line 185 30680] Test: [770/1449] Data 0.014 (0.048) Batch 0.181 (0.181).
+[2025-10-20 07:58:16,881 INFO test.py line 185 30680] Test: [780/1449] Data 0.015 (0.048) Batch 0.120 (0.181).
+[2025-10-20 07:58:18,126 INFO test.py line 185 30680] Test: [790/1449] Data 0.015 (0.048) Batch 0.119 (0.180).
+[2025-10-20 07:58:19,264 INFO test.py line 185 30680] Test: [800/1449] Data 0.013 (0.047) Batch 0.111 (0.179).
+[2025-10-20 07:58:20,597 INFO test.py line 185 30680] Test: [810/1449] Data 0.016 (0.047) Batch 0.121 (0.179).
+[2025-10-20 07:58:21,977 INFO test.py line 185 30680] Test: [820/1449] Data 0.012 (0.046) Batch 0.119 (0.178).
+[2025-10-20 07:58:23,426 INFO test.py line 185 30680] Test: [830/1449] Data 0.013 (0.046) Batch 0.118 (0.178).
+[2025-10-20 07:58:24,743 INFO test.py line 185 30680] Test: [840/1449] Data 0.014 (0.046) Batch 0.151 (0.177).
+[2025-10-20 07:58:26,173 INFO test.py line 185 30680] Test: [850/1449] Data 0.013 (0.045) Batch 0.155 (0.177).
+[2025-10-20 07:58:27,460 INFO test.py line 185 30680] Test: [860/1449] Data 0.015 (0.045) Batch 0.181 (0.176).
+[2025-10-20 07:58:28,792 INFO test.py line 185 30680] Test: [870/1449] Data 0.014 (0.044) Batch 0.146 (0.176).
+[2025-10-20 07:58:30,142 INFO test.py line 185 30680] Test: [880/1449] Data 0.012 (0.044) Batch 0.161 (0.175).
+[2025-10-20 07:58:31,543 INFO test.py line 185 30680] Test: [890/1449] Data 0.016 (0.044) Batch 0.089 (0.175).
+[2025-10-20 07:58:32,703 INFO test.py line 185 30680] Test: [900/1449] Data 0.014 (0.043) Batch 0.118 (0.174).
+[2025-10-20 07:58:33,887 INFO test.py line 185 30680] Test: [910/1449] Data 0.015 (0.043) Batch 0.120 (0.173).
+[2025-10-20 07:58:35,156 INFO test.py line 185 30680] Test: [920/1449] Data 0.015 (0.043) Batch 0.139 (0.173).
+[2025-10-20 07:58:36,513 INFO test.py line 185 30680] Test: [930/1449] Data 0.014 (0.042) Batch 0.088 (0.173).
+[2025-10-20 07:58:37,927 INFO test.py line 185 30680] Test: [940/1449] Data 0.015 (0.042) Batch 0.180 (0.172).
+[2025-10-20 07:58:39,156 INFO test.py line 185 30680] Test: [950/1449] Data 0.012 (0.042) Batch 0.107 (0.172).
+[2025-10-20 07:58:40,416 INFO test.py line 185 30680] Test: [960/1449] Data 0.016 (0.042) Batch 0.149 (0.171).
+[2025-10-20 07:58:41,690 INFO test.py line 185 30680] Test: [970/1449] Data 0.014 (0.041) Batch 0.117 (0.171).
+[2025-10-20 07:58:42,977 INFO test.py line 185 30680] Test: [980/1449] Data 0.014 (0.041) Batch 0.128 (0.170).
+[2025-10-20 07:58:44,318 INFO test.py line 185 30680] Test: [990/1449] Data 0.020 (0.041) Batch 0.123 (0.170).
+[2025-10-20 07:58:45,663 INFO test.py line 185 30680] Test: [1000/1449] Data 0.016 (0.040) Batch 0.168 (0.170).
+[2025-10-20 07:58:47,018 INFO test.py line 185 30680] Test: [1010/1449] Data 0.012 (0.040) Batch 0.176 (0.169).
+[2025-10-20 07:58:48,300 INFO test.py line 185 30680] Test: [1020/1449] Data 0.012 (0.040) Batch 0.134 (0.169).
+[2025-10-20 07:58:49,723 INFO test.py line 185 30680] Test: [1030/1449] Data 0.014 (0.040) Batch 0.117 (0.169).
+[2025-10-20 07:58:51,113 INFO test.py line 185 30680] Test: [1040/1449] Data 0.014 (0.039) Batch 0.117 (0.168).
+[2025-10-20 07:58:52,321 INFO test.py line 185 30680] Test: [1050/1449] Data 0.015 (0.039) Batch 0.121 (0.168).
+[2025-10-20 07:58:53,517 INFO test.py line 185 30680] Test: [1060/1449] Data 0.014 (0.039) Batch 0.120 (0.167).
+[2025-10-20 07:58:54,661 INFO test.py line 185 30680] Test: [1070/1449] Data 0.016 (0.039) Batch 0.122 (0.167).
+[2025-10-20 07:58:56,119 INFO test.py line 185 30680] Test: [1080/1449] Data 0.015 (0.039) Batch 0.151 (0.167).
+[2025-10-20 07:58:57,335 INFO test.py line 185 30680] Test: [1090/1449] Data 0.012 (0.038) Batch 0.118 (0.166).
+[2025-10-20 07:58:58,574 INFO test.py line 185 30680] Test: [1100/1449] Data 0.015 (0.038) Batch 0.153 (0.166).
+[2025-10-20 07:59:00,018 INFO test.py line 185 30680] Test: [1110/1449] Data 0.012 (0.038) Batch 0.112 (0.166).
+[2025-10-20 07:59:01,327 INFO test.py line 185 30680] Test: [1120/1449] Data 0.015 (0.038) Batch 0.159 (0.165).
+[2025-10-20 07:59:02,682 INFO test.py line 185 30680] Test: [1130/1449] Data 0.013 (0.037) Batch 0.128 (0.165).
+[2025-10-20 07:59:04,087 INFO test.py line 185 30680] Test: [1140/1449] Data 0.017 (0.037) Batch 0.195 (0.165).
+[2025-10-20 07:59:05,532 INFO test.py line 185 30680] Test: [1150/1449] Data 0.014 (0.037) Batch 0.132 (0.165).
+[2025-10-20 07:59:06,861 INFO test.py line 185 30680] Test: [1160/1449] Data 0.012 (0.037) Batch 0.116 (0.165).
+[2025-10-20 07:59:08,118 INFO test.py line 185 30680] Test: [1170/1449] Data 0.012 (0.037) Batch 0.090 (0.164).
+[2025-10-20 07:59:09,490 INFO test.py line 185 30680] Test: [1180/1449] Data 0.012 (0.036) Batch 0.132 (0.164).
+[2025-10-20 07:59:10,779 INFO test.py line 185 30680] Test: [1190/1449] Data 0.013 (0.036) Batch 0.117 (0.164).
+[2025-10-20 07:59:12,114 INFO test.py line 185 30680] Test: [1200/1449] Data 0.019 (0.036) Batch 0.154 (0.163).
+[2025-10-20 07:59:13,559 INFO test.py line 185 30680] Test: [1210/1449] Data 0.014 (0.036) Batch 0.120 (0.163).
+[2025-10-20 07:59:14,746 INFO test.py line 185 30680] Test: [1220/1449] Data 0.014 (0.036) Batch 0.093 (0.163).
+[2025-10-20 07:59:16,119 INFO test.py line 185 30680] Test: [1230/1449] Data 0.014 (0.036) Batch 0.182 (0.163).
+[2025-10-20 07:59:17,448 INFO test.py line 185 30680] Test: [1240/1449] Data 0.014 (0.035) Batch 0.123 (0.162).
+[2025-10-20 07:59:18,632 INFO test.py line 185 30680] Test: [1250/1449] Data 0.013 (0.035) Batch 0.131 (0.162).
+[2025-10-20 07:59:19,863 INFO test.py line 185 30680] Test: [1260/1449] Data 0.014 (0.035) Batch 0.133 (0.162).
+[2025-10-20 07:59:21,206 INFO test.py line 185 30680] Test: [1270/1449] Data 0.013 (0.035) Batch 0.121 (0.162).
+[2025-10-20 07:59:22,505 INFO test.py line 185 30680] Test: [1280/1449] Data 0.014 (0.035) Batch 0.092 (0.161).
+[2025-10-20 07:59:23,703 INFO test.py line 185 30680] Test: [1290/1449] Data 0.012 (0.035) Batch 0.148 (0.161).
+[2025-10-20 07:59:25,095 INFO test.py line 185 30680] Test: [1300/1449] Data 0.014 (0.034) Batch 0.121 (0.161).
+[2025-10-20 07:59:26,521 INFO test.py line 185 30680] Test: [1310/1449] Data 0.012 (0.034) Batch 0.153 (0.161).
+[2025-10-20 07:59:27,914 INFO test.py line 185 30680] Test: [1320/1449] Data 0.014 (0.034) Batch 0.132 (0.161).
+[2025-10-20 07:59:29,253 INFO test.py line 185 30680] Test: [1330/1449] Data 0.013 (0.034) Batch 0.147 (0.160).
+[2025-10-20 07:59:30,732 INFO test.py line 185 30680] Test: [1340/1449] Data 0.015 (0.034) Batch 0.136 (0.160).
+[2025-10-20 07:59:32,030 INFO test.py line 185 30680] Test: [1350/1449] Data 0.013 (0.034) Batch 0.150 (0.160).
+[2025-10-20 07:59:33,498 INFO test.py line 185 30680] Test: [1360/1449] Data 0.016 (0.033) Batch 0.186 (0.160).
+[2025-10-20 07:59:34,906 INFO test.py line 185 30680] Test: [1370/1449] Data 0.012 (0.033) Batch 0.181 (0.160).
+[2025-10-20 07:59:36,452 INFO test.py line 185 30680] Test: [1380/1449] Data 0.014 (0.033) Batch 0.144 (0.160).
+[2025-10-20 07:59:37,703 INFO test.py line 185 30680] Test: [1390/1449] Data 0.013 (0.033) Batch 0.117 (0.159).
+[2025-10-20 07:59:38,962 INFO test.py line 185 30680] Test: [1400/1449] Data 0.011 (0.033) Batch 0.126 (0.159).
+[2025-10-20 07:59:40,298 INFO test.py line 185 30680] Test: [1410/1449] Data 0.012 (0.033) Batch 0.143 (0.159).
+[2025-10-20 07:59:41,588 INFO test.py line 185 30680] Test: [1420/1449] Data 0.013 (0.033) Batch 0.114 (0.159).
+[2025-10-20 07:59:42,952 INFO test.py line 185 30680] Test: [1430/1449] Data 0.015 (0.032) Batch 0.134 (0.159).
+[2025-10-20 07:59:44,397 INFO test.py line 185 30680] Test: [1440/1449] Data 0.020 (0.032) Batch 0.129 (0.159).
+[2025-10-20 07:59:45,560 INFO test.py line 185 30680] Test: [1449/1449] Data 0.014 (0.032) Batch 0.176 (0.158).
+[2025-10-20 07:59:45,618 INFO test.py line 200 30680] <<<<<<<<<<<<<<<<< End Evaluation <<<<<<<<<<<<<<<<<
+[2025-10-20 07:59:45,631 INFO test.py line 217 30680] Evaluating 1/1449 on image 2007_000033.png, accuracy 0.9668.
+[2025-10-20 07:59:45,642 INFO test.py line 217 30680] Evaluating 2/1449 on image 2007_000042.png, accuracy 0.9202.
+[2025-10-20 07:59:45,658 INFO test.py line 217 30680] Evaluating 3/1449 on image 2007_000061.png, accuracy 0.9839.
+[2025-10-20 07:59:45,677 INFO test.py line 217 30680] Evaluating 4/1449 on image 2007_000123.png, accuracy 0.9480.
+[2025-10-20 07:59:45,693 INFO test.py line 217 30680] Evaluating 5/1449 on image 2007_000129.png, accuracy 0.8275.
+[2025-10-20 07:59:45,712 INFO test.py line 217 30680] Evaluating 6/1449 on image 2007_000175.png, accuracy 0.9694.
+[2025-10-20 07:59:45,733 INFO test.py line 217 30680] Evaluating 7/1449 on image 2007_000187.png, accuracy 0.9386.
+[2025-10-20 07:59:45,755 INFO test.py line 217 30680] Evaluating 8/1449 on image 2007_000323.png, accuracy 0.9710.
+[2025-10-20 07:59:45,775 INFO test.py line 217 30680] Evaluating 9/1449 on image 2007_000332.png, accuracy 0.9325.
+[2025-10-20 07:59:45,797 INFO test.py line 217 30680] Evaluating 10/1449 on image 2007_000346.png, accuracy 0.9519.
+[2025-10-20 07:59:45,821 INFO test.py line 217 30680] Evaluating 11/1449 on image 2007_000452.png, accuracy 0.9101.
+[2025-10-20 07:59:45,844 INFO test.py line 217 30680] Evaluating 12/1449 on image 2007_000464.png, accuracy 0.9904.
+[2025-10-20 07:59:45,866 INFO test.py line 217 30680] Evaluating 13/1449 on image 2007_000491.png, accuracy 0.9817.
+[2025-10-20 07:59:45,887 INFO test.py line 217 30680] Evaluating 14/1449 on image 2007_000529.png, accuracy 0.9670.
+[2025-10-20 07:59:45,909 INFO test.py line 217 30680] Evaluating 15/1449 on image 2007_000559.png, accuracy 0.9262.
+[2025-10-20 07:59:45,929 INFO test.py line 217 30680] Evaluating 16/1449 on image 2007_000572.png, accuracy 0.8989.
+[2025-10-20 07:59:45,945 INFO test.py line 217 30680] Evaluating 17/1449 on image 2007_000629.png, accuracy 0.9459.
+[2025-10-20 07:59:45,965 INFO test.py line 217 30680] Evaluating 18/1449 on image 2007_000636.png, accuracy 0.9516.
+[2025-10-20 07:59:45,987 INFO test.py line 217 30680] Evaluating 19/1449 on image 2007_000661.png, accuracy 0.9793.
+[2025-10-20 07:59:46,011 INFO test.py line 217 30680] Evaluating 20/1449 on image 2007_000663.png, accuracy 0.8153.
+[2025-10-20 07:59:46,034 INFO test.py line 217 30680] Evaluating 21/1449 on image 2007_000676.png, accuracy 0.9910.
+[2025-10-20 07:59:46,057 INFO test.py line 217 30680] Evaluating 22/1449 on image 2007_000727.png, accuracy 0.9369.
+[2025-10-20 07:59:46,079 INFO test.py line 217 30680] Evaluating 23/1449 on image 2007_000762.png, accuracy 0.8721.
+[2025-10-20 07:59:46,103 INFO test.py line 217 30680] Evaluating 24/1449 on image 2007_000783.png, accuracy 0.9679.
+[2025-10-20 07:59:46,128 INFO test.py line 217 30680] Evaluating 25/1449 on image 2007_000799.png, accuracy 0.9533.
+[2025-10-20 07:59:46,149 INFO test.py line 217 30680] Evaluating 26/1449 on image 2007_000804.png, accuracy 0.9002.
+[2025-10-20 07:59:46,172 INFO test.py line 217 30680] Evaluating 27/1449 on image 2007_000830.png, accuracy 0.9541.
+[2025-10-20 07:59:46,189 INFO test.py line 217 30680] Evaluating 28/1449 on image 2007_000837.png, accuracy 0.9875.
+[2025-10-20 07:59:46,210 INFO test.py line 217 30680] Evaluating 29/1449 on image 2007_000847.png, accuracy 0.8420.
+[2025-10-20 07:59:46,233 INFO test.py line 217 30680] Evaluating 30/1449 on image 2007_000862.png, accuracy 0.9969.
+[2025-10-20 07:59:46,254 INFO test.py line 217 30680] Evaluating 31/1449 on image 2007_000925.png, accuracy 0.9814.
+[2025-10-20 07:59:46,276 INFO test.py line 217 30680] Evaluating 32/1449 on image 2007_000999.png, accuracy 0.9762.
+[2025-10-20 07:59:46,299 INFO test.py line 217 30680] Evaluating 33/1449 on image 2007_001154.png, accuracy 0.9891.
+[2025-10-20 07:59:46,324 INFO test.py line 217 30680] Evaluating 34/1449 on image 2007_001175.png, accuracy 0.9606.
+[2025-10-20 07:59:46,346 INFO test.py line 217 30680] Evaluating 35/1449 on image 2007_001239.png, accuracy 0.9615.
+[2025-10-20 07:59:46,368 INFO test.py line 217 30680] Evaluating 36/1449 on image 2007_001284.png, accuracy 0.9559.
+[2025-10-20 07:59:46,390 INFO test.py line 217 30680] Evaluating 37/1449 on image 2007_001288.png, accuracy 0.9763.
+[2025-10-20 07:59:46,409 INFO test.py line 217 30680] Evaluating 38/1449 on image 2007_001289.png, accuracy 0.9866.
+[2025-10-20 07:59:46,434 INFO test.py line 217 30680] Evaluating 39/1449 on image 2007_001299.png, accuracy 0.9042.
+[2025-10-20 07:59:46,455 INFO test.py line 217 30680] Evaluating 40/1449 on image 2007_001311.png, accuracy 0.8943.
+[2025-10-20 07:59:46,475 INFO test.py line 217 30680] Evaluating 41/1449 on image 2007_001321.png, accuracy 0.9599.
+[2025-10-20 07:59:46,497 INFO test.py line 217 30680] Evaluating 42/1449 on image 2007_001377.png, accuracy 0.9967.
+[2025-10-20 07:59:46,520 INFO test.py line 217 30680] Evaluating 43/1449 on image 2007_001408.png, accuracy 0.8838.
+[2025-10-20 07:59:46,540 INFO test.py line 217 30680] Evaluating 44/1449 on image 2007_001423.png, accuracy 0.9581.
+[2025-10-20 07:59:46,562 INFO test.py line 217 30680] Evaluating 45/1449 on image 2007_001430.png, accuracy 0.9091.
+[2025-10-20 07:59:46,585 INFO test.py line 217 30680] Evaluating 46/1449 on image 2007_001457.png, accuracy 0.9723.
+[2025-10-20 07:59:46,605 INFO test.py line 217 30680] Evaluating 47/1449 on image 2007_001458.png, accuracy 0.9534.
+[2025-10-20 07:59:46,624 INFO test.py line 217 30680] Evaluating 48/1449 on image 2007_001526.png, accuracy 0.9303.
+[2025-10-20 07:59:46,645 INFO test.py line 217 30680] Evaluating 49/1449 on image 2007_001568.png, accuracy 0.9802.
+[2025-10-20 07:59:46,669 INFO test.py line 217 30680] Evaluating 50/1449 on image 2007_001585.png, accuracy 0.8442.
+[2025-10-20 07:59:46,692 INFO test.py line 217 30680] Evaluating 51/1449 on image 2007_001586.png, accuracy 0.9477.
+[2025-10-20 07:59:46,714 INFO test.py line 217 30680] Evaluating 52/1449 on image 2007_001587.png, accuracy 0.9921.
+[2025-10-20 07:59:46,735 INFO test.py line 217 30680] Evaluating 53/1449 on image 2007_001594.png, accuracy 0.9694.
+[2025-10-20 07:59:46,758 INFO test.py line 217 30680] Evaluating 54/1449 on image 2007_001630.png, accuracy 0.8895.
+[2025-10-20 07:59:46,780 INFO test.py line 217 30680] Evaluating 55/1449 on image 2007_001677.png, accuracy 0.9028.
+[2025-10-20 07:59:46,799 INFO test.py line 217 30680] Evaluating 56/1449 on image 2007_001678.png, accuracy 0.8996.
+[2025-10-20 07:59:46,826 INFO test.py line 217 30680] Evaluating 57/1449 on image 2007_001717.png, accuracy 0.9271.
+[2025-10-20 07:59:46,853 INFO test.py line 217 30680] Evaluating 58/1449 on image 2007_001733.png, accuracy 0.9869.
+[2025-10-20 07:59:46,875 INFO test.py line 217 30680] Evaluating 59/1449 on image 2007_001761.png, accuracy 0.9901.
+[2025-10-20 07:59:46,895 INFO test.py line 217 30680] Evaluating 60/1449 on image 2007_001763.png, accuracy 0.6184.
+[2025-10-20 07:59:46,917 INFO test.py line 217 30680] Evaluating 61/1449 on image 2007_001774.png, accuracy 0.9604.
+[2025-10-20 07:59:46,940 INFO test.py line 217 30680] Evaluating 62/1449 on image 2007_001884.png, accuracy 0.9494.
+[2025-10-20 07:59:46,960 INFO test.py line 217 30680] Evaluating 63/1449 on image 2007_001955.png, accuracy 0.9746.
+[2025-10-20 07:59:46,986 INFO test.py line 217 30680] Evaluating 64/1449 on image 2007_002046.png, accuracy 0.9674.
+[2025-10-20 07:59:47,007 INFO test.py line 217 30680] Evaluating 65/1449 on image 2007_002094.png, accuracy 0.9873.
+[2025-10-20 07:59:47,030 INFO test.py line 217 30680] Evaluating 66/1449 on image 2007_002119.png, accuracy 0.9597.
+[2025-10-20 07:59:47,052 INFO test.py line 217 30680] Evaluating 67/1449 on image 2007_002132.png, accuracy 0.9926.
+[2025-10-20 07:59:47,074 INFO test.py line 217 30680] Evaluating 68/1449 on image 2007_002260.png, accuracy 0.9810.
+[2025-10-20 07:59:47,096 INFO test.py line 217 30680] Evaluating 69/1449 on image 2007_002266.png, accuracy 0.9758.
+[2025-10-20 07:59:47,120 INFO test.py line 217 30680] Evaluating 70/1449 on image 2007_002268.png, accuracy 0.6913.
+[2025-10-20 07:59:47,142 INFO test.py line 217 30680] Evaluating 71/1449 on image 2007_002284.png, accuracy 0.9382.
+[2025-10-20 07:59:47,162 INFO test.py line 217 30680] Evaluating 72/1449 on image 2007_002376.png, accuracy 0.9675.
+[2025-10-20 07:59:47,185 INFO test.py line 217 30680] Evaluating 73/1449 on image 2007_002378.png, accuracy 0.8417.
+[2025-10-20 07:59:47,207 INFO test.py line 217 30680] Evaluating 74/1449 on image 2007_002387.png, accuracy 0.9514.
+[2025-10-20 07:59:47,230 INFO test.py line 217 30680] Evaluating 75/1449 on image 2007_002400.png, accuracy 0.9862.
+[2025-10-20 07:59:47,252 INFO test.py line 217 30680] Evaluating 76/1449 on image 2007_002412.png, accuracy 0.8915.
+[2025-10-20 07:59:47,274 INFO test.py line 217 30680] Evaluating 77/1449 on image 2007_002426.png, accuracy 0.6148.
+[2025-10-20 07:59:47,287 INFO test.py line 217 30680] Evaluating 78/1449 on image 2007_002427.png, accuracy 0.8808.
+[2025-10-20 07:59:47,308 INFO test.py line 217 30680] Evaluating 79/1449 on image 2007_002445.png, accuracy 0.9499.
+[2025-10-20 07:59:47,332 INFO test.py line 217 30680] Evaluating 80/1449 on image 2007_002470.png, accuracy 0.8865.
+[2025-10-20 07:59:47,351 INFO test.py line 217 30680] Evaluating 81/1449 on image 2007_002539.png, accuracy 0.8069.
+[2025-10-20 07:59:47,374 INFO test.py line 217 30680] Evaluating 82/1449 on image 2007_002565.png, accuracy 0.9317.
+[2025-10-20 07:59:47,395 INFO test.py line 217 30680] Evaluating 83/1449 on image 2007_002597.png, accuracy 0.8483.
+[2025-10-20 07:59:47,418 INFO test.py line 217 30680] Evaluating 84/1449 on image 2007_002618.png, accuracy 0.9000.
+[2025-10-20 07:59:47,441 INFO test.py line 217 30680] Evaluating 85/1449 on image 2007_002619.png, accuracy 0.9747.
+[2025-10-20 07:59:47,464 INFO test.py line 217 30680] Evaluating 86/1449 on image 2007_002624.png, accuracy 0.9317.
+[2025-10-20 07:59:47,487 INFO test.py line 217 30680] Evaluating 87/1449 on image 2007_002643.png, accuracy 0.9716.
+[2025-10-20 07:59:47,511 INFO test.py line 217 30680] Evaluating 88/1449 on image 2007_002648.png, accuracy 0.9756.
+[2025-10-20 07:59:47,533 INFO test.py line 217 30680] Evaluating 89/1449 on image 2007_002719.png, accuracy 0.9022.
+[2025-10-20 07:59:47,555 INFO test.py line 217 30680] Evaluating 90/1449 on image 2007_002728.png, accuracy 0.9530.
+[2025-10-20 07:59:47,577 INFO test.py line 217 30680] Evaluating 91/1449 on image 2007_002823.png, accuracy 0.9508.
+[2025-10-20 07:59:47,602 INFO test.py line 217 30680] Evaluating 92/1449 on image 2007_002824.png, accuracy 0.9452.
+[2025-10-20 07:59:47,625 INFO test.py line 217 30680] Evaluating 93/1449 on image 2007_002852.png, accuracy 0.9644.
+[2025-10-20 07:59:47,647 INFO test.py line 217 30680] Evaluating 94/1449 on image 2007_002903.png, accuracy 0.9591.
+[2025-10-20 07:59:47,669 INFO test.py line 217 30680] Evaluating 95/1449 on image 2007_003011.png, accuracy 0.8397.
+[2025-10-20 07:59:47,692 INFO test.py line 217 30680] Evaluating 96/1449 on image 2007_003020.png, accuracy 0.8978.
+[2025-10-20 07:59:47,715 INFO test.py line 217 30680] Evaluating 97/1449 on image 2007_003022.png, accuracy 0.9430.
+[2025-10-20 07:59:47,735 INFO test.py line 217 30680] Evaluating 98/1449 on image 2007_003051.png, accuracy 0.9928.
+[2025-10-20 07:59:47,758 INFO test.py line 217 30680] Evaluating 99/1449 on image 2007_003088.png, accuracy 0.9716.
+[2025-10-20 07:59:47,778 INFO test.py line 217 30680] Evaluating 100/1449 on image 2007_003101.png, accuracy 0.9426.
+[2025-10-20 07:59:47,802 INFO test.py line 217 30680] Evaluating 101/1449 on image 2007_003106.png, accuracy 0.9544.
+[2025-10-20 07:59:47,823 INFO test.py line 217 30680] Evaluating 102/1449 on image 2007_003110.png, accuracy 0.8758.
+[2025-10-20 07:59:47,843 INFO test.py line 217 30680] Evaluating 103/1449 on image 2007_003131.png, accuracy 0.9955.
+[2025-10-20 07:59:47,865 INFO test.py line 217 30680] Evaluating 104/1449 on image 2007_003134.png, accuracy 0.7965.
+[2025-10-20 07:59:47,889 INFO test.py line 217 30680] Evaluating 105/1449 on image 2007_003137.png, accuracy 0.9478.
+[2025-10-20 07:59:47,908 INFO test.py line 217 30680] Evaluating 106/1449 on image 2007_003143.png, accuracy 0.9833.
+[2025-10-20 07:59:47,930 INFO test.py line 217 30680] Evaluating 107/1449 on image 2007_003169.png, accuracy 0.8991.
+[2025-10-20 07:59:47,953 INFO test.py line 217 30680] Evaluating 108/1449 on image 2007_003188.png, accuracy 0.8996.
+[2025-10-20 07:59:47,973 INFO test.py line 217 30680] Evaluating 109/1449 on image 2007_003194.png, accuracy 0.9526.
+[2025-10-20 07:59:47,993 INFO test.py line 217 30680] Evaluating 110/1449 on image 2007_003195.png, accuracy 0.9645.
+[2025-10-20 07:59:48,016 INFO test.py line 217 30680] Evaluating 111/1449 on image 2007_003201.png, accuracy 0.9247.
+[2025-10-20 07:59:48,036 INFO test.py line 217 30680] Evaluating 112/1449 on image 2007_003349.png, accuracy 0.9850.
+[2025-10-20 07:59:48,058 INFO test.py line 217 30680] Evaluating 113/1449 on image 2007_003367.png, accuracy 0.9496.
+[2025-10-20 07:59:48,081 INFO test.py line 217 30680] Evaluating 114/1449 on image 2007_003373.png, accuracy 0.9285.
+[2025-10-20 07:59:48,103 INFO test.py line 217 30680] Evaluating 115/1449 on image 2007_003499.png, accuracy 0.9697.
+[2025-10-20 07:59:48,124 INFO test.py line 217 30680] Evaluating 116/1449 on image 2007_003503.png, accuracy 0.9475.
+[2025-10-20 07:59:48,144 INFO test.py line 217 30680] Evaluating 117/1449 on image 2007_003506.png, accuracy 0.8268.
+[2025-10-20 07:59:48,166 INFO test.py line 217 30680] Evaluating 118/1449 on image 2007_003530.png, accuracy 0.9155.
+[2025-10-20 07:59:48,186 INFO test.py line 217 30680] Evaluating 119/1449 on image 2007_003571.png, accuracy 0.9594.
+[2025-10-20 07:59:48,208 INFO test.py line 217 30680] Evaluating 120/1449 on image 2007_003587.png, accuracy 0.8017.
+[2025-10-20 07:59:48,230 INFO test.py line 217 30680] Evaluating 121/1449 on image 2007_003611.png, accuracy 0.9986.
+[2025-10-20 07:59:48,251 INFO test.py line 217 30680] Evaluating 122/1449 on image 2007_003621.png, accuracy 0.9630.
+[2025-10-20 07:59:48,272 INFO test.py line 217 30680] Evaluating 123/1449 on image 2007_003682.png, accuracy 0.9923.
+[2025-10-20 07:59:48,296 INFO test.py line 217 30680] Evaluating 124/1449 on image 2007_003711.png, accuracy 0.9749.
+[2025-10-20 07:59:48,320 INFO test.py line 217 30680] Evaluating 125/1449 on image 2007_003714.png, accuracy 0.9937.
+[2025-10-20 07:59:48,333 INFO test.py line 217 30680] Evaluating 126/1449 on image 2007_003742.png, accuracy 0.9465.
+[2025-10-20 07:59:48,352 INFO test.py line 217 30680] Evaluating 127/1449 on image 2007_003786.png, accuracy 0.9635.
+[2025-10-20 07:59:48,377 INFO test.py line 217 30680] Evaluating 128/1449 on image 2007_003841.png, accuracy 0.8943.
+[2025-10-20 07:59:48,390 INFO test.py line 217 30680] Evaluating 129/1449 on image 2007_003848.png, accuracy 0.9174.
+[2025-10-20 07:59:48,411 INFO test.py line 217 30680] Evaluating 130/1449 on image 2007_003861.png, accuracy 0.9566.
+[2025-10-20 07:59:48,433 INFO test.py line 217 30680] Evaluating 131/1449 on image 2007_003872.png, accuracy 0.9952.
+[2025-10-20 07:59:48,455 INFO test.py line 217 30680] Evaluating 132/1449 on image 2007_003917.png, accuracy 0.9830.
+[2025-10-20 07:59:48,475 INFO test.py line 217 30680] Evaluating 133/1449 on image 2007_003957.png, accuracy 0.9846.
+[2025-10-20 07:59:48,501 INFO test.py line 217 30680] Evaluating 134/1449 on image 2007_003991.png, accuracy 0.9778.
+[2025-10-20 07:59:48,523 INFO test.py line 217 30680] Evaluating 135/1449 on image 2007_004033.png, accuracy 0.9069.
+[2025-10-20 07:59:48,543 INFO test.py line 217 30680] Evaluating 136/1449 on image 2007_004052.png, accuracy 0.9898.
+[2025-10-20 07:59:48,564 INFO test.py line 217 30680] Evaluating 137/1449 on image 2007_004112.png, accuracy 0.7035.
+[2025-10-20 07:59:48,585 INFO test.py line 217 30680] Evaluating 138/1449 on image 2007_004121.png, accuracy 0.9572.
+[2025-10-20 07:59:48,607 INFO test.py line 217 30680] Evaluating 139/1449 on image 2007_004143.png, accuracy 0.9833.
+[2025-10-20 07:59:48,627 INFO test.py line 217 30680] Evaluating 140/1449 on image 2007_004189.png, accuracy 0.9716.
+[2025-10-20 07:59:48,650 INFO test.py line 217 30680] Evaluating 141/1449 on image 2007_004190.png, accuracy 0.9522.
+[2025-10-20 07:59:48,672 INFO test.py line 217 30680] Evaluating 142/1449 on image 2007_004193.png, accuracy 0.9234.
+[2025-10-20 07:59:48,694 INFO test.py line 217 30680] Evaluating 143/1449 on image 2007_004241.png, accuracy 0.8787.
+[2025-10-20 07:59:48,718 INFO test.py line 217 30680] Evaluating 144/1449 on image 2007_004275.png, accuracy 0.9466.
+[2025-10-20 07:59:48,740 INFO test.py line 217 30680] Evaluating 145/1449 on image 2007_004281.png, accuracy 0.9799.
+[2025-10-20 07:59:48,761 INFO test.py line 217 30680] Evaluating 146/1449 on image 2007_004380.png, accuracy 0.8844.
+[2025-10-20 07:59:48,784 INFO test.py line 217 30680] Evaluating 147/1449 on image 2007_004392.png, accuracy 0.9436.
+[2025-10-20 07:59:48,805 INFO test.py line 217 30680] Evaluating 148/1449 on image 2007_004405.png, accuracy 0.8392.
+[2025-10-20 07:59:48,818 INFO test.py line 217 30680] Evaluating 149/1449 on image 2007_004468.png, accuracy 0.8891.
+[2025-10-20 07:59:48,841 INFO test.py line 217 30680] Evaluating 150/1449 on image 2007_004483.png, accuracy 0.9772.
+[2025-10-20 07:59:48,863 INFO test.py line 217 30680] Evaluating 151/1449 on image 2007_004510.png, accuracy 0.8863.
+[2025-10-20 07:59:48,884 INFO test.py line 217 30680] Evaluating 152/1449 on image 2007_004538.png, accuracy 0.9178.
+[2025-10-20 07:59:48,906 INFO test.py line 217 30680] Evaluating 153/1449 on image 2007_004558.png, accuracy 0.9446.
+[2025-10-20 07:59:48,926 INFO test.py line 217 30680] Evaluating 154/1449 on image 2007_004644.png, accuracy 0.9422.
+[2025-10-20 07:59:48,947 INFO test.py line 217 30680] Evaluating 155/1449 on image 2007_004649.png, accuracy 0.9692.
+[2025-10-20 07:59:48,969 INFO test.py line 217 30680] Evaluating 156/1449 on image 2007_004712.png, accuracy 0.8465.
+[2025-10-20 07:59:48,991 INFO test.py line 217 30680] Evaluating 157/1449 on image 2007_004722.png, accuracy 0.9443.
+[2025-10-20 07:59:49,017 INFO test.py line 217 30680] Evaluating 158/1449 on image 2007_004856.png, accuracy 0.9681.
+[2025-10-20 07:59:49,039 INFO test.py line 217 30680] Evaluating 159/1449 on image 2007_004866.png, accuracy 0.9845.
+[2025-10-20 07:59:49,061 INFO test.py line 217 30680] Evaluating 160/1449 on image 2007_004902.png, accuracy 0.9716.
+[2025-10-20 07:59:49,082 INFO test.py line 217 30680] Evaluating 161/1449 on image 2007_004969.png, accuracy 0.9928.
+[2025-10-20 07:59:49,104 INFO test.py line 217 30680] Evaluating 162/1449 on image 2007_005058.png, accuracy 0.9962.
+[2025-10-20 07:59:49,124 INFO test.py line 217 30680] Evaluating 163/1449 on image 2007_005074.png, accuracy 0.9267.
+[2025-10-20 07:59:49,146 INFO test.py line 217 30680] Evaluating 164/1449 on image 2007_005107.png, accuracy 0.9759.
+[2025-10-20 07:59:49,166 INFO test.py line 217 30680] Evaluating 165/1449 on image 2007_005114.png, accuracy 0.9454.
+[2025-10-20 07:59:49,185 INFO test.py line 217 30680] Evaluating 166/1449 on image 2007_005149.png, accuracy 0.6036.
+[2025-10-20 07:59:49,203 INFO test.py line 217 30680] Evaluating 167/1449 on image 2007_005173.png, accuracy 0.9005.
+[2025-10-20 07:59:49,223 INFO test.py line 217 30680] Evaluating 168/1449 on image 2007_005281.png, accuracy 0.9822.
+[2025-10-20 07:59:49,244 INFO test.py line 217 30680] Evaluating 169/1449 on image 2007_005294.png, accuracy 0.6834.
+[2025-10-20 07:59:49,264 INFO test.py line 217 30680] Evaluating 170/1449 on image 2007_005296.png, accuracy 0.5461.
+[2025-10-20 07:59:49,287 INFO test.py line 217 30680] Evaluating 171/1449 on image 2007_005304.png, accuracy 0.9319.
+[2025-10-20 07:59:49,307 INFO test.py line 217 30680] Evaluating 172/1449 on image 2007_005331.png, accuracy 0.9203.
+[2025-10-20 07:59:49,328 INFO test.py line 217 30680] Evaluating 173/1449 on image 2007_005354.png, accuracy 0.9420.
+[2025-10-20 07:59:49,351 INFO test.py line 217 30680] Evaluating 174/1449 on image 2007_005358.png, accuracy 0.9987.
+[2025-10-20 07:59:49,372 INFO test.py line 217 30680] Evaluating 175/1449 on image 2007_005428.png, accuracy 0.8749.
+[2025-10-20 07:59:49,395 INFO test.py line 217 30680] Evaluating 176/1449 on image 2007_005460.png, accuracy 0.9465.
+[2025-10-20 07:59:49,415 INFO test.py line 217 30680] Evaluating 177/1449 on image 2007_005469.png, accuracy 0.8021.
+[2025-10-20 07:59:49,435 INFO test.py line 217 30680] Evaluating 178/1449 on image 2007_005509.png, accuracy 0.9559.
+[2025-10-20 07:59:49,457 INFO test.py line 217 30680] Evaluating 179/1449 on image 2007_005547.png, accuracy 0.8785.
+[2025-10-20 07:59:49,477 INFO test.py line 217 30680] Evaluating 180/1449 on image 2007_005600.png, accuracy 0.9815.
+[2025-10-20 07:59:49,499 INFO test.py line 217 30680] Evaluating 181/1449 on image 2007_005608.png, accuracy 0.9457.
+[2025-10-20 07:59:49,521 INFO test.py line 217 30680] Evaluating 182/1449 on image 2007_005626.png, accuracy 0.9622.
+[2025-10-20 07:59:49,542 INFO test.py line 217 30680] Evaluating 183/1449 on image 2007_005689.png, accuracy 0.9752.
+[2025-10-20 07:59:49,562 INFO test.py line 217 30680] Evaluating 184/1449 on image 2007_005696.png, accuracy 0.9339.
+[2025-10-20 07:59:49,584 INFO test.py line 217 30680] Evaluating 185/1449 on image 2007_005705.png, accuracy 0.9692.
+[2025-10-20 07:59:49,606 INFO test.py line 217 30680] Evaluating 186/1449 on image 2007_005759.png, accuracy 0.9850.
+[2025-10-20 07:59:49,627 INFO test.py line 217 30680] Evaluating 187/1449 on image 2007_005803.png, accuracy 0.9424.
+[2025-10-20 07:59:49,647 INFO test.py line 217 30680] Evaluating 188/1449 on image 2007_005813.png, accuracy 0.9312.
+[2025-10-20 07:59:49,666 INFO test.py line 217 30680] Evaluating 189/1449 on image 2007_005828.png, accuracy 0.9850.
+[2025-10-20 07:59:49,687 INFO test.py line 217 30680] Evaluating 190/1449 on image 2007_005844.png, accuracy 0.8560.
+[2025-10-20 07:59:49,708 INFO test.py line 217 30680] Evaluating 191/1449 on image 2007_005845.png, accuracy 0.7911.
+[2025-10-20 07:59:49,730 INFO test.py line 217 30680] Evaluating 192/1449 on image 2007_005857.png, accuracy 0.9529.
+[2025-10-20 07:59:49,752 INFO test.py line 217 30680] Evaluating 193/1449 on image 2007_005911.png, accuracy 0.9791.
+[2025-10-20 07:59:49,774 INFO test.py line 217 30680] Evaluating 194/1449 on image 2007_005915.png, accuracy 0.9928.
+[2025-10-20 07:59:49,793 INFO test.py line 217 30680] Evaluating 195/1449 on image 2007_005978.png, accuracy 0.9793.
+[2025-10-20 07:59:49,818 INFO test.py line 217 30680] Evaluating 196/1449 on image 2007_006028.png, accuracy 0.9771.
+[2025-10-20 07:59:49,837 INFO test.py line 217 30680] Evaluating 197/1449 on image 2007_006035.png, accuracy 0.9654.
+[2025-10-20 07:59:49,857 INFO test.py line 217 30680] Evaluating 198/1449 on image 2007_006046.png, accuracy 0.9927.
+[2025-10-20 07:59:49,880 INFO test.py line 217 30680] Evaluating 199/1449 on image 2007_006076.png, accuracy 0.9596.
+[2025-10-20 07:59:49,906 INFO test.py line 217 30680] Evaluating 200/1449 on image 2007_006086.png, accuracy 0.9003.
+[2025-10-20 07:59:49,930 INFO test.py line 217 30680] Evaluating 201/1449 on image 2007_006117.png, accuracy 0.8657.
+[2025-10-20 07:59:49,951 INFO test.py line 217 30680] Evaluating 202/1449 on image 2007_006171.png, accuracy 0.8667.
+[2025-10-20 07:59:49,974 INFO test.py line 217 30680] Evaluating 203/1449 on image 2007_006241.png, accuracy 0.8739.
+[2025-10-20 07:59:49,995 INFO test.py line 217 30680] Evaluating 204/1449 on image 2007_006260.png, accuracy 0.6754.
+[2025-10-20 07:59:50,018 INFO test.py line 217 30680] Evaluating 205/1449 on image 2007_006277.png, accuracy 0.9901.
+[2025-10-20 07:59:50,041 INFO test.py line 217 30680] Evaluating 206/1449 on image 2007_006348.png, accuracy 0.7260.
+[2025-10-20 07:59:50,061 INFO test.py line 217 30680] Evaluating 207/1449 on image 2007_006364.png, accuracy 0.9594.
+[2025-10-20 07:59:50,083 INFO test.py line 217 30680] Evaluating 208/1449 on image 2007_006373.png, accuracy 0.9769.
+[2025-10-20 07:59:50,105 INFO test.py line 217 30680] Evaluating 209/1449 on image 2007_006444.png, accuracy 0.9846.
+[2025-10-20 07:59:50,127 INFO test.py line 217 30680] Evaluating 210/1449 on image 2007_006449.png, accuracy 0.7969.
+[2025-10-20 07:59:50,151 INFO test.py line 217 30680] Evaluating 211/1449 on image 2007_006549.png, accuracy 0.9957.
+[2025-10-20 07:59:50,171 INFO test.py line 217 30680] Evaluating 212/1449 on image 2007_006553.png, accuracy 0.7968.
+[2025-10-20 07:59:50,194 INFO test.py line 217 30680] Evaluating 213/1449 on image 2007_006560.png, accuracy 0.9578.
+[2025-10-20 07:59:50,217 INFO test.py line 217 30680] Evaluating 214/1449 on image 2007_006647.png, accuracy 0.8371.
+[2025-10-20 07:59:50,240 INFO test.py line 217 30680] Evaluating 215/1449 on image 2007_006678.png, accuracy 0.9743.
+[2025-10-20 07:59:50,261 INFO test.py line 217 30680] Evaluating 216/1449 on image 2007_006680.png, accuracy 0.9676.
+[2025-10-20 07:59:50,283 INFO test.py line 217 30680] Evaluating 217/1449 on image 2007_006698.png, accuracy 0.9743.
+[2025-10-20 07:59:50,306 INFO test.py line 217 30680] Evaluating 218/1449 on image 2007_006761.png, accuracy 0.9909.
+[2025-10-20 07:59:50,326 INFO test.py line 217 30680] Evaluating 219/1449 on image 2007_006802.png, accuracy 0.9660.
+[2025-10-20 07:59:50,347 INFO test.py line 217 30680] Evaluating 220/1449 on image 2007_006837.png, accuracy 0.9911.
+[2025-10-20 07:59:50,367 INFO test.py line 217 30680] Evaluating 221/1449 on image 2007_006841.png, accuracy 0.9080.
+[2025-10-20 07:59:50,387 INFO test.py line 217 30680] Evaluating 222/1449 on image 2007_006864.png, accuracy 0.8702.
+[2025-10-20 07:59:50,410 INFO test.py line 217 30680] Evaluating 223/1449 on image 2007_006866.png, accuracy 0.9528.
+[2025-10-20 07:59:50,430 INFO test.py line 217 30680] Evaluating 224/1449 on image 2007_006946.png, accuracy 0.9751.
+[2025-10-20 07:59:50,451 INFO test.py line 217 30680] Evaluating 225/1449 on image 2007_007007.png, accuracy 0.7379.
+[2025-10-20 07:59:50,473 INFO test.py line 217 30680] Evaluating 226/1449 on image 2007_007084.png, accuracy 0.9925.
+[2025-10-20 07:59:50,494 INFO test.py line 217 30680] Evaluating 227/1449 on image 2007_007109.png, accuracy 0.9269.
+[2025-10-20 07:59:50,518 INFO test.py line 217 30680] Evaluating 228/1449 on image 2007_007130.png, accuracy 0.9801.
+[2025-10-20 07:59:50,540 INFO test.py line 217 30680] Evaluating 229/1449 on image 2007_007165.png, accuracy 0.8888.
+[2025-10-20 07:59:50,562 INFO test.py line 217 30680] Evaluating 230/1449 on image 2007_007168.png, accuracy 0.9383.
+[2025-10-20 07:59:50,582 INFO test.py line 217 30680] Evaluating 231/1449 on image 2007_007195.png, accuracy 0.9314.
+[2025-10-20 07:59:50,604 INFO test.py line 217 30680] Evaluating 232/1449 on image 2007_007196.png, accuracy 0.9471.
+[2025-10-20 07:59:50,626 INFO test.py line 217 30680] Evaluating 233/1449 on image 2007_007203.png, accuracy 0.9271.
+[2025-10-20 07:59:50,649 INFO test.py line 217 30680] Evaluating 234/1449 on image 2007_007211.png, accuracy 0.9895.
+[2025-10-20 07:59:50,670 INFO test.py line 217 30680] Evaluating 235/1449 on image 2007_007235.png, accuracy 0.9424.
+[2025-10-20 07:59:50,692 INFO test.py line 217 30680] Evaluating 236/1449 on image 2007_007341.png, accuracy 0.9474.
+[2025-10-20 07:59:50,712 INFO test.py line 217 30680] Evaluating 237/1449 on image 2007_007414.png, accuracy 0.9807.
+[2025-10-20 07:59:50,729 INFO test.py line 217 30680] Evaluating 238/1449 on image 2007_007417.png, accuracy 0.6419.
+[2025-10-20 07:59:50,749 INFO test.py line 217 30680] Evaluating 239/1449 on image 2007_007470.png, accuracy 0.9876.
+[2025-10-20 07:59:50,774 INFO test.py line 217 30680] Evaluating 240/1449 on image 2007_007477.png, accuracy 0.9860.
+[2025-10-20 07:59:50,796 INFO test.py line 217 30680] Evaluating 241/1449 on image 2007_007493.png, accuracy 0.9406.
+[2025-10-20 07:59:50,817 INFO test.py line 217 30680] Evaluating 242/1449 on image 2007_007498.png, accuracy 0.7562.
+[2025-10-20 07:59:50,837 INFO test.py line 217 30680] Evaluating 243/1449 on image 2007_007524.png, accuracy 0.9719.
+[2025-10-20 07:59:50,859 INFO test.py line 217 30680] Evaluating 244/1449 on image 2007_007534.png, accuracy 0.9702.
+[2025-10-20 07:59:50,882 INFO test.py line 217 30680] Evaluating 245/1449 on image 2007_007624.png, accuracy 0.9363.
+[2025-10-20 07:59:50,902 INFO test.py line 217 30680] Evaluating 246/1449 on image 2007_007651.png, accuracy 0.7405.
+[2025-10-20 07:59:50,923 INFO test.py line 217 30680] Evaluating 247/1449 on image 2007_007688.png, accuracy 0.8246.
+[2025-10-20 07:59:50,946 INFO test.py line 217 30680] Evaluating 248/1449 on image 2007_007748.png, accuracy 0.9788.
+[2025-10-20 07:59:50,968 INFO test.py line 217 30680] Evaluating 249/1449 on image 2007_007795.png, accuracy 0.8539.
+[2025-10-20 07:59:50,991 INFO test.py line 217 30680] Evaluating 250/1449 on image 2007_007810.png, accuracy 0.9685.
+[2025-10-20 07:59:51,013 INFO test.py line 217 30680] Evaluating 251/1449 on image 2007_007815.png, accuracy 0.9506.
+[2025-10-20 07:59:51,035 INFO test.py line 217 30680] Evaluating 252/1449 on image 2007_007818.png, accuracy 0.9246.
+[2025-10-20 07:59:51,057 INFO test.py line 217 30680] Evaluating 253/1449 on image 2007_007836.png, accuracy 0.8839.
+[2025-10-20 07:59:51,075 INFO test.py line 217 30680] Evaluating 254/1449 on image 2007_007849.png, accuracy 0.9661.
+[2025-10-20 07:59:51,095 INFO test.py line 217 30680] Evaluating 255/1449 on image 2007_007881.png, accuracy 0.9014.
+[2025-10-20 07:59:51,116 INFO test.py line 217 30680] Evaluating 256/1449 on image 2007_007996.png, accuracy 0.8363.
+[2025-10-20 07:59:51,138 INFO test.py line 217 30680] Evaluating 257/1449 on image 2007_008051.png, accuracy 0.9904.
+[2025-10-20 07:59:51,159 INFO test.py line 217 30680] Evaluating 258/1449 on image 2007_008084.png, accuracy 0.9512.
+[2025-10-20 07:59:51,181 INFO test.py line 217 30680] Evaluating 259/1449 on image 2007_008106.png, accuracy 0.9426.
+[2025-10-20 07:59:51,203 INFO test.py line 217 30680] Evaluating 260/1449 on image 2007_008110.png, accuracy 0.8295.
+[2025-10-20 07:59:51,225 INFO test.py line 217 30680] Evaluating 261/1449 on image 2007_008204.png, accuracy 0.8040.
+[2025-10-20 07:59:51,245 INFO test.py line 217 30680] Evaluating 262/1449 on image 2007_008222.png, accuracy 0.9726.
+[2025-10-20 07:59:51,269 INFO test.py line 217 30680] Evaluating 263/1449 on image 2007_008256.png, accuracy 0.9724.
+[2025-10-20 07:59:51,291 INFO test.py line 217 30680] Evaluating 264/1449 on image 2007_008260.png, accuracy 0.9159.
+[2025-10-20 07:59:51,313 INFO test.py line 217 30680] Evaluating 265/1449 on image 2007_008339.png, accuracy 0.9861.
+[2025-10-20 07:59:51,335 INFO test.py line 217 30680] Evaluating 266/1449 on image 2007_008374.png, accuracy 0.9144.
+[2025-10-20 07:59:51,356 INFO test.py line 217 30680] Evaluating 267/1449 on image 2007_008415.png, accuracy 0.9586.
+[2025-10-20 07:59:51,375 INFO test.py line 217 30680] Evaluating 268/1449 on image 2007_008430.png, accuracy 0.9822.
+[2025-10-20 07:59:51,397 INFO test.py line 217 30680] Evaluating 269/1449 on image 2007_008543.png, accuracy 0.9451.
+[2025-10-20 07:59:51,418 INFO test.py line 217 30680] Evaluating 270/1449 on image 2007_008547.png, accuracy 0.8357.
+[2025-10-20 07:59:51,439 INFO test.py line 217 30680] Evaluating 271/1449 on image 2007_008596.png, accuracy 0.9719.
+[2025-10-20 07:59:51,459 INFO test.py line 217 30680] Evaluating 272/1449 on image 2007_008645.png, accuracy 0.9935.
+[2025-10-20 07:59:51,479 INFO test.py line 217 30680] Evaluating 273/1449 on image 2007_008670.png, accuracy 0.9419.
+[2025-10-20 07:59:51,502 INFO test.py line 217 30680] Evaluating 274/1449 on image 2007_008708.png, accuracy 0.9890.
+[2025-10-20 07:59:51,522 INFO test.py line 217 30680] Evaluating 275/1449 on image 2007_008722.png, accuracy 0.9958.
+[2025-10-20 07:59:51,546 INFO test.py line 217 30680] Evaluating 276/1449 on image 2007_008747.png, accuracy 0.9625.
+[2025-10-20 07:59:51,558 INFO test.py line 217 30680] Evaluating 277/1449 on image 2007_008802.png, accuracy 0.9694.
+[2025-10-20 07:59:51,580 INFO test.py line 217 30680] Evaluating 278/1449 on image 2007_008815.png, accuracy 0.9802.
+[2025-10-20 07:59:51,600 INFO test.py line 217 30680] Evaluating 279/1449 on image 2007_008897.png, accuracy 0.9427.
+[2025-10-20 07:59:51,627 INFO test.py line 217 30680] Evaluating 280/1449 on image 2007_008944.png, accuracy 0.9529.
+[2025-10-20 07:59:51,648 INFO test.py line 217 30680] Evaluating 281/1449 on image 2007_008964.png, accuracy 0.7949.
+[2025-10-20 07:59:51,669 INFO test.py line 217 30680] Evaluating 282/1449 on image 2007_008973.png, accuracy 0.9889.
+[2025-10-20 07:59:51,694 INFO test.py line 217 30680] Evaluating 283/1449 on image 2007_008980.png, accuracy 0.6215.
+[2025-10-20 07:59:51,716 INFO test.py line 217 30680] Evaluating 284/1449 on image 2007_009015.png, accuracy 0.9618.
+[2025-10-20 07:59:51,738 INFO test.py line 217 30680] Evaluating 285/1449 on image 2007_009068.png, accuracy 0.8023.
+[2025-10-20 07:59:51,761 INFO test.py line 217 30680] Evaluating 286/1449 on image 2007_009084.png, accuracy 0.8923.
+[2025-10-20 07:59:51,782 INFO test.py line 217 30680] Evaluating 287/1449 on image 2007_009088.png, accuracy 0.8239.
+[2025-10-20 07:59:51,794 INFO test.py line 217 30680] Evaluating 288/1449 on image 2007_009096.png, accuracy 0.7388.
+[2025-10-20 07:59:51,816 INFO test.py line 217 30680] Evaluating 289/1449 on image 2007_009221.png, accuracy 0.9781.
+[2025-10-20 07:59:51,839 INFO test.py line 217 30680] Evaluating 290/1449 on image 2007_009245.png, accuracy 0.9620.
+[2025-10-20 07:59:51,860 INFO test.py line 217 30680] Evaluating 291/1449 on image 2007_009251.png, accuracy 0.9703.
+[2025-10-20 07:59:51,882 INFO test.py line 217 30680] Evaluating 292/1449 on image 2007_009252.png, accuracy 0.9001.
+[2025-10-20 07:59:51,903 INFO test.py line 217 30680] Evaluating 293/1449 on image 2007_009258.png, accuracy 0.8306.
+[2025-10-20 07:59:51,925 INFO test.py line 217 30680] Evaluating 294/1449 on image 2007_009320.png, accuracy 0.9035.
+[2025-10-20 07:59:51,950 INFO test.py line 217 30680] Evaluating 295/1449 on image 2007_009323.png, accuracy 0.9902.
+[2025-10-20 07:59:51,973 INFO test.py line 217 30680] Evaluating 296/1449 on image 2007_009331.png, accuracy 0.9474.
+[2025-10-20 07:59:51,996 INFO test.py line 217 30680] Evaluating 297/1449 on image 2007_009346.png, accuracy 0.9824.
+[2025-10-20 07:59:52,019 INFO test.py line 217 30680] Evaluating 298/1449 on image 2007_009392.png, accuracy 0.9532.
+[2025-10-20 07:59:52,047 INFO test.py line 217 30680] Evaluating 299/1449 on image 2007_009413.png, accuracy 0.8689.
+[2025-10-20 07:59:52,068 INFO test.py line 217 30680] Evaluating 300/1449 on image 2007_009419.png, accuracy 0.9747.
+[2025-10-20 07:59:52,091 INFO test.py line 217 30680] Evaluating 301/1449 on image 2007_009446.png, accuracy 0.9649.
+[2025-10-20 07:59:52,117 INFO test.py line 217 30680] Evaluating 302/1449 on image 2007_009458.png, accuracy 0.8700.
+[2025-10-20 07:59:52,139 INFO test.py line 217 30680] Evaluating 303/1449 on image 2007_009521.png, accuracy 0.9028.
+[2025-10-20 07:59:52,161 INFO test.py line 217 30680] Evaluating 304/1449 on image 2007_009562.png, accuracy 0.9359.
+[2025-10-20 07:59:52,175 INFO test.py line 217 30680] Evaluating 305/1449 on image 2007_009592.png, accuracy 0.8895.
+[2025-10-20 07:59:52,195 INFO test.py line 217 30680] Evaluating 306/1449 on image 2007_009654.png, accuracy 0.9730.
+[2025-10-20 07:59:52,216 INFO test.py line 217 30680] Evaluating 307/1449 on image 2007_009655.png, accuracy 0.6669.
+[2025-10-20 07:59:52,238 INFO test.py line 217 30680] Evaluating 308/1449 on image 2007_009684.png, accuracy 0.9201.
+[2025-10-20 07:59:52,260 INFO test.py line 217 30680] Evaluating 309/1449 on image 2007_009687.png, accuracy 0.9510.
+[2025-10-20 07:59:52,280 INFO test.py line 217 30680] Evaluating 310/1449 on image 2007_009691.png, accuracy 0.9298.
+[2025-10-20 07:59:52,302 INFO test.py line 217 30680] Evaluating 311/1449 on image 2007_009706.png, accuracy 0.9232.
+[2025-10-20 07:59:52,324 INFO test.py line 217 30680] Evaluating 312/1449 on image 2007_009750.png, accuracy 0.9086.
+[2025-10-20 07:59:52,346 INFO test.py line 217 30680] Evaluating 313/1449 on image 2007_009756.png, accuracy 0.9668.
+[2025-10-20 07:59:52,368 INFO test.py line 217 30680] Evaluating 314/1449 on image 2007_009764.png, accuracy 0.9362.
+[2025-10-20 07:59:52,391 INFO test.py line 217 30680] Evaluating 315/1449 on image 2007_009794.png, accuracy 0.9861.
+[2025-10-20 07:59:52,413 INFO test.py line 217 30680] Evaluating 316/1449 on image 2007_009817.png, accuracy 0.9911.
+[2025-10-20 07:59:52,433 INFO test.py line 217 30680] Evaluating 317/1449 on image 2007_009841.png, accuracy 0.9793.
+[2025-10-20 07:59:52,456 INFO test.py line 217 30680] Evaluating 318/1449 on image 2007_009897.png, accuracy 0.9405.
+[2025-10-20 07:59:52,479 INFO test.py line 217 30680] Evaluating 319/1449 on image 2007_009911.png, accuracy 0.9934.
+[2025-10-20 07:59:52,500 INFO test.py line 217 30680] Evaluating 320/1449 on image 2007_009923.png, accuracy 0.9946.
+[2025-10-20 07:59:52,525 INFO test.py line 217 30680] Evaluating 321/1449 on image 2007_009938.png, accuracy 0.9684.
+[2025-10-20 07:59:52,547 INFO test.py line 217 30680] Evaluating 322/1449 on image 2008_000009.png, accuracy 0.9959.
+[2025-10-20 07:59:52,570 INFO test.py line 217 30680] Evaluating 323/1449 on image 2008_000016.png, accuracy 0.9191.
+[2025-10-20 07:59:52,591 INFO test.py line 217 30680] Evaluating 324/1449 on image 2008_000073.png, accuracy 0.9461.
+[2025-10-20 07:59:52,613 INFO test.py line 217 30680] Evaluating 325/1449 on image 2008_000075.png, accuracy 0.9901.
+[2025-10-20 07:59:52,635 INFO test.py line 217 30680] Evaluating 326/1449 on image 2008_000080.png, accuracy 0.9804.
+[2025-10-20 07:59:52,658 INFO test.py line 217 30680] Evaluating 327/1449 on image 2008_000107.png, accuracy 0.7690.
+[2025-10-20 07:59:52,678 INFO test.py line 217 30680] Evaluating 328/1449 on image 2008_000120.png, accuracy 0.8693.
+[2025-10-20 07:59:52,699 INFO test.py line 217 30680] Evaluating 329/1449 on image 2008_000123.png, accuracy 0.9966.
+[2025-10-20 07:59:52,723 INFO test.py line 217 30680] Evaluating 330/1449 on image 2008_000149.png, accuracy 0.9605.
+[2025-10-20 07:59:52,746 INFO test.py line 217 30680] Evaluating 331/1449 on image 2008_000182.png, accuracy 0.9971.
+[2025-10-20 07:59:52,767 INFO test.py line 217 30680] Evaluating 332/1449 on image 2008_000213.png, accuracy 0.9379.
+[2025-10-20 07:59:52,790 INFO test.py line 217 30680] Evaluating 333/1449 on image 2008_000215.png, accuracy 0.9867.
+[2025-10-20 07:59:52,809 INFO test.py line 217 30680] Evaluating 334/1449 on image 2008_000223.png, accuracy 0.8515.
+[2025-10-20 07:59:52,828 INFO test.py line 217 30680] Evaluating 335/1449 on image 2008_000233.png, accuracy 0.9856.
+[2025-10-20 07:59:52,850 INFO test.py line 217 30680] Evaluating 336/1449 on image 2008_000234.png, accuracy 0.9906.
+[2025-10-20 07:59:52,870 INFO test.py line 217 30680] Evaluating 337/1449 on image 2008_000239.png, accuracy 0.9911.
+[2025-10-20 07:59:52,891 INFO test.py line 217 30680] Evaluating 338/1449 on image 2008_000254.png, accuracy 0.9889.
+[2025-10-20 07:59:52,912 INFO test.py line 217 30680] Evaluating 339/1449 on image 2008_000270.png, accuracy 0.7578.
+[2025-10-20 07:59:52,933 INFO test.py line 217 30680] Evaluating 340/1449 on image 2008_000271.png, accuracy 0.9932.
+[2025-10-20 07:59:52,955 INFO test.py line 217 30680] Evaluating 341/1449 on image 2008_000345.png, accuracy 0.9881.
+[2025-10-20 07:59:52,976 INFO test.py line 217 30680] Evaluating 342/1449 on image 2008_000359.png, accuracy 0.9730.
+[2025-10-20 07:59:52,997 INFO test.py line 217 30680] Evaluating 343/1449 on image 2008_000391.png, accuracy 0.9146.
+[2025-10-20 07:59:53,021 INFO test.py line 217 30680] Evaluating 344/1449 on image 2008_000401.png, accuracy 0.9877.
+[2025-10-20 07:59:53,042 INFO test.py line 217 30680] Evaluating 345/1449 on image 2008_000464.png, accuracy 0.9893.
+[2025-10-20 07:59:53,062 INFO test.py line 217 30680] Evaluating 346/1449 on image 2008_000469.png, accuracy 0.9913.
+[2025-10-20 07:59:53,084 INFO test.py line 217 30680] Evaluating 347/1449 on image 2008_000474.png, accuracy 0.8733.
+[2025-10-20 07:59:53,106 INFO test.py line 217 30680] Evaluating 348/1449 on image 2008_000501.png, accuracy 0.9961.
+[2025-10-20 07:59:53,127 INFO test.py line 217 30680] Evaluating 349/1449 on image 2008_000510.png, accuracy 0.9760.
+[2025-10-20 07:59:53,149 INFO test.py line 217 30680] Evaluating 350/1449 on image 2008_000533.png, accuracy 0.9920.
+[2025-10-20 07:59:53,169 INFO test.py line 217 30680] Evaluating 351/1449 on image 2008_000573.png, accuracy 0.9319.
+[2025-10-20 07:59:53,189 INFO test.py line 217 30680] Evaluating 352/1449 on image 2008_000589.png, accuracy 0.9691.
+[2025-10-20 07:59:53,209 INFO test.py line 217 30680] Evaluating 353/1449 on image 2008_000602.png, accuracy 0.9586.
+[2025-10-20 07:59:53,227 INFO test.py line 217 30680] Evaluating 354/1449 on image 2008_000630.png, accuracy 0.9708.
+[2025-10-20 07:59:53,248 INFO test.py line 217 30680] Evaluating 355/1449 on image 2008_000657.png, accuracy 0.9842.
+[2025-10-20 07:59:53,270 INFO test.py line 217 30680] Evaluating 356/1449 on image 2008_000661.png, accuracy 0.8672.
+[2025-10-20 07:59:53,290 INFO test.py line 217 30680] Evaluating 357/1449 on image 2008_000662.png, accuracy 0.8185.
+[2025-10-20 07:59:53,301 INFO test.py line 217 30680] Evaluating 358/1449 on image 2008_000666.png, accuracy 0.9952.
+[2025-10-20 07:59:53,312 INFO test.py line 217 30680] Evaluating 359/1449 on image 2008_000673.png, accuracy 0.8812.
+[2025-10-20 07:59:53,334 INFO test.py line 217 30680] Evaluating 360/1449 on image 2008_000700.png, accuracy 0.9765.
+[2025-10-20 07:59:53,355 INFO test.py line 217 30680] Evaluating 361/1449 on image 2008_000725.png, accuracy 0.9719.
+[2025-10-20 07:59:53,371 INFO test.py line 217 30680] Evaluating 362/1449 on image 2008_000731.png, accuracy 0.5808.
+[2025-10-20 07:59:53,389 INFO test.py line 217 30680] Evaluating 363/1449 on image 2008_000763.png, accuracy 0.2383.
+[2025-10-20 07:59:53,412 INFO test.py line 217 30680] Evaluating 364/1449 on image 2008_000765.png, accuracy 0.9686.
+[2025-10-20 07:59:53,432 INFO test.py line 217 30680] Evaluating 365/1449 on image 2008_000782.png, accuracy 0.9435.
+[2025-10-20 07:59:53,452 INFO test.py line 217 30680] Evaluating 366/1449 on image 2008_000795.png, accuracy 0.9803.
+[2025-10-20 07:59:53,475 INFO test.py line 217 30680] Evaluating 367/1449 on image 2008_000811.png, accuracy 0.8659.
+[2025-10-20 07:59:53,494 INFO test.py line 217 30680] Evaluating 368/1449 on image 2008_000848.png, accuracy 0.9968.
+[2025-10-20 07:59:53,518 INFO test.py line 217 30680] Evaluating 369/1449 on image 2008_000853.png, accuracy 0.9771.
+[2025-10-20 07:59:53,538 INFO test.py line 217 30680] Evaluating 370/1449 on image 2008_000863.png, accuracy 0.9727.
+[2025-10-20 07:59:53,560 INFO test.py line 217 30680] Evaluating 371/1449 on image 2008_000911.png, accuracy 0.8688.
+[2025-10-20 07:59:53,582 INFO test.py line 217 30680] Evaluating 372/1449 on image 2008_000919.png, accuracy 0.9562.
+[2025-10-20 07:59:53,603 INFO test.py line 217 30680] Evaluating 373/1449 on image 2008_000943.png, accuracy 0.8934.
+[2025-10-20 07:59:53,624 INFO test.py line 217 30680] Evaluating 374/1449 on image 2008_000992.png, accuracy 0.9861.
+[2025-10-20 07:59:53,646 INFO test.py line 217 30680] Evaluating 375/1449 on image 2008_001013.png, accuracy 0.7982.
+[2025-10-20 07:59:53,668 INFO test.py line 217 30680] Evaluating 376/1449 on image 2008_001028.png, accuracy 0.9945.
+[2025-10-20 07:59:53,690 INFO test.py line 217 30680] Evaluating 377/1449 on image 2008_001040.png, accuracy 0.9820.
+[2025-10-20 07:59:53,713 INFO test.py line 217 30680] Evaluating 378/1449 on image 2008_001070.png, accuracy 0.9800.
+[2025-10-20 07:59:53,734 INFO test.py line 217 30680] Evaluating 379/1449 on image 2008_001074.png, accuracy 0.8894.
+[2025-10-20 07:59:53,755 INFO test.py line 217 30680] Evaluating 380/1449 on image 2008_001076.png, accuracy 0.7961.
+[2025-10-20 07:59:53,777 INFO test.py line 217 30680] Evaluating 381/1449 on image 2008_001078.png, accuracy 0.9265.
+[2025-10-20 07:59:53,800 INFO test.py line 217 30680] Evaluating 382/1449 on image 2008_001135.png, accuracy 0.9694.
+[2025-10-20 07:59:53,824 INFO test.py line 217 30680] Evaluating 383/1449 on image 2008_001150.png, accuracy 0.9961.
+[2025-10-20 07:59:53,847 INFO test.py line 217 30680] Evaluating 384/1449 on image 2008_001170.png, accuracy 0.9824.
+[2025-10-20 07:59:53,869 INFO test.py line 217 30680] Evaluating 385/1449 on image 2008_001231.png, accuracy 0.9870.
+[2025-10-20 07:59:53,890 INFO test.py line 217 30680] Evaluating 386/1449 on image 2008_001249.png, accuracy 0.9908.
+[2025-10-20 07:59:53,912 INFO test.py line 217 30680] Evaluating 387/1449 on image 2008_001260.png, accuracy 0.9755.
+[2025-10-20 07:59:53,934 INFO test.py line 217 30680] Evaluating 388/1449 on image 2008_001283.png, accuracy 0.9180.
+[2025-10-20 07:59:53,958 INFO test.py line 217 30680] Evaluating 389/1449 on image 2008_001308.png, accuracy 0.9069.
+[2025-10-20 07:59:53,980 INFO test.py line 217 30680] Evaluating 390/1449 on image 2008_001379.png, accuracy 0.9879.
+[2025-10-20 07:59:54,001 INFO test.py line 217 30680] Evaluating 391/1449 on image 2008_001404.png, accuracy 0.9655.
+[2025-10-20 07:59:54,025 INFO test.py line 217 30680] Evaluating 392/1449 on image 2008_001433.png, accuracy 0.9754.
+[2025-10-20 07:59:54,043 INFO test.py line 217 30680] Evaluating 393/1449 on image 2008_001439.png, accuracy 0.8906.
+[2025-10-20 07:59:54,065 INFO test.py line 217 30680] Evaluating 394/1449 on image 2008_001478.png, accuracy 0.7856.
+[2025-10-20 07:59:54,085 INFO test.py line 217 30680] Evaluating 395/1449 on image 2008_001491.png, accuracy 0.9088.
+[2025-10-20 07:59:54,107 INFO test.py line 217 30680] Evaluating 396/1449 on image 2008_001504.png, accuracy 0.9770.
+[2025-10-20 07:59:54,130 INFO test.py line 217 30680] Evaluating 397/1449 on image 2008_001513.png, accuracy 0.9185.
+[2025-10-20 07:59:54,153 INFO test.py line 217 30680] Evaluating 398/1449 on image 2008_001514.png, accuracy 0.9832.
+[2025-10-20 07:59:54,174 INFO test.py line 217 30680] Evaluating 399/1449 on image 2008_001531.png, accuracy 0.9563.
+[2025-10-20 07:59:54,193 INFO test.py line 217 30680] Evaluating 400/1449 on image 2008_001546.png, accuracy 0.9891.
+[2025-10-20 07:59:54,223 INFO test.py line 217 30680] Evaluating 401/1449 on image 2008_001547.png, accuracy 0.9908.
+[2025-10-20 07:59:54,244 INFO test.py line 217 30680] Evaluating 402/1449 on image 2008_001580.png, accuracy 0.9928.
+[2025-10-20 07:59:54,267 INFO test.py line 217 30680] Evaluating 403/1449 on image 2008_001629.png, accuracy 0.9895.
+[2025-10-20 07:59:54,289 INFO test.py line 217 30680] Evaluating 404/1449 on image 2008_001640.png, accuracy 0.9877.
+[2025-10-20 07:59:54,311 INFO test.py line 217 30680] Evaluating 405/1449 on image 2008_001682.png, accuracy 0.9857.
+[2025-10-20 07:59:54,333 INFO test.py line 217 30680] Evaluating 406/1449 on image 2008_001688.png, accuracy 0.9000.
+[2025-10-20 07:59:54,355 INFO test.py line 217 30680] Evaluating 407/1449 on image 2008_001715.png, accuracy 0.9540.
+[2025-10-20 07:59:54,376 INFO test.py line 217 30680] Evaluating 408/1449 on image 2008_001821.png, accuracy 0.6711.
+[2025-10-20 07:59:54,398 INFO test.py line 217 30680] Evaluating 409/1449 on image 2008_001874.png, accuracy 0.9306.
+[2025-10-20 07:59:54,421 INFO test.py line 217 30680] Evaluating 410/1449 on image 2008_001885.png, accuracy 0.9898.
+[2025-10-20 07:59:54,442 INFO test.py line 217 30680] Evaluating 411/1449 on image 2008_001895.png, accuracy 0.9072.
+[2025-10-20 07:59:54,462 INFO test.py line 217 30680] Evaluating 412/1449 on image 2008_001966.png, accuracy 0.8907.
+[2025-10-20 07:59:54,483 INFO test.py line 217 30680] Evaluating 413/1449 on image 2008_001971.png, accuracy 0.9938.
+[2025-10-20 07:59:54,503 INFO test.py line 217 30680] Evaluating 414/1449 on image 2008_001992.png, accuracy 0.9371.
+[2025-10-20 07:59:54,522 INFO test.py line 217 30680] Evaluating 415/1449 on image 2008_002043.png, accuracy 0.9686.
+[2025-10-20 07:59:54,544 INFO test.py line 217 30680] Evaluating 416/1449 on image 2008_002152.png, accuracy 0.9882.
+[2025-10-20 07:59:54,566 INFO test.py line 217 30680] Evaluating 417/1449 on image 2008_002205.png, accuracy 0.9684.
+[2025-10-20 07:59:54,588 INFO test.py line 217 30680] Evaluating 418/1449 on image 2008_002212.png, accuracy 0.9479.
+[2025-10-20 07:59:54,610 INFO test.py line 217 30680] Evaluating 419/1449 on image 2008_002239.png, accuracy 0.9772.
+[2025-10-20 07:59:54,631 INFO test.py line 217 30680] Evaluating 420/1449 on image 2008_002240.png, accuracy 0.8712.
+[2025-10-20 07:59:54,654 INFO test.py line 217 30680] Evaluating 421/1449 on image 2008_002241.png, accuracy 0.9713.
+[2025-10-20 07:59:54,676 INFO test.py line 217 30680] Evaluating 422/1449 on image 2008_002269.png, accuracy 0.8950.
+[2025-10-20 07:59:54,699 INFO test.py line 217 30680] Evaluating 423/1449 on image 2008_002273.png, accuracy 0.9207.
+[2025-10-20 07:59:54,722 INFO test.py line 217 30680] Evaluating 424/1449 on image 2008_002358.png, accuracy 0.9825.
+[2025-10-20 07:59:54,745 INFO test.py line 217 30680] Evaluating 425/1449 on image 2008_002379.png, accuracy 0.8000.
+[2025-10-20 07:59:54,763 INFO test.py line 217 30680] Evaluating 426/1449 on image 2008_002383.png, accuracy 0.9788.
+[2025-10-20 07:59:54,791 INFO test.py line 217 30680] Evaluating 427/1449 on image 2008_002429.png, accuracy 0.9786.
+[2025-10-20 07:59:54,811 INFO test.py line 217 30680] Evaluating 428/1449 on image 2008_002464.png, accuracy 0.9075.
+[2025-10-20 07:59:54,832 INFO test.py line 217 30680] Evaluating 429/1449 on image 2008_002467.png, accuracy 0.8641.
+[2025-10-20 07:59:54,856 INFO test.py line 217 30680] Evaluating 430/1449 on image 2008_002492.png, accuracy 0.9977.
+[2025-10-20 07:59:54,876 INFO test.py line 217 30680] Evaluating 431/1449 on image 2008_002495.png, accuracy 0.9651.
+[2025-10-20 07:59:54,899 INFO test.py line 217 30680] Evaluating 432/1449 on image 2008_002504.png, accuracy 0.9720.
+[2025-10-20 07:59:54,928 INFO test.py line 217 30680] Evaluating 433/1449 on image 2008_002521.png, accuracy 0.9932.
+[2025-10-20 07:59:54,948 INFO test.py line 217 30680] Evaluating 434/1449 on image 2008_002536.png, accuracy 0.9577.
+[2025-10-20 07:59:54,973 INFO test.py line 217 30680] Evaluating 435/1449 on image 2008_002588.png, accuracy 0.9944.
+[2025-10-20 07:59:54,995 INFO test.py line 217 30680] Evaluating 436/1449 on image 2008_002623.png, accuracy 0.8747.
+[2025-10-20 07:59:55,015 INFO test.py line 217 30680] Evaluating 437/1449 on image 2008_002680.png, accuracy 0.8267.
+[2025-10-20 07:59:55,037 INFO test.py line 217 30680] Evaluating 438/1449 on image 2008_002681.png, accuracy 0.9786.
+[2025-10-20 07:59:55,058 INFO test.py line 217 30680] Evaluating 439/1449 on image 2008_002775.png, accuracy 0.8164.
+[2025-10-20 07:59:55,081 INFO test.py line 217 30680] Evaluating 440/1449 on image 2008_002778.png, accuracy 0.9723.
+[2025-10-20 07:59:55,105 INFO test.py line 217 30680] Evaluating 441/1449 on image 2008_002835.png, accuracy 0.9580.
+[2025-10-20 07:59:55,127 INFO test.py line 217 30680] Evaluating 442/1449 on image 2008_002859.png, accuracy 0.9244.
+[2025-10-20 07:59:55,149 INFO test.py line 217 30680] Evaluating 443/1449 on image 2008_002864.png, accuracy 0.8719.
+[2025-10-20 07:59:55,169 INFO test.py line 217 30680] Evaluating 444/1449 on image 2008_002900.png, accuracy 0.8135.
+[2025-10-20 07:59:55,190 INFO test.py line 217 30680] Evaluating 445/1449 on image 2008_002904.png, accuracy 0.7631.
+[2025-10-20 07:59:55,210 INFO test.py line 217 30680] Evaluating 446/1449 on image 2008_002929.png, accuracy 0.8797.
+[2025-10-20 07:59:55,229 INFO test.py line 217 30680] Evaluating 447/1449 on image 2008_002936.png, accuracy 0.9105.
+[2025-10-20 07:59:55,253 INFO test.py line 217 30680] Evaluating 448/1449 on image 2008_002942.png, accuracy 0.8692.
+[2025-10-20 07:59:55,266 INFO test.py line 217 30680] Evaluating 449/1449 on image 2008_002958.png, accuracy 0.9031.
+[2025-10-20 07:59:55,279 INFO test.py line 217 30680] Evaluating 450/1449 on image 2008_003003.png, accuracy 0.9801.
+[2025-10-20 07:59:55,292 INFO test.py line 217 30680] Evaluating 451/1449 on image 2008_003026.png, accuracy 0.9418.
+[2025-10-20 07:59:55,304 INFO test.py line 217 30680] Evaluating 452/1449 on image 2008_003034.png, accuracy 0.7470.
+[2025-10-20 07:59:55,317 INFO test.py line 217 30680] Evaluating 453/1449 on image 2008_003076.png, accuracy 0.9491.
+[2025-10-20 07:59:55,329 INFO test.py line 217 30680] Evaluating 454/1449 on image 2008_003105.png, accuracy 0.9691.
+[2025-10-20 07:59:55,338 INFO test.py line 217 30680] Evaluating 455/1449 on image 2008_003108.png, accuracy 0.9226.
+[2025-10-20 07:59:55,351 INFO test.py line 217 30680] Evaluating 456/1449 on image 2008_003110.png, accuracy 0.9793.
+[2025-10-20 07:59:55,362 INFO test.py line 217 30680] Evaluating 457/1449 on image 2008_003135.png, accuracy 0.9856.
+[2025-10-20 07:59:55,373 INFO test.py line 217 30680] Evaluating 458/1449 on image 2008_003141.png, accuracy 0.9597.
+[2025-10-20 07:59:55,391 INFO test.py line 217 30680] Evaluating 459/1449 on image 2008_003155.png, accuracy 0.9657.
+[2025-10-20 07:59:55,409 INFO test.py line 217 30680] Evaluating 460/1449 on image 2008_003210.png, accuracy 0.9648.
+[2025-10-20 07:59:55,428 INFO test.py line 217 30680] Evaluating 461/1449 on image 2008_003238.png, accuracy 0.9584.
+[2025-10-20 07:59:55,446 INFO test.py line 217 30680] Evaluating 462/1449 on image 2008_003270.png, accuracy 0.7594.
+[2025-10-20 07:59:55,460 INFO test.py line 217 30680] Evaluating 463/1449 on image 2008_003330.png, accuracy 0.9515.
+[2025-10-20 07:59:55,476 INFO test.py line 217 30680] Evaluating 464/1449 on image 2008_003333.png, accuracy 0.9650.
+[2025-10-20 07:59:55,496 INFO test.py line 217 30680] Evaluating 465/1449 on image 2008_003369.png, accuracy 0.9846.
+[2025-10-20 07:59:55,516 INFO test.py line 217 30680] Evaluating 466/1449 on image 2008_003379.png, accuracy 0.9676.
+[2025-10-20 07:59:55,539 INFO test.py line 217 30680] Evaluating 467/1449 on image 2008_003451.png, accuracy 0.9428.
+[2025-10-20 07:59:55,558 INFO test.py line 217 30680] Evaluating 468/1449 on image 2008_003461.png, accuracy 0.9300.
+[2025-10-20 07:59:55,580 INFO test.py line 217 30680] Evaluating 469/1449 on image 2008_003477.png, accuracy 0.8452.
+[2025-10-20 07:59:55,603 INFO test.py line 217 30680] Evaluating 470/1449 on image 2008_003492.png, accuracy 0.9781.
+[2025-10-20 07:59:55,626 INFO test.py line 217 30680] Evaluating 471/1449 on image 2008_003499.png, accuracy 0.9787.
+[2025-10-20 07:59:55,648 INFO test.py line 217 30680] Evaluating 472/1449 on image 2008_003511.png, accuracy 0.9731.
+[2025-10-20 07:59:55,672 INFO test.py line 217 30680] Evaluating 473/1449 on image 2008_003546.png, accuracy 0.9581.
+[2025-10-20 07:59:55,693 INFO test.py line 217 30680] Evaluating 474/1449 on image 2008_003576.png, accuracy 0.9526.
+[2025-10-20 07:59:55,718 INFO test.py line 217 30680] Evaluating 475/1449 on image 2008_003577.png, accuracy 0.9732.
+[2025-10-20 07:59:55,741 INFO test.py line 217 30680] Evaluating 476/1449 on image 2008_003676.png, accuracy 0.9486.
+[2025-10-20 07:59:55,762 INFO test.py line 217 30680] Evaluating 477/1449 on image 2008_003709.png, accuracy 0.9841.
+[2025-10-20 07:59:55,785 INFO test.py line 217 30680] Evaluating 478/1449 on image 2008_003733.png, accuracy 0.9595.
+[2025-10-20 07:59:55,802 INFO test.py line 217 30680] Evaluating 479/1449 on image 2008_003777.png, accuracy 0.9714.
+[2025-10-20 07:59:55,825 INFO test.py line 217 30680] Evaluating 480/1449 on image 2008_003782.png, accuracy 0.9822.
+[2025-10-20 07:59:55,847 INFO test.py line 217 30680] Evaluating 481/1449 on image 2008_003821.png, accuracy 0.9199.
+[2025-10-20 07:59:55,870 INFO test.py line 217 30680] Evaluating 482/1449 on image 2008_003846.png, accuracy 0.9854.
+[2025-10-20 07:59:55,893 INFO test.py line 217 30680] Evaluating 483/1449 on image 2008_003856.png, accuracy 0.9898.
+[2025-10-20 07:59:55,918 INFO test.py line 217 30680] Evaluating 484/1449 on image 2008_003858.png, accuracy 0.9821.
+[2025-10-20 07:59:55,934 INFO test.py line 217 30680] Evaluating 485/1449 on image 2008_003874.png, accuracy 0.9605.
+[2025-10-20 07:59:55,954 INFO test.py line 217 30680] Evaluating 486/1449 on image 2008_003876.png, accuracy 0.9892.
+[2025-10-20 07:59:55,979 INFO test.py line 217 30680] Evaluating 487/1449 on image 2008_003885.png, accuracy 0.9701.
+[2025-10-20 07:59:56,001 INFO test.py line 217 30680] Evaluating 488/1449 on image 2008_003886.png, accuracy 0.9871.
+[2025-10-20 07:59:56,021 INFO test.py line 217 30680] Evaluating 489/1449 on image 2008_003926.png, accuracy 0.9859.
+[2025-10-20 07:59:56,043 INFO test.py line 217 30680] Evaluating 490/1449 on image 2008_003976.png, accuracy 0.9873.
+[2025-10-20 07:59:56,063 INFO test.py line 217 30680] Evaluating 491/1449 on image 2008_004069.png, accuracy 0.8583.
+[2025-10-20 07:59:56,086 INFO test.py line 217 30680] Evaluating 492/1449 on image 2008_004101.png, accuracy 0.9570.
+[2025-10-20 07:59:56,109 INFO test.py line 217 30680] Evaluating 493/1449 on image 2008_004140.png, accuracy 0.9556.
+[2025-10-20 07:59:56,130 INFO test.py line 217 30680] Evaluating 494/1449 on image 2008_004172.png, accuracy 0.9712.
+[2025-10-20 07:59:56,142 INFO test.py line 217 30680] Evaluating 495/1449 on image 2008_004175.png, accuracy 0.9922.
+[2025-10-20 07:59:56,164 INFO test.py line 217 30680] Evaluating 496/1449 on image 2008_004212.png, accuracy 0.9877.
+[2025-10-20 07:59:56,186 INFO test.py line 217 30680] Evaluating 497/1449 on image 2008_004279.png, accuracy 0.9018.
+[2025-10-20 07:59:56,206 INFO test.py line 217 30680] Evaluating 498/1449 on image 2008_004339.png, accuracy 0.9757.
+[2025-10-20 07:59:56,228 INFO test.py line 217 30680] Evaluating 499/1449 on image 2008_004345.png, accuracy 0.9812.
+[2025-10-20 07:59:56,252 INFO test.py line 217 30680] Evaluating 500/1449 on image 2008_004363.png, accuracy 0.9614.
+[2025-10-20 07:59:56,272 INFO test.py line 217 30680] Evaluating 501/1449 on image 2008_004367.png, accuracy 0.9618.
+[2025-10-20 07:59:56,294 INFO test.py line 217 30680] Evaluating 502/1449 on image 2008_004396.png, accuracy 0.9507.
+[2025-10-20 07:59:56,316 INFO test.py line 217 30680] Evaluating 503/1449 on image 2008_004399.png, accuracy 0.9832.
+[2025-10-20 07:59:56,338 INFO test.py line 217 30680] Evaluating 504/1449 on image 2008_004453.png, accuracy 0.6910.
+[2025-10-20 07:59:56,360 INFO test.py line 217 30680] Evaluating 505/1449 on image 2008_004477.png, accuracy 0.9424.
+[2025-10-20 07:59:56,381 INFO test.py line 217 30680] Evaluating 506/1449 on image 2008_004552.png, accuracy 0.9516.
+[2025-10-20 07:59:56,402 INFO test.py line 217 30680] Evaluating 507/1449 on image 2008_004562.png, accuracy 0.7260.
+[2025-10-20 07:59:56,421 INFO test.py line 217 30680] Evaluating 508/1449 on image 2008_004575.png, accuracy 0.8015.
+[2025-10-20 07:59:56,440 INFO test.py line 217 30680] Evaluating 509/1449 on image 2008_004610.png, accuracy 0.9881.
+[2025-10-20 07:59:56,460 INFO test.py line 217 30680] Evaluating 510/1449 on image 2008_004612.png, accuracy 0.7103.
+[2025-10-20 07:59:56,482 INFO test.py line 217 30680] Evaluating 511/1449 on image 2008_004621.png, accuracy 0.8211.
+[2025-10-20 07:59:56,503 INFO test.py line 217 30680] Evaluating 512/1449 on image 2008_004624.png, accuracy 0.9769.
+[2025-10-20 07:59:56,524 INFO test.py line 217 30680] Evaluating 513/1449 on image 2008_004654.png, accuracy 0.9725.
+[2025-10-20 07:59:56,547 INFO test.py line 217 30680] Evaluating 514/1449 on image 2008_004659.png, accuracy 0.9681.
+[2025-10-20 07:59:56,571 INFO test.py line 217 30680] Evaluating 515/1449 on image 2008_004687.png, accuracy 0.9632.
+[2025-10-20 07:59:56,592 INFO test.py line 217 30680] Evaluating 516/1449 on image 2008_004701.png, accuracy 0.4202.
+[2025-10-20 07:59:56,612 INFO test.py line 217 30680] Evaluating 517/1449 on image 2008_004704.png, accuracy 0.9331.
+[2025-10-20 07:59:56,632 INFO test.py line 217 30680] Evaluating 518/1449 on image 2008_004705.png, accuracy 0.8921.
+[2025-10-20 07:59:56,654 INFO test.py line 217 30680] Evaluating 519/1449 on image 2008_004754.png, accuracy 0.9712.
+[2025-10-20 07:59:56,676 INFO test.py line 217 30680] Evaluating 520/1449 on image 2008_004758.png, accuracy 0.8907.
+[2025-10-20 07:59:56,698 INFO test.py line 217 30680] Evaluating 521/1449 on image 2008_004854.png, accuracy 0.9766.
+[2025-10-20 07:59:56,724 INFO test.py line 217 30680] Evaluating 522/1449 on image 2008_004910.png, accuracy 0.9919.
+[2025-10-20 07:59:56,745 INFO test.py line 217 30680] Evaluating 523/1449 on image 2008_004995.png, accuracy 0.9686.
+[2025-10-20 07:59:56,768 INFO test.py line 217 30680] Evaluating 524/1449 on image 2008_005049.png, accuracy 0.9776.
+[2025-10-20 07:59:56,791 INFO test.py line 217 30680] Evaluating 525/1449 on image 2008_005089.png, accuracy 0.9500.
+[2025-10-20 07:59:56,810 INFO test.py line 217 30680] Evaluating 526/1449 on image 2008_005097.png, accuracy 0.9192.
+[2025-10-20 07:59:56,831 INFO test.py line 217 30680] Evaluating 527/1449 on image 2008_005105.png, accuracy 0.8462.
+[2025-10-20 07:59:56,847 INFO test.py line 217 30680] Evaluating 528/1449 on image 2008_005145.png, accuracy 0.9739.
+[2025-10-20 07:59:56,868 INFO test.py line 217 30680] Evaluating 529/1449 on image 2008_005197.png, accuracy 0.9367.
+[2025-10-20 07:59:56,887 INFO test.py line 217 30680] Evaluating 530/1449 on image 2008_005217.png, accuracy 0.9010.
+[2025-10-20 07:59:56,903 INFO test.py line 217 30680] Evaluating 531/1449 on image 2008_005242.png, accuracy 0.8941.
+[2025-10-20 07:59:56,923 INFO test.py line 217 30680] Evaluating 532/1449 on image 2008_005245.png, accuracy 0.8951.
+[2025-10-20 07:59:56,945 INFO test.py line 217 30680] Evaluating 533/1449 on image 2008_005254.png, accuracy 0.9535.
+[2025-10-20 07:59:56,967 INFO test.py line 217 30680] Evaluating 534/1449 on image 2008_005262.png, accuracy 0.9701.
+[2025-10-20 07:59:56,992 INFO test.py line 217 30680] Evaluating 535/1449 on image 2008_005338.png, accuracy 0.9601.
+[2025-10-20 07:59:57,017 INFO test.py line 217 30680] Evaluating 536/1449 on image 2008_005398.png, accuracy 0.9945.
+[2025-10-20 07:59:57,033 INFO test.py line 217 30680] Evaluating 537/1449 on image 2008_005399.png, accuracy 0.9477.
+[2025-10-20 07:59:57,055 INFO test.py line 217 30680] Evaluating 538/1449 on image 2008_005422.png, accuracy 0.9684.
+[2025-10-20 07:59:57,077 INFO test.py line 217 30680] Evaluating 539/1449 on image 2008_005439.png, accuracy 0.9105.
+[2025-10-20 07:59:57,100 INFO test.py line 217 30680] Evaluating 540/1449 on image 2008_005445.png, accuracy 0.8919.
+[2025-10-20 07:59:57,124 INFO test.py line 217 30680] Evaluating 541/1449 on image 2008_005525.png, accuracy 0.9817.
+[2025-10-20 07:59:57,146 INFO test.py line 217 30680] Evaluating 542/1449 on image 2008_005544.png, accuracy 0.9738.
+[2025-10-20 07:59:57,167 INFO test.py line 217 30680] Evaluating 543/1449 on image 2008_005628.png, accuracy 0.9853.
+[2025-10-20 07:59:57,188 INFO test.py line 217 30680] Evaluating 544/1449 on image 2008_005633.png, accuracy 0.9640.
+[2025-10-20 07:59:57,210 INFO test.py line 217 30680] Evaluating 545/1449 on image 2008_005637.png, accuracy 0.9776.
+[2025-10-20 07:59:57,232 INFO test.py line 217 30680] Evaluating 546/1449 on image 2008_005642.png, accuracy 0.9757.
+[2025-10-20 07:59:57,255 INFO test.py line 217 30680] Evaluating 547/1449 on image 2008_005676.png, accuracy 0.9817.
+[2025-10-20 07:59:57,274 INFO test.py line 217 30680] Evaluating 548/1449 on image 2008_005680.png, accuracy 0.9165.
+[2025-10-20 07:59:57,296 INFO test.py line 217 30680] Evaluating 549/1449 on image 2008_005691.png, accuracy 0.9774.
+[2025-10-20 07:59:57,319 INFO test.py line 217 30680] Evaluating 550/1449 on image 2008_005727.png, accuracy 0.9107.
+[2025-10-20 07:59:57,340 INFO test.py line 217 30680] Evaluating 551/1449 on image 2008_005738.png, accuracy 0.9782.
+[2025-10-20 07:59:57,362 INFO test.py line 217 30680] Evaluating 552/1449 on image 2008_005812.png, accuracy 0.9597.
+[2025-10-20 07:59:57,383 INFO test.py line 217 30680] Evaluating 553/1449 on image 2008_005904.png, accuracy 0.7522.
+[2025-10-20 07:59:57,405 INFO test.py line 217 30680] Evaluating 554/1449 on image 2008_005915.png, accuracy 0.8994.
+[2025-10-20 07:59:57,428 INFO test.py line 217 30680] Evaluating 555/1449 on image 2008_006008.png, accuracy 0.9292.
+[2025-10-20 07:59:57,450 INFO test.py line 217 30680] Evaluating 556/1449 on image 2008_006036.png, accuracy 0.9924.
+[2025-10-20 07:59:57,471 INFO test.py line 217 30680] Evaluating 557/1449 on image 2008_006055.png, accuracy 0.9800.
+[2025-10-20 07:59:57,493 INFO test.py line 217 30680] Evaluating 558/1449 on image 2008_006063.png, accuracy 0.9385.
+[2025-10-20 07:59:57,517 INFO test.py line 217 30680] Evaluating 559/1449 on image 2008_006108.png, accuracy 0.9601.
+[2025-10-20 07:59:57,538 INFO test.py line 217 30680] Evaluating 560/1449 on image 2008_006130.png, accuracy 0.8261.
+[2025-10-20 07:59:57,561 INFO test.py line 217 30680] Evaluating 561/1449 on image 2008_006143.png, accuracy 0.9941.
+[2025-10-20 07:59:57,583 INFO test.py line 217 30680] Evaluating 562/1449 on image 2008_006159.png, accuracy 0.9737.
+[2025-10-20 07:59:57,606 INFO test.py line 217 30680] Evaluating 563/1449 on image 2008_006216.png, accuracy 0.9605.
+[2025-10-20 07:59:57,630 INFO test.py line 217 30680] Evaluating 564/1449 on image 2008_006219.png, accuracy 0.9506.
+[2025-10-20 07:59:57,651 INFO test.py line 217 30680] Evaluating 565/1449 on image 2008_006229.png, accuracy 0.9705.
+[2025-10-20 07:59:57,674 INFO test.py line 217 30680] Evaluating 566/1449 on image 2008_006254.png, accuracy 0.9130.
+[2025-10-20 07:59:57,697 INFO test.py line 217 30680] Evaluating 567/1449 on image 2008_006275.png, accuracy 0.9589.
+[2025-10-20 07:59:57,726 INFO test.py line 217 30680] Evaluating 568/1449 on image 2008_006325.png, accuracy 0.9803.
+[2025-10-20 07:59:57,742 INFO test.py line 217 30680] Evaluating 569/1449 on image 2008_006327.png, accuracy 0.8298.
+[2025-10-20 07:59:57,757 INFO test.py line 217 30680] Evaluating 570/1449 on image 2008_006341.png, accuracy 0.9300.
+[2025-10-20 07:59:57,772 INFO test.py line 217 30680] Evaluating 571/1449 on image 2008_006408.png, accuracy 0.9260.
+[2025-10-20 07:59:57,785 INFO test.py line 217 30680] Evaluating 572/1449 on image 2008_006480.png, accuracy 0.9700.
+[2025-10-20 07:59:57,799 INFO test.py line 217 30680] Evaluating 573/1449 on image 2008_006523.png, accuracy 0.5051.
+[2025-10-20 07:59:57,815 INFO test.py line 217 30680] Evaluating 574/1449 on image 2008_006526.png, accuracy 0.9290.
+[2025-10-20 07:59:57,829 INFO test.py line 217 30680] Evaluating 575/1449 on image 2008_006528.png, accuracy 0.9799.
+[2025-10-20 07:59:57,843 INFO test.py line 217 30680] Evaluating 576/1449 on image 2008_006553.png, accuracy 0.9852.
+[2025-10-20 07:59:57,856 INFO test.py line 217 30680] Evaluating 577/1449 on image 2008_006554.png, accuracy 0.8702.
+[2025-10-20 07:59:57,869 INFO test.py line 217 30680] Evaluating 578/1449 on image 2008_006703.png, accuracy 0.9906.
+[2025-10-20 07:59:57,881 INFO test.py line 217 30680] Evaluating 579/1449 on image 2008_006722.png, accuracy 0.7816.
+[2025-10-20 07:59:57,895 INFO test.py line 217 30680] Evaluating 580/1449 on image 2008_006752.png, accuracy 0.9944.
+[2025-10-20 07:59:57,912 INFO test.py line 217 30680] Evaluating 581/1449 on image 2008_006784.png, accuracy 0.9951.
+[2025-10-20 07:59:57,927 INFO test.py line 217 30680] Evaluating 582/1449 on image 2008_006835.png, accuracy 0.9866.
+[2025-10-20 07:59:57,940 INFO test.py line 217 30680] Evaluating 583/1449 on image 2008_006874.png, accuracy 0.9062.
+[2025-10-20 07:59:57,954 INFO test.py line 217 30680] Evaluating 584/1449 on image 2008_006981.png, accuracy 0.7464.
+[2025-10-20 07:59:57,966 INFO test.py line 217 30680] Evaluating 585/1449 on image 2008_006986.png, accuracy 0.9932.
+[2025-10-20 07:59:57,977 INFO test.py line 217 30680] Evaluating 586/1449 on image 2008_007025.png, accuracy 0.9695.
+[2025-10-20 07:59:57,992 INFO test.py line 217 30680] Evaluating 587/1449 on image 2008_007031.png, accuracy 0.9710.
+[2025-10-20 07:59:58,005 INFO test.py line 217 30680] Evaluating 588/1449 on image 2008_007048.png, accuracy 0.9644.
+[2025-10-20 07:59:58,017 INFO test.py line 217 30680] Evaluating 589/1449 on image 2008_007120.png, accuracy 0.9709.
+[2025-10-20 07:59:58,030 INFO test.py line 217 30680] Evaluating 590/1449 on image 2008_007123.png, accuracy 0.9824.
+[2025-10-20 07:59:58,043 INFO test.py line 217 30680] Evaluating 591/1449 on image 2008_007143.png, accuracy 0.9516.
+[2025-10-20 07:59:58,056 INFO test.py line 217 30680] Evaluating 592/1449 on image 2008_007194.png, accuracy 0.8944.
+[2025-10-20 07:59:58,069 INFO test.py line 217 30680] Evaluating 593/1449 on image 2008_007219.png, accuracy 0.9240.
+[2025-10-20 07:59:58,083 INFO test.py line 217 30680] Evaluating 594/1449 on image 2008_007273.png, accuracy 0.9783.
+[2025-10-20 07:59:58,092 INFO test.py line 217 30680] Evaluating 595/1449 on image 2008_007350.png, accuracy 0.9834.
+[2025-10-20 07:59:58,106 INFO test.py line 217 30680] Evaluating 596/1449 on image 2008_007378.png, accuracy 0.7947.
+[2025-10-20 07:59:58,119 INFO test.py line 217 30680] Evaluating 597/1449 on image 2008_007392.png, accuracy 0.9764.
+[2025-10-20 07:59:58,135 INFO test.py line 217 30680] Evaluating 598/1449 on image 2008_007402.png, accuracy 0.7571.
+[2025-10-20 07:59:58,154 INFO test.py line 217 30680] Evaluating 599/1449 on image 2008_007497.png, accuracy 0.9726.
+[2025-10-20 07:59:58,172 INFO test.py line 217 30680] Evaluating 600/1449 on image 2008_007498.png, accuracy 0.9714.
+[2025-10-20 07:59:58,185 INFO test.py line 217 30680] Evaluating 601/1449 on image 2008_007507.png, accuracy 0.9961.
+[2025-10-20 07:59:58,205 INFO test.py line 217 30680] Evaluating 602/1449 on image 2008_007513.png, accuracy 0.9570.
+[2025-10-20 07:59:58,223 INFO test.py line 217 30680] Evaluating 603/1449 on image 2008_007527.png, accuracy 0.9231.
+[2025-10-20 07:59:58,245 INFO test.py line 217 30680] Evaluating 604/1449 on image 2008_007548.png, accuracy 0.9741.
+[2025-10-20 07:59:58,265 INFO test.py line 217 30680] Evaluating 605/1449 on image 2008_007596.png, accuracy 0.9934.
+[2025-10-20 07:59:58,287 INFO test.py line 217 30680] Evaluating 606/1449 on image 2008_007677.png, accuracy 0.9741.
+[2025-10-20 07:59:58,307 INFO test.py line 217 30680] Evaluating 607/1449 on image 2008_007737.png, accuracy 0.8889.
+[2025-10-20 07:59:58,330 INFO test.py line 217 30680] Evaluating 608/1449 on image 2008_007797.png, accuracy 0.9896.
+[2025-10-20 07:59:58,351 INFO test.py line 217 30680] Evaluating 609/1449 on image 2008_007804.png, accuracy 0.9765.
+[2025-10-20 07:59:58,373 INFO test.py line 217 30680] Evaluating 610/1449 on image 2008_007811.png, accuracy 0.7961.
+[2025-10-20 07:59:58,395 INFO test.py line 217 30680] Evaluating 611/1449 on image 2008_007814.png, accuracy 0.9777.
+[2025-10-20 07:59:58,418 INFO test.py line 217 30680] Evaluating 612/1449 on image 2008_007828.png, accuracy 0.9168.
+[2025-10-20 07:59:58,440 INFO test.py line 217 30680] Evaluating 613/1449 on image 2008_007836.png, accuracy 0.9973.
+[2025-10-20 07:59:58,462 INFO test.py line 217 30680] Evaluating 614/1449 on image 2008_007945.png, accuracy 0.8784.
+[2025-10-20 07:59:58,482 INFO test.py line 217 30680] Evaluating 615/1449 on image 2008_007994.png, accuracy 0.9570.
+[2025-10-20 07:59:58,506 INFO test.py line 217 30680] Evaluating 616/1449 on image 2008_008051.png, accuracy 0.9042.
+[2025-10-20 07:59:58,528 INFO test.py line 217 30680] Evaluating 617/1449 on image 2008_008103.png, accuracy 0.9842.
+[2025-10-20 07:59:58,550 INFO test.py line 217 30680] Evaluating 618/1449 on image 2008_008127.png, accuracy 0.9765.
+[2025-10-20 07:59:58,570 INFO test.py line 217 30680] Evaluating 619/1449 on image 2008_008221.png, accuracy 0.9353.
+[2025-10-20 07:59:58,593 INFO test.py line 217 30680] Evaluating 620/1449 on image 2008_008252.png, accuracy 0.9756.
+[2025-10-20 07:59:58,616 INFO test.py line 217 30680] Evaluating 621/1449 on image 2008_008268.png, accuracy 0.9814.
+[2025-10-20 07:59:58,639 INFO test.py line 217 30680] Evaluating 622/1449 on image 2008_008296.png, accuracy 0.9960.
+[2025-10-20 07:59:58,662 INFO test.py line 217 30680] Evaluating 623/1449 on image 2008_008301.png, accuracy 0.9854.
+[2025-10-20 07:59:58,685 INFO test.py line 217 30680] Evaluating 624/1449 on image 2008_008335.png, accuracy 0.8577.
+[2025-10-20 07:59:58,708 INFO test.py line 217 30680] Evaluating 625/1449 on image 2008_008362.png, accuracy 0.8815.
+[2025-10-20 07:59:58,731 INFO test.py line 217 30680] Evaluating 626/1449 on image 2008_008392.png, accuracy 0.9839.
+[2025-10-20 07:59:58,755 INFO test.py line 217 30680] Evaluating 627/1449 on image 2008_008393.png, accuracy 0.9914.
+[2025-10-20 07:59:58,775 INFO test.py line 217 30680] Evaluating 628/1449 on image 2008_008421.png, accuracy 0.8974.
+[2025-10-20 07:59:58,796 INFO test.py line 217 30680] Evaluating 629/1449 on image 2008_008434.png, accuracy 0.8339.
+[2025-10-20 07:59:58,820 INFO test.py line 217 30680] Evaluating 630/1449 on image 2008_008469.png, accuracy 0.9194.
+[2025-10-20 07:59:58,843 INFO test.py line 217 30680] Evaluating 631/1449 on image 2008_008629.png, accuracy 0.8926.
+[2025-10-20 07:59:58,871 INFO test.py line 217 30680] Evaluating 632/1449 on image 2008_008682.png, accuracy 0.9911.
+[2025-10-20 07:59:58,894 INFO test.py line 217 30680] Evaluating 633/1449 on image 2008_008711.png, accuracy 0.8604.
+[2025-10-20 07:59:58,918 INFO test.py line 217 30680] Evaluating 634/1449 on image 2008_008746.png, accuracy 0.9916.
+[2025-10-20 07:59:58,934 INFO test.py line 217 30680] Evaluating 635/1449 on image 2009_000012.png, accuracy 0.8408.
+[2025-10-20 07:59:58,955 INFO test.py line 217 30680] Evaluating 636/1449 on image 2009_000013.png, accuracy 0.9689.
+[2025-10-20 07:59:58,978 INFO test.py line 217 30680] Evaluating 637/1449 on image 2009_000022.png, accuracy 0.9880.
+[2025-10-20 07:59:59,001 INFO test.py line 217 30680] Evaluating 638/1449 on image 2009_000032.png, accuracy 0.8938.
+[2025-10-20 07:59:59,025 INFO test.py line 217 30680] Evaluating 639/1449 on image 2009_000037.png, accuracy 0.8188.
+[2025-10-20 07:59:59,046 INFO test.py line 217 30680] Evaluating 640/1449 on image 2009_000039.png, accuracy 0.9952.
+[2025-10-20 07:59:59,067 INFO test.py line 217 30680] Evaluating 641/1449 on image 2009_000074.png, accuracy 0.9483.
+[2025-10-20 07:59:59,090 INFO test.py line 217 30680] Evaluating 642/1449 on image 2009_000080.png, accuracy 0.9690.
+[2025-10-20 07:59:59,116 INFO test.py line 217 30680] Evaluating 643/1449 on image 2009_000087.png, accuracy 0.9273.
+[2025-10-20 07:59:59,139 INFO test.py line 217 30680] Evaluating 644/1449 on image 2009_000096.png, accuracy 0.9619.
+[2025-10-20 07:59:59,162 INFO test.py line 217 30680] Evaluating 645/1449 on image 2009_000121.png, accuracy 0.9037.
+[2025-10-20 07:59:59,183 INFO test.py line 217 30680] Evaluating 646/1449 on image 2009_000136.png, accuracy 0.9831.
+[2025-10-20 07:59:59,205 INFO test.py line 217 30680] Evaluating 647/1449 on image 2009_000149.png, accuracy 0.9268.
+[2025-10-20 07:59:59,226 INFO test.py line 217 30680] Evaluating 648/1449 on image 2009_000156.png, accuracy 0.9914.
+[2025-10-20 07:59:59,246 INFO test.py line 217 30680] Evaluating 649/1449 on image 2009_000201.png, accuracy 0.7111.
+[2025-10-20 07:59:59,269 INFO test.py line 217 30680] Evaluating 650/1449 on image 2009_000205.png, accuracy 0.9744.
+[2025-10-20 07:59:59,292 INFO test.py line 217 30680] Evaluating 651/1449 on image 2009_000219.png, accuracy 0.7319.
+[2025-10-20 07:59:59,319 INFO test.py line 217 30680] Evaluating 652/1449 on image 2009_000242.png, accuracy 0.9634.
+[2025-10-20 07:59:59,341 INFO test.py line 217 30680] Evaluating 653/1449 on image 2009_000309.png, accuracy 0.8291.
+[2025-10-20 07:59:59,364 INFO test.py line 217 30680] Evaluating 654/1449 on image 2009_000318.png, accuracy 0.9892.
+[2025-10-20 07:59:59,385 INFO test.py line 217 30680] Evaluating 655/1449 on image 2009_000335.png, accuracy 0.9710.
+[2025-10-20 07:59:59,408 INFO test.py line 217 30680] Evaluating 656/1449 on image 2009_000351.png, accuracy 0.9812.
+[2025-10-20 07:59:59,431 INFO test.py line 217 30680] Evaluating 657/1449 on image 2009_000354.png, accuracy 0.8450.
+[2025-10-20 07:59:59,451 INFO test.py line 217 30680] Evaluating 658/1449 on image 2009_000387.png, accuracy 0.9856.
+[2025-10-20 07:59:59,471 INFO test.py line 217 30680] Evaluating 659/1449 on image 2009_000391.png, accuracy 0.9078.
+[2025-10-20 07:59:59,492 INFO test.py line 217 30680] Evaluating 660/1449 on image 2009_000412.png, accuracy 0.9485.
+[2025-10-20 07:59:59,519 INFO test.py line 217 30680] Evaluating 661/1449 on image 2009_000418.png, accuracy 0.8533.
+[2025-10-20 07:59:59,542 INFO test.py line 217 30680] Evaluating 662/1449 on image 2009_000421.png, accuracy 0.9738.
+[2025-10-20 07:59:59,563 INFO test.py line 217 30680] Evaluating 663/1449 on image 2009_000426.png, accuracy 0.9809.
+[2025-10-20 07:59:59,585 INFO test.py line 217 30680] Evaluating 664/1449 on image 2009_000440.png, accuracy 0.9913.
+[2025-10-20 07:59:59,604 INFO test.py line 217 30680] Evaluating 665/1449 on image 2009_000446.png, accuracy 0.9570.
+[2025-10-20 07:59:59,618 INFO test.py line 217 30680] Evaluating 666/1449 on image 2009_000455.png, accuracy 0.9928.
+[2025-10-20 07:59:59,631 INFO test.py line 217 30680] Evaluating 667/1449 on image 2009_000457.png, accuracy 0.9439.
+[2025-10-20 07:59:59,643 INFO test.py line 217 30680] Evaluating 668/1449 on image 2009_000469.png, accuracy 0.9725.
+[2025-10-20 07:59:59,651 INFO test.py line 217 30680] Evaluating 669/1449 on image 2009_000487.png, accuracy 0.9980.
+[2025-10-20 07:59:59,664 INFO test.py line 217 30680] Evaluating 670/1449 on image 2009_000488.png, accuracy 0.9527.
+[2025-10-20 07:59:59,678 INFO test.py line 217 30680] Evaluating 671/1449 on image 2009_000523.png, accuracy 0.9787.
+[2025-10-20 07:59:59,691 INFO test.py line 217 30680] Evaluating 672/1449 on image 2009_000573.png, accuracy 0.9051.
+[2025-10-20 07:59:59,708 INFO test.py line 217 30680] Evaluating 673/1449 on image 2009_000619.png, accuracy 0.9962.
+[2025-10-20 07:59:59,721 INFO test.py line 217 30680] Evaluating 674/1449 on image 2009_000628.png, accuracy 0.9924.
+[2025-10-20 07:59:59,735 INFO test.py line 217 30680] Evaluating 675/1449 on image 2009_000641.png, accuracy 0.9821.
+[2025-10-20 07:59:59,749 INFO test.py line 217 30680] Evaluating 676/1449 on image 2009_000664.png, accuracy 0.9768.
+[2025-10-20 07:59:59,763 INFO test.py line 217 30680] Evaluating 677/1449 on image 2009_000675.png, accuracy 0.9784.
+[2025-10-20 07:59:59,774 INFO test.py line 217 30680] Evaluating 678/1449 on image 2009_000704.png, accuracy 0.9412.
+[2025-10-20 07:59:59,787 INFO test.py line 217 30680] Evaluating 679/1449 on image 2009_000705.png, accuracy 0.9847.
+[2025-10-20 07:59:59,800 INFO test.py line 217 30680] Evaluating 680/1449 on image 2009_000712.png, accuracy 0.9932.
+[2025-10-20 07:59:59,815 INFO test.py line 217 30680] Evaluating 681/1449 on image 2009_000716.png, accuracy 0.9282.
+[2025-10-20 07:59:59,829 INFO test.py line 217 30680] Evaluating 682/1449 on image 2009_000723.png, accuracy 0.9717.
+[2025-10-20 07:59:59,842 INFO test.py line 217 30680] Evaluating 683/1449 on image 2009_000727.png, accuracy 0.9727.
+[2025-10-20 07:59:59,855 INFO test.py line 217 30680] Evaluating 684/1449 on image 2009_000730.png, accuracy 0.9506.
+[2025-10-20 07:59:59,868 INFO test.py line 217 30680] Evaluating 685/1449 on image 2009_000731.png, accuracy 0.8187.
+[2025-10-20 07:59:59,879 INFO test.py line 217 30680] Evaluating 686/1449 on image 2009_000732.png, accuracy 0.9073.
+[2025-10-20 07:59:59,892 INFO test.py line 217 30680] Evaluating 687/1449 on image 2009_000771.png, accuracy 0.7687.
+[2025-10-20 07:59:59,905 INFO test.py line 217 30680] Evaluating 688/1449 on image 2009_000825.png, accuracy 0.8914.
+[2025-10-20 07:59:59,918 INFO test.py line 217 30680] Evaluating 689/1449 on image 2009_000828.png, accuracy 0.9921.
+[2025-10-20 07:59:59,931 INFO test.py line 217 30680] Evaluating 690/1449 on image 2009_000839.png, accuracy 0.9931.
+[2025-10-20 07:59:59,945 INFO test.py line 217 30680] Evaluating 691/1449 on image 2009_000840.png, accuracy 0.9513.
+[2025-10-20 07:59:59,957 INFO test.py line 217 30680] Evaluating 692/1449 on image 2009_000845.png, accuracy 0.9879.
+[2025-10-20 07:59:59,971 INFO test.py line 217 30680] Evaluating 693/1449 on image 2009_000879.png, accuracy 0.9944.
+[2025-10-20 07:59:59,983 INFO test.py line 217 30680] Evaluating 694/1449 on image 2009_000892.png, accuracy 0.9829.
+[2025-10-20 07:59:59,996 INFO test.py line 217 30680] Evaluating 695/1449 on image 2009_000919.png, accuracy 0.9953.
+[2025-10-20 08:00:00,013 INFO test.py line 217 30680] Evaluating 696/1449 on image 2009_000924.png, accuracy 0.9820.
+[2025-10-20 08:00:00,026 INFO test.py line 217 30680] Evaluating 697/1449 on image 2009_000931.png, accuracy 0.9815.
+[2025-10-20 08:00:00,039 INFO test.py line 217 30680] Evaluating 698/1449 on image 2009_000935.png, accuracy 0.9855.
+[2025-10-20 08:00:00,054 INFO test.py line 217 30680] Evaluating 699/1449 on image 2009_000964.png, accuracy 0.9373.
+[2025-10-20 08:00:00,068 INFO test.py line 217 30680] Evaluating 700/1449 on image 2009_000989.png, accuracy 0.9991.
+[2025-10-20 08:00:00,081 INFO test.py line 217 30680] Evaluating 701/1449 on image 2009_000991.png, accuracy 0.9853.
+[2025-10-20 08:00:00,094 INFO test.py line 217 30680] Evaluating 702/1449 on image 2009_000998.png, accuracy 0.9919.
+[2025-10-20 08:00:00,111 INFO test.py line 217 30680] Evaluating 703/1449 on image 2009_001008.png, accuracy 0.9419.
+[2025-10-20 08:00:00,124 INFO test.py line 217 30680] Evaluating 704/1449 on image 2009_001082.png, accuracy 0.9673.
+[2025-10-20 08:00:00,142 INFO test.py line 217 30680] Evaluating 705/1449 on image 2009_001108.png, accuracy 0.9975.
+[2025-10-20 08:00:00,154 INFO test.py line 217 30680] Evaluating 706/1449 on image 2009_001160.png, accuracy 0.8716.
+[2025-10-20 08:00:00,168 INFO test.py line 217 30680] Evaluating 707/1449 on image 2009_001215.png, accuracy 0.7385.
+[2025-10-20 08:00:00,181 INFO test.py line 217 30680] Evaluating 708/1449 on image 2009_001240.png, accuracy 0.9814.
+[2025-10-20 08:00:00,194 INFO test.py line 217 30680] Evaluating 709/1449 on image 2009_001255.png, accuracy 0.8007.
+[2025-10-20 08:00:00,209 INFO test.py line 217 30680] Evaluating 710/1449 on image 2009_001278.png, accuracy 0.9107.
+[2025-10-20 08:00:00,222 INFO test.py line 217 30680] Evaluating 711/1449 on image 2009_001299.png, accuracy 0.7271.
+[2025-10-20 08:00:00,238 INFO test.py line 217 30680] Evaluating 712/1449 on image 2009_001300.png, accuracy 0.9771.
+[2025-10-20 08:00:00,260 INFO test.py line 217 30680] Evaluating 713/1449 on image 2009_001314.png, accuracy 0.9950.
+[2025-10-20 08:00:00,277 INFO test.py line 217 30680] Evaluating 714/1449 on image 2009_001332.png, accuracy 0.9905.
+[2025-10-20 08:00:00,294 INFO test.py line 217 30680] Evaluating 715/1449 on image 2009_001333.png, accuracy 0.9854.
+[2025-10-20 08:00:00,317 INFO test.py line 217 30680] Evaluating 716/1449 on image 2009_001363.png, accuracy 0.9521.
+[2025-10-20 08:00:00,337 INFO test.py line 217 30680] Evaluating 717/1449 on image 2009_001391.png, accuracy 0.9739.
+[2025-10-20 08:00:00,360 INFO test.py line 217 30680] Evaluating 718/1449 on image 2009_001411.png, accuracy 0.9829.
+[2025-10-20 08:00:00,382 INFO test.py line 217 30680] Evaluating 719/1449 on image 2009_001433.png, accuracy 0.9721.
+[2025-10-20 08:00:00,405 INFO test.py line 217 30680] Evaluating 720/1449 on image 2009_001505.png, accuracy 0.9406.
+[2025-10-20 08:00:00,426 INFO test.py line 217 30680] Evaluating 721/1449 on image 2009_001535.png, accuracy 0.9198.
+[2025-10-20 08:00:00,448 INFO test.py line 217 30680] Evaluating 722/1449 on image 2009_001536.png, accuracy 0.7982.
+[2025-10-20 08:00:00,468 INFO test.py line 217 30680] Evaluating 723/1449 on image 2009_001565.png, accuracy 0.9907.
+[2025-10-20 08:00:00,489 INFO test.py line 217 30680] Evaluating 724/1449 on image 2009_001607.png, accuracy 0.9535.
+[2025-10-20 08:00:00,511 INFO test.py line 217 30680] Evaluating 725/1449 on image 2009_001644.png, accuracy 0.9094.
+[2025-10-20 08:00:00,532 INFO test.py line 217 30680] Evaluating 726/1449 on image 2009_001663.png, accuracy 0.9662.
+[2025-10-20 08:00:00,556 INFO test.py line 217 30680] Evaluating 727/1449 on image 2009_001683.png, accuracy 0.9902.
+[2025-10-20 08:00:00,577 INFO test.py line 217 30680] Evaluating 728/1449 on image 2009_001684.png, accuracy 0.7583.
+[2025-10-20 08:00:00,599 INFO test.py line 217 30680] Evaluating 729/1449 on image 2009_001687.png, accuracy 0.9704.
+[2025-10-20 08:00:00,625 INFO test.py line 217 30680] Evaluating 730/1449 on image 2009_001718.png, accuracy 0.9415.
+[2025-10-20 08:00:00,645 INFO test.py line 217 30680] Evaluating 731/1449 on image 2009_001731.png, accuracy 0.9945.
+[2025-10-20 08:00:00,666 INFO test.py line 217 30680] Evaluating 732/1449 on image 2009_001765.png, accuracy 0.9905.
+[2025-10-20 08:00:00,690 INFO test.py line 217 30680] Evaluating 733/1449 on image 2009_001768.png, accuracy 0.9607.
+[2025-10-20 08:00:00,714 INFO test.py line 217 30680] Evaluating 734/1449 on image 2009_001775.png, accuracy 0.7691.
+[2025-10-20 08:00:00,737 INFO test.py line 217 30680] Evaluating 735/1449 on image 2009_001804.png, accuracy 0.9785.
+[2025-10-20 08:00:00,761 INFO test.py line 217 30680] Evaluating 736/1449 on image 2009_001816.png, accuracy 0.9790.
+[2025-10-20 08:00:00,779 INFO test.py line 217 30680] Evaluating 737/1449 on image 2009_001818.png, accuracy 0.8229.
+[2025-10-20 08:00:00,801 INFO test.py line 217 30680] Evaluating 738/1449 on image 2009_001850.png, accuracy 0.9913.
+[2025-10-20 08:00:00,824 INFO test.py line 217 30680] Evaluating 739/1449 on image 2009_001851.png, accuracy 0.9854.
+[2025-10-20 08:00:00,845 INFO test.py line 217 30680] Evaluating 740/1449 on image 2009_001854.png, accuracy 0.9764.
+[2025-10-20 08:00:00,868 INFO test.py line 217 30680] Evaluating 741/1449 on image 2009_001941.png, accuracy 0.9680.
+[2025-10-20 08:00:00,896 INFO test.py line 217 30680] Evaluating 742/1449 on image 2009_001991.png, accuracy 0.9625.
+[2025-10-20 08:00:00,919 INFO test.py line 217 30680] Evaluating 743/1449 on image 2009_002012.png, accuracy 0.9903.
+[2025-10-20 08:00:00,942 INFO test.py line 217 30680] Evaluating 744/1449 on image 2009_002035.png, accuracy 0.9899.
+[2025-10-20 08:00:00,963 INFO test.py line 217 30680] Evaluating 745/1449 on image 2009_002042.png, accuracy 0.9943.
+[2025-10-20 08:00:00,987 INFO test.py line 217 30680] Evaluating 746/1449 on image 2009_002082.png, accuracy 0.9853.
+[2025-10-20 08:00:01,012 INFO test.py line 217 30680] Evaluating 747/1449 on image 2009_002094.png, accuracy 0.9347.
+[2025-10-20 08:00:01,034 INFO test.py line 217 30680] Evaluating 748/1449 on image 2009_002097.png, accuracy 0.9877.
+[2025-10-20 08:00:01,055 INFO test.py line 217 30680] Evaluating 749/1449 on image 2009_002122.png, accuracy 0.9838.
+[2025-10-20 08:00:01,077 INFO test.py line 217 30680] Evaluating 750/1449 on image 2009_002150.png, accuracy 0.7562.
+[2025-10-20 08:00:01,106 INFO test.py line 217 30680] Evaluating 751/1449 on image 2009_002155.png, accuracy 0.8107.
+[2025-10-20 08:00:01,128 INFO test.py line 217 30680] Evaluating 752/1449 on image 2009_002164.png, accuracy 0.9838.
+[2025-10-20 08:00:01,151 INFO test.py line 217 30680] Evaluating 753/1449 on image 2009_002165.png, accuracy 0.9553.
+[2025-10-20 08:00:01,173 INFO test.py line 217 30680] Evaluating 754/1449 on image 2009_002171.png, accuracy 0.9345.
+[2025-10-20 08:00:01,193 INFO test.py line 217 30680] Evaluating 755/1449 on image 2009_002185.png, accuracy 0.8832.
+[2025-10-20 08:00:01,217 INFO test.py line 217 30680] Evaluating 756/1449 on image 2009_002202.png, accuracy 0.9892.
+[2025-10-20 08:00:01,240 INFO test.py line 217 30680] Evaluating 757/1449 on image 2009_002221.png, accuracy 0.7838.
+[2025-10-20 08:00:01,263 INFO test.py line 217 30680] Evaluating 758/1449 on image 2009_002238.png, accuracy 0.8894.
+[2025-10-20 08:00:01,290 INFO test.py line 217 30680] Evaluating 759/1449 on image 2009_002239.png, accuracy 0.6936.
+[2025-10-20 08:00:01,311 INFO test.py line 217 30680] Evaluating 760/1449 on image 2009_002265.png, accuracy 0.9788.
+[2025-10-20 08:00:01,331 INFO test.py line 217 30680] Evaluating 761/1449 on image 2009_002268.png, accuracy 0.9913.
+[2025-10-20 08:00:01,351 INFO test.py line 217 30680] Evaluating 762/1449 on image 2009_002291.png, accuracy 0.9843.
+[2025-10-20 08:00:01,374 INFO test.py line 217 30680] Evaluating 763/1449 on image 2009_002295.png, accuracy 0.9558.
+[2025-10-20 08:00:01,394 INFO test.py line 217 30680] Evaluating 764/1449 on image 2009_002317.png, accuracy 0.9763.
+[2025-10-20 08:00:01,418 INFO test.py line 217 30680] Evaluating 765/1449 on image 2009_002320.png, accuracy 0.9914.
+[2025-10-20 08:00:01,440 INFO test.py line 217 30680] Evaluating 766/1449 on image 2009_002346.png, accuracy 0.7580.
+[2025-10-20 08:00:01,460 INFO test.py line 217 30680] Evaluating 767/1449 on image 2009_002366.png, accuracy 0.8849.
+[2025-10-20 08:00:01,471 INFO test.py line 217 30680] Evaluating 768/1449 on image 2009_002372.png, accuracy 0.9550.
+[2025-10-20 08:00:01,482 INFO test.py line 217 30680] Evaluating 769/1449 on image 2009_002382.png, accuracy 0.9271.
+[2025-10-20 08:00:01,492 INFO test.py line 217 30680] Evaluating 770/1449 on image 2009_002390.png, accuracy 0.8033.
+[2025-10-20 08:00:01,508 INFO test.py line 217 30680] Evaluating 771/1449 on image 2009_002415.png, accuracy 0.6640.
+[2025-10-20 08:00:01,527 INFO test.py line 217 30680] Evaluating 772/1449 on image 2009_002445.png, accuracy 0.9899.
+[2025-10-20 08:00:01,539 INFO test.py line 217 30680] Evaluating 773/1449 on image 2009_002487.png, accuracy 0.8639.
+[2025-10-20 08:00:01,554 INFO test.py line 217 30680] Evaluating 774/1449 on image 2009_002521.png, accuracy 0.9723.
+[2025-10-20 08:00:01,572 INFO test.py line 217 30680] Evaluating 775/1449 on image 2009_002527.png, accuracy 0.9536.
+[2025-10-20 08:00:01,586 INFO test.py line 217 30680] Evaluating 776/1449 on image 2009_002535.png, accuracy 0.9743.
+[2025-10-20 08:00:01,600 INFO test.py line 217 30680] Evaluating 777/1449 on image 2009_002539.png, accuracy 0.9922.
+[2025-10-20 08:00:01,614 INFO test.py line 217 30680] Evaluating 778/1449 on image 2009_002549.png, accuracy 0.9774.
+[2025-10-20 08:00:01,628 INFO test.py line 217 30680] Evaluating 779/1449 on image 2009_002562.png, accuracy 0.9157.
+[2025-10-20 08:00:01,640 INFO test.py line 217 30680] Evaluating 780/1449 on image 2009_002568.png, accuracy 0.9777.
+[2025-10-20 08:00:01,653 INFO test.py line 217 30680] Evaluating 781/1449 on image 2009_002571.png, accuracy 0.8759.
+[2025-10-20 08:00:01,666 INFO test.py line 217 30680] Evaluating 782/1449 on image 2009_002573.png, accuracy 0.9798.
+[2025-10-20 08:00:01,680 INFO test.py line 217 30680] Evaluating 783/1449 on image 2009_002584.png, accuracy 0.8945.
+[2025-10-20 08:00:01,696 INFO test.py line 217 30680] Evaluating 784/1449 on image 2009_002591.png, accuracy 0.9989.
+[2025-10-20 08:00:01,716 INFO test.py line 217 30680] Evaluating 785/1449 on image 2009_002594.png, accuracy 0.9939.
+[2025-10-20 08:00:01,733 INFO test.py line 217 30680] Evaluating 786/1449 on image 2009_002604.png, accuracy 0.9953.
+[2025-10-20 08:00:01,750 INFO test.py line 217 30680] Evaluating 787/1449 on image 2009_002618.png, accuracy 0.9975.
+[2025-10-20 08:00:01,771 INFO test.py line 217 30680] Evaluating 788/1449 on image 2009_002635.png, accuracy 0.9903.
+[2025-10-20 08:00:01,791 INFO test.py line 217 30680] Evaluating 789/1449 on image 2009_002638.png, accuracy 0.9132.
+[2025-10-20 08:00:01,812 INFO test.py line 217 30680] Evaluating 790/1449 on image 2009_002649.png, accuracy 0.8403.
+[2025-10-20 08:00:01,834 INFO test.py line 217 30680] Evaluating 791/1449 on image 2009_002651.png, accuracy 0.9738.
+[2025-10-20 08:00:01,854 INFO test.py line 217 30680] Evaluating 792/1449 on image 2009_002727.png, accuracy 0.9821.
+[2025-10-20 08:00:01,872 INFO test.py line 217 30680] Evaluating 793/1449 on image 2009_002732.png, accuracy 0.6087.
+[2025-10-20 08:00:01,887 INFO test.py line 217 30680] Evaluating 794/1449 on image 2009_002749.png, accuracy 0.9297.
+[2025-10-20 08:00:01,908 INFO test.py line 217 30680] Evaluating 795/1449 on image 2009_002753.png, accuracy 0.9634.
+[2025-10-20 08:00:01,929 INFO test.py line 217 30680] Evaluating 796/1449 on image 2009_002771.png, accuracy 0.9878.
+[2025-10-20 08:00:01,948 INFO test.py line 217 30680] Evaluating 797/1449 on image 2009_002808.png, accuracy 0.9165.
+[2025-10-20 08:00:01,966 INFO test.py line 217 30680] Evaluating 798/1449 on image 2009_002856.png, accuracy 0.8247.
+[2025-10-20 08:00:01,982 INFO test.py line 217 30680] Evaluating 799/1449 on image 2009_002887.png, accuracy 0.9738.
+[2025-10-20 08:00:02,002 INFO test.py line 217 30680] Evaluating 800/1449 on image 2009_002888.png, accuracy 0.9719.
+[2025-10-20 08:00:02,025 INFO test.py line 217 30680] Evaluating 801/1449 on image 2009_002928.png, accuracy 0.8770.
+[2025-10-20 08:00:02,047 INFO test.py line 217 30680] Evaluating 802/1449 on image 2009_002936.png, accuracy 0.9921.
+[2025-10-20 08:00:02,069 INFO test.py line 217 30680] Evaluating 803/1449 on image 2009_002975.png, accuracy 0.9712.
+[2025-10-20 08:00:02,091 INFO test.py line 217 30680] Evaluating 804/1449 on image 2009_002982.png, accuracy 0.9835.
+[2025-10-20 08:00:02,112 INFO test.py line 217 30680] Evaluating 805/1449 on image 2009_002990.png, accuracy 0.9841.
+[2025-10-20 08:00:02,132 INFO test.py line 217 30680] Evaluating 806/1449 on image 2009_003003.png, accuracy 0.5682.
+[2025-10-20 08:00:02,153 INFO test.py line 217 30680] Evaluating 807/1449 on image 2009_003005.png, accuracy 0.9789.
+[2025-10-20 08:00:02,176 INFO test.py line 217 30680] Evaluating 808/1449 on image 2009_003043.png, accuracy 0.9820.
+[2025-10-20 08:00:02,196 INFO test.py line 217 30680] Evaluating 809/1449 on image 2009_003059.png, accuracy 0.7882.
+[2025-10-20 08:00:02,221 INFO test.py line 217 30680] Evaluating 810/1449 on image 2009_003063.png, accuracy 0.9779.
+[2025-10-20 08:00:02,243 INFO test.py line 217 30680] Evaluating 811/1449 on image 2009_003065.png, accuracy 0.9816.
+[2025-10-20 08:00:02,264 INFO test.py line 217 30680] Evaluating 812/1449 on image 2009_003071.png, accuracy 0.8587.
+[2025-10-20 08:00:02,286 INFO test.py line 217 30680] Evaluating 813/1449 on image 2009_003080.png, accuracy 0.9845.
+[2025-10-20 08:00:02,308 INFO test.py line 217 30680] Evaluating 814/1449 on image 2009_003105.png, accuracy 0.9922.
+[2025-10-20 08:00:02,330 INFO test.py line 217 30680] Evaluating 815/1449 on image 2009_003123.png, accuracy 0.9107.
+[2025-10-20 08:00:02,353 INFO test.py line 217 30680] Evaluating 816/1449 on image 2009_003193.png, accuracy 0.9436.
+[2025-10-20 08:00:02,375 INFO test.py line 217 30680] Evaluating 817/1449 on image 2009_003196.png, accuracy 0.9909.
+[2025-10-20 08:00:02,397 INFO test.py line 217 30680] Evaluating 818/1449 on image 2009_003217.png, accuracy 0.9779.
+[2025-10-20 08:00:02,422 INFO test.py line 217 30680] Evaluating 819/1449 on image 2009_003224.png, accuracy 0.9147.
+[2025-10-20 08:00:02,442 INFO test.py line 217 30680] Evaluating 820/1449 on image 2009_003241.png, accuracy 0.9295.
+[2025-10-20 08:00:02,464 INFO test.py line 217 30680] Evaluating 821/1449 on image 2009_003269.png, accuracy 0.9431.
+[2025-10-20 08:00:02,487 INFO test.py line 217 30680] Evaluating 822/1449 on image 2009_003273.png, accuracy 0.9785.
+[2025-10-20 08:00:02,507 INFO test.py line 217 30680] Evaluating 823/1449 on image 2009_003299.png, accuracy 0.9196.
+[2025-10-20 08:00:02,527 INFO test.py line 217 30680] Evaluating 824/1449 on image 2009_003304.png, accuracy 0.9684.
+[2025-10-20 08:00:02,548 INFO test.py line 217 30680] Evaluating 825/1449 on image 2009_003311.png, accuracy 0.9867.
+[2025-10-20 08:00:02,573 INFO test.py line 217 30680] Evaluating 826/1449 on image 2009_003323.png, accuracy 0.9889.
+[2025-10-20 08:00:02,591 INFO test.py line 217 30680] Evaluating 827/1449 on image 2009_003343.png, accuracy 0.5778.
+[2025-10-20 08:00:02,616 INFO test.py line 217 30680] Evaluating 828/1449 on image 2009_003378.png, accuracy 0.8440.
+[2025-10-20 08:00:02,638 INFO test.py line 217 30680] Evaluating 829/1449 on image 2009_003387.png, accuracy 0.8084.
+[2025-10-20 08:00:02,656 INFO test.py line 217 30680] Evaluating 830/1449 on image 2009_003406.png, accuracy 0.9934.
+[2025-10-20 08:00:02,677 INFO test.py line 217 30680] Evaluating 831/1449 on image 2009_003433.png, accuracy 0.9523.
+[2025-10-20 08:00:02,700 INFO test.py line 217 30680] Evaluating 832/1449 on image 2009_003450.png, accuracy 0.9826.
+[2025-10-20 08:00:02,723 INFO test.py line 217 30680] Evaluating 833/1449 on image 2009_003466.png, accuracy 0.8848.
+[2025-10-20 08:00:02,744 INFO test.py line 217 30680] Evaluating 834/1449 on image 2009_003481.png, accuracy 0.9717.
+[2025-10-20 08:00:02,767 INFO test.py line 217 30680] Evaluating 835/1449 on image 2009_003494.png, accuracy 0.9072.
+[2025-10-20 08:00:02,790 INFO test.py line 217 30680] Evaluating 836/1449 on image 2009_003498.png, accuracy 0.9868.
+[2025-10-20 08:00:02,810 INFO test.py line 217 30680] Evaluating 837/1449 on image 2009_003504.png, accuracy 0.9600.
+[2025-10-20 08:00:02,830 INFO test.py line 217 30680] Evaluating 838/1449 on image 2009_003507.png, accuracy 0.9231.
+[2025-10-20 08:00:02,852 INFO test.py line 217 30680] Evaluating 839/1449 on image 2009_003517.png, accuracy 0.9179.
+[2025-10-20 08:00:02,874 INFO test.py line 217 30680] Evaluating 840/1449 on image 2009_003523.png, accuracy 0.9860.
+[2025-10-20 08:00:02,893 INFO test.py line 217 30680] Evaluating 841/1449 on image 2009_003542.png, accuracy 0.7028.
+[2025-10-20 08:00:02,914 INFO test.py line 217 30680] Evaluating 842/1449 on image 2009_003549.png, accuracy 0.9700.
+[2025-10-20 08:00:02,939 INFO test.py line 217 30680] Evaluating 843/1449 on image 2009_003551.png, accuracy 0.5751.
+[2025-10-20 08:00:02,962 INFO test.py line 217 30680] Evaluating 844/1449 on image 2009_003564.png, accuracy 0.9036.
+[2025-10-20 08:00:02,985 INFO test.py line 217 30680] Evaluating 845/1449 on image 2009_003569.png, accuracy 0.9555.
+[2025-10-20 08:00:03,005 INFO test.py line 217 30680] Evaluating 846/1449 on image 2009_003576.png, accuracy 0.9809.
+[2025-10-20 08:00:03,030 INFO test.py line 217 30680] Evaluating 847/1449 on image 2009_003589.png, accuracy 0.9846.
+[2025-10-20 08:00:03,052 INFO test.py line 217 30680] Evaluating 848/1449 on image 2009_003607.png, accuracy 0.9376.
+[2025-10-20 08:00:03,076 INFO test.py line 217 30680] Evaluating 849/1449 on image 2009_003640.png, accuracy 0.9883.
+[2025-10-20 08:00:03,098 INFO test.py line 217 30680] Evaluating 850/1449 on image 2009_003666.png, accuracy 0.9761.
+[2025-10-20 08:00:03,119 INFO test.py line 217 30680] Evaluating 851/1449 on image 2009_003696.png, accuracy 0.9635.
+[2025-10-20 08:00:03,142 INFO test.py line 217 30680] Evaluating 852/1449 on image 2009_003703.png, accuracy 0.9783.
+[2025-10-20 08:00:03,162 INFO test.py line 217 30680] Evaluating 853/1449 on image 2009_003707.png, accuracy 0.9938.
+[2025-10-20 08:00:03,185 INFO test.py line 217 30680] Evaluating 854/1449 on image 2009_003756.png, accuracy 0.9937.
+[2025-10-20 08:00:03,205 INFO test.py line 217 30680] Evaluating 855/1449 on image 2009_003771.png, accuracy 0.9823.
+[2025-10-20 08:00:03,225 INFO test.py line 217 30680] Evaluating 856/1449 on image 2009_003773.png, accuracy 0.7865.
+[2025-10-20 08:00:03,247 INFO test.py line 217 30680] Evaluating 857/1449 on image 2009_003804.png, accuracy 0.8936.
+[2025-10-20 08:00:03,267 INFO test.py line 217 30680] Evaluating 858/1449 on image 2009_003806.png, accuracy 0.9912.
+[2025-10-20 08:00:03,289 INFO test.py line 217 30680] Evaluating 859/1449 on image 2009_003810.png, accuracy 0.8991.
+[2025-10-20 08:00:03,311 INFO test.py line 217 30680] Evaluating 860/1449 on image 2009_003849.png, accuracy 0.9480.
+[2025-10-20 08:00:03,332 INFO test.py line 217 30680] Evaluating 861/1449 on image 2009_003857.png, accuracy 0.9140.
+[2025-10-20 08:00:03,355 INFO test.py line 217 30680] Evaluating 862/1449 on image 2009_003858.png, accuracy 0.9661.
+[2025-10-20 08:00:03,376 INFO test.py line 217 30680] Evaluating 863/1449 on image 2009_003895.png, accuracy 0.8325.
+[2025-10-20 08:00:03,397 INFO test.py line 217 30680] Evaluating 864/1449 on image 2009_003903.png, accuracy 0.9550.
+[2025-10-20 08:00:03,419 INFO test.py line 217 30680] Evaluating 865/1449 on image 2009_003904.png, accuracy 0.9737.
+[2025-10-20 08:00:03,442 INFO test.py line 217 30680] Evaluating 866/1449 on image 2009_003928.png, accuracy 0.9404.
+[2025-10-20 08:00:03,464 INFO test.py line 217 30680] Evaluating 867/1449 on image 2009_003938.png, accuracy 0.9873.
+[2025-10-20 08:00:03,486 INFO test.py line 217 30680] Evaluating 868/1449 on image 2009_003971.png, accuracy 0.9015.
+[2025-10-20 08:00:03,510 INFO test.py line 217 30680] Evaluating 869/1449 on image 2009_003991.png, accuracy 0.8400.
+[2025-10-20 08:00:03,523 INFO test.py line 217 30680] Evaluating 870/1449 on image 2009_004021.png, accuracy 0.9911.
+[2025-10-20 08:00:03,544 INFO test.py line 217 30680] Evaluating 871/1449 on image 2009_004033.png, accuracy 0.9985.
+[2025-10-20 08:00:03,565 INFO test.py line 217 30680] Evaluating 872/1449 on image 2009_004043.png, accuracy 0.9446.
+[2025-10-20 08:00:03,587 INFO test.py line 217 30680] Evaluating 873/1449 on image 2009_004070.png, accuracy 0.9983.
+[2025-10-20 08:00:03,608 INFO test.py line 217 30680] Evaluating 874/1449 on image 2009_004072.png, accuracy 0.8102.
+[2025-10-20 08:00:03,631 INFO test.py line 217 30680] Evaluating 875/1449 on image 2009_004084.png, accuracy 0.9886.
+[2025-10-20 08:00:03,652 INFO test.py line 217 30680] Evaluating 876/1449 on image 2009_004099.png, accuracy 0.9332.
+[2025-10-20 08:00:03,674 INFO test.py line 217 30680] Evaluating 877/1449 on image 2009_004125.png, accuracy 0.9661.
+[2025-10-20 08:00:03,697 INFO test.py line 217 30680] Evaluating 878/1449 on image 2009_004140.png, accuracy 0.8533.
+[2025-10-20 08:00:03,720 INFO test.py line 217 30680] Evaluating 879/1449 on image 2009_004217.png, accuracy 0.9733.
+[2025-10-20 08:00:03,744 INFO test.py line 217 30680] Evaluating 880/1449 on image 2009_004221.png, accuracy 0.9806.
+[2025-10-20 08:00:03,767 INFO test.py line 217 30680] Evaluating 881/1449 on image 2009_004247.png, accuracy 0.9657.
+[2025-10-20 08:00:03,787 INFO test.py line 217 30680] Evaluating 882/1449 on image 2009_004248.png, accuracy 0.9718.
+[2025-10-20 08:00:03,810 INFO test.py line 217 30680] Evaluating 883/1449 on image 2009_004255.png, accuracy 0.9556.
+[2025-10-20 08:00:03,832 INFO test.py line 217 30680] Evaluating 884/1449 on image 2009_004298.png, accuracy 0.9574.
+[2025-10-20 08:00:03,855 INFO test.py line 217 30680] Evaluating 885/1449 on image 2009_004324.png, accuracy 0.9188.
+[2025-10-20 08:00:03,875 INFO test.py line 217 30680] Evaluating 886/1449 on image 2009_004455.png, accuracy 0.9465.
+[2025-10-20 08:00:03,897 INFO test.py line 217 30680] Evaluating 887/1449 on image 2009_004494.png, accuracy 0.9877.
+[2025-10-20 08:00:03,922 INFO test.py line 217 30680] Evaluating 888/1449 on image 2009_004497.png, accuracy 0.9791.
+[2025-10-20 08:00:03,944 INFO test.py line 217 30680] Evaluating 889/1449 on image 2009_004504.png, accuracy 0.7790.
+[2025-10-20 08:00:03,964 INFO test.py line 217 30680] Evaluating 890/1449 on image 2009_004507.png, accuracy 0.9316.
+[2025-10-20 08:00:03,987 INFO test.py line 217 30680] Evaluating 891/1449 on image 2009_004509.png, accuracy 0.9865.
+[2025-10-20 08:00:04,009 INFO test.py line 217 30680] Evaluating 892/1449 on image 2009_004540.png, accuracy 0.9866.
+[2025-10-20 08:00:04,031 INFO test.py line 217 30680] Evaluating 893/1449 on image 2009_004568.png, accuracy 0.9741.
+[2025-10-20 08:00:04,044 INFO test.py line 217 30680] Evaluating 894/1449 on image 2009_004579.png, accuracy 0.7946.
+[2025-10-20 08:00:04,056 INFO test.py line 217 30680] Evaluating 895/1449 on image 2009_004581.png, accuracy 0.7460.
+[2025-10-20 08:00:04,069 INFO test.py line 217 30680] Evaluating 896/1449 on image 2009_004590.png, accuracy 0.9805.
+[2025-10-20 08:00:04,081 INFO test.py line 217 30680] Evaluating 897/1449 on image 2009_004592.png, accuracy 0.9898.
+[2025-10-20 08:00:04,091 INFO test.py line 217 30680] Evaluating 898/1449 on image 2009_004594.png, accuracy 0.9902.
+[2025-10-20 08:00:04,102 INFO test.py line 217 30680] Evaluating 899/1449 on image 2009_004635.png, accuracy 0.9896.
+[2025-10-20 08:00:04,114 INFO test.py line 217 30680] Evaluating 900/1449 on image 2009_004653.png, accuracy 0.9958.
+[2025-10-20 08:00:04,126 INFO test.py line 217 30680] Evaluating 901/1449 on image 2009_004687.png, accuracy 0.9301.
+[2025-10-20 08:00:04,137 INFO test.py line 217 30680] Evaluating 902/1449 on image 2009_004721.png, accuracy 0.7681.
+[2025-10-20 08:00:04,149 INFO test.py line 217 30680] Evaluating 903/1449 on image 2009_004730.png, accuracy 0.9910.
+[2025-10-20 08:00:04,161 INFO test.py line 217 30680] Evaluating 904/1449 on image 2009_004732.png, accuracy 0.9805.
+[2025-10-20 08:00:04,171 INFO test.py line 217 30680] Evaluating 905/1449 on image 2009_004738.png, accuracy 0.9623.
+[2025-10-20 08:00:04,181 INFO test.py line 217 30680] Evaluating 906/1449 on image 2009_004748.png, accuracy 0.9873.
+[2025-10-20 08:00:04,193 INFO test.py line 217 30680] Evaluating 907/1449 on image 2009_004789.png, accuracy 0.9064.
+[2025-10-20 08:00:04,203 INFO test.py line 217 30680] Evaluating 908/1449 on image 2009_004799.png, accuracy 0.9473.
+[2025-10-20 08:00:04,213 INFO test.py line 217 30680] Evaluating 909/1449 on image 2009_004801.png, accuracy 0.9800.
+[2025-10-20 08:00:04,224 INFO test.py line 217 30680] Evaluating 910/1449 on image 2009_004848.png, accuracy 0.9649.
+[2025-10-20 08:00:04,236 INFO test.py line 217 30680] Evaluating 911/1449 on image 2009_004859.png, accuracy 0.7955.
+[2025-10-20 08:00:04,247 INFO test.py line 217 30680] Evaluating 912/1449 on image 2009_004867.png, accuracy 0.9893.
+[2025-10-20 08:00:04,259 INFO test.py line 217 30680] Evaluating 913/1449 on image 2009_004882.png, accuracy 0.9530.
+[2025-10-20 08:00:04,269 INFO test.py line 217 30680] Evaluating 914/1449 on image 2009_004886.png, accuracy 0.9438.
+[2025-10-20 08:00:04,280 INFO test.py line 217 30680] Evaluating 915/1449 on image 2009_004895.png, accuracy 0.9650.
+[2025-10-20 08:00:04,293 INFO test.py line 217 30680] Evaluating 916/1449 on image 2009_004942.png, accuracy 0.9627.
+[2025-10-20 08:00:04,304 INFO test.py line 217 30680] Evaluating 917/1449 on image 2009_004969.png, accuracy 0.9747.
+[2025-10-20 08:00:04,316 INFO test.py line 217 30680] Evaluating 918/1449 on image 2009_004987.png, accuracy 0.9567.
+[2025-10-20 08:00:04,327 INFO test.py line 217 30680] Evaluating 919/1449 on image 2009_004993.png, accuracy 0.9555.
+[2025-10-20 08:00:04,337 INFO test.py line 217 30680] Evaluating 920/1449 on image 2009_004994.png, accuracy 0.6101.
+[2025-10-20 08:00:04,348 INFO test.py line 217 30680] Evaluating 921/1449 on image 2009_005038.png, accuracy 0.8263.
+[2025-10-20 08:00:04,359 INFO test.py line 217 30680] Evaluating 922/1449 on image 2009_005078.png, accuracy 0.9767.
+[2025-10-20 08:00:04,372 INFO test.py line 217 30680] Evaluating 923/1449 on image 2009_005087.png, accuracy 0.9774.
+[2025-10-20 08:00:04,383 INFO test.py line 217 30680] Evaluating 924/1449 on image 2009_005089.png, accuracy 0.9889.
+[2025-10-20 08:00:04,394 INFO test.py line 217 30680] Evaluating 925/1449 on image 2009_005137.png, accuracy 0.9957.
+[2025-10-20 08:00:04,401 INFO test.py line 217 30680] Evaluating 926/1449 on image 2009_005148.png, accuracy 0.8536.
+[2025-10-20 08:00:04,414 INFO test.py line 217 30680] Evaluating 927/1449 on image 2009_005156.png, accuracy 0.9581.
+[2025-10-20 08:00:04,425 INFO test.py line 217 30680] Evaluating 928/1449 on image 2009_005158.png, accuracy 0.9922.
+[2025-10-20 08:00:04,436 INFO test.py line 217 30680] Evaluating 929/1449 on image 2009_005189.png, accuracy 0.9863.
+[2025-10-20 08:00:04,447 INFO test.py line 217 30680] Evaluating 930/1449 on image 2009_005190.png, accuracy 0.9733.
+[2025-10-20 08:00:04,458 INFO test.py line 217 30680] Evaluating 931/1449 on image 2009_005217.png, accuracy 0.9133.
+[2025-10-20 08:00:04,469 INFO test.py line 217 30680] Evaluating 932/1449 on image 2009_005219.png, accuracy 0.8868.
+[2025-10-20 08:00:04,481 INFO test.py line 217 30680] Evaluating 933/1449 on image 2009_005220.png, accuracy 0.9863.
+[2025-10-20 08:00:04,493 INFO test.py line 217 30680] Evaluating 934/1449 on image 2009_005231.png, accuracy 0.9777.
+[2025-10-20 08:00:04,504 INFO test.py line 217 30680] Evaluating 935/1449 on image 2009_005260.png, accuracy 0.9947.
+[2025-10-20 08:00:04,516 INFO test.py line 217 30680] Evaluating 936/1449 on image 2009_005262.png, accuracy 0.9835.
+[2025-10-20 08:00:04,527 INFO test.py line 217 30680] Evaluating 937/1449 on image 2009_005302.png, accuracy 0.8204.
+[2025-10-20 08:00:04,538 INFO test.py line 217 30680] Evaluating 938/1449 on image 2010_000003.png, accuracy 0.7681.
+[2025-10-20 08:00:04,552 INFO test.py line 217 30680] Evaluating 939/1449 on image 2010_000038.png, accuracy 0.9668.
+[2025-10-20 08:00:04,563 INFO test.py line 217 30680] Evaluating 940/1449 on image 2010_000065.png, accuracy 0.9542.
+[2025-10-20 08:00:04,573 INFO test.py line 217 30680] Evaluating 941/1449 on image 2010_000083.png, accuracy 0.9877.
+[2025-10-20 08:00:04,584 INFO test.py line 217 30680] Evaluating 942/1449 on image 2010_000084.png, accuracy 0.9782.
+[2025-10-20 08:00:04,598 INFO test.py line 217 30680] Evaluating 943/1449 on image 2010_000087.png, accuracy 0.8808.
+[2025-10-20 08:00:04,616 INFO test.py line 217 30680] Evaluating 944/1449 on image 2010_000110.png, accuracy 0.8341.
+[2025-10-20 08:00:04,633 INFO test.py line 217 30680] Evaluating 945/1449 on image 2010_000159.png, accuracy 0.9416.
+[2025-10-20 08:00:04,651 INFO test.py line 217 30680] Evaluating 946/1449 on image 2010_000160.png, accuracy 0.9688.
+[2025-10-20 08:00:04,668 INFO test.py line 217 30680] Evaluating 947/1449 on image 2010_000163.png, accuracy 0.9703.
+[2025-10-20 08:00:04,689 INFO test.py line 217 30680] Evaluating 948/1449 on image 2010_000174.png, accuracy 0.9386.
+[2025-10-20 08:00:04,701 INFO test.py line 217 30680] Evaluating 949/1449 on image 2010_000216.png, accuracy 0.9841.
+[2025-10-20 08:00:04,722 INFO test.py line 217 30680] Evaluating 950/1449 on image 2010_000238.png, accuracy 0.9681.
+[2025-10-20 08:00:04,742 INFO test.py line 217 30680] Evaluating 951/1449 on image 2010_000241.png, accuracy 0.9868.
+[2025-10-20 08:00:04,761 INFO test.py line 217 30680] Evaluating 952/1449 on image 2010_000256.png, accuracy 0.8853.
+[2025-10-20 08:00:04,780 INFO test.py line 217 30680] Evaluating 953/1449 on image 2010_000272.png, accuracy 0.9834.
+[2025-10-20 08:00:04,803 INFO test.py line 217 30680] Evaluating 954/1449 on image 2010_000284.png, accuracy 0.9487.
+[2025-10-20 08:00:04,825 INFO test.py line 217 30680] Evaluating 955/1449 on image 2010_000309.png, accuracy 0.9928.
+[2025-10-20 08:00:04,848 INFO test.py line 217 30680] Evaluating 956/1449 on image 2010_000318.png, accuracy 0.9356.
+[2025-10-20 08:00:04,865 INFO test.py line 217 30680] Evaluating 957/1449 on image 2010_000330.png, accuracy 0.8972.
+[2025-10-20 08:00:04,886 INFO test.py line 217 30680] Evaluating 958/1449 on image 2010_000335.png, accuracy 0.9980.
+[2025-10-20 08:00:04,909 INFO test.py line 217 30680] Evaluating 959/1449 on image 2010_000342.png, accuracy 0.9249.
+[2025-10-20 08:00:04,928 INFO test.py line 217 30680] Evaluating 960/1449 on image 2010_000372.png, accuracy 0.9880.
+[2025-10-20 08:00:04,951 INFO test.py line 217 30680] Evaluating 961/1449 on image 2010_000422.png, accuracy 0.8828.
+[2025-10-20 08:00:04,973 INFO test.py line 217 30680] Evaluating 962/1449 on image 2010_000426.png, accuracy 0.9607.
+[2025-10-20 08:00:04,997 INFO test.py line 217 30680] Evaluating 963/1449 on image 2010_000427.png, accuracy 0.9726.
+[2025-10-20 08:00:05,023 INFO test.py line 217 30680] Evaluating 964/1449 on image 2010_000502.png, accuracy 0.9972.
+[2025-10-20 08:00:05,048 INFO test.py line 217 30680] Evaluating 965/1449 on image 2010_000530.png, accuracy 0.9852.
+[2025-10-20 08:00:05,071 INFO test.py line 217 30680] Evaluating 966/1449 on image 2010_000552.png, accuracy 0.9548.
+[2025-10-20 08:00:05,090 INFO test.py line 217 30680] Evaluating 967/1449 on image 2010_000559.png, accuracy 0.9590.
+[2025-10-20 08:00:05,111 INFO test.py line 217 30680] Evaluating 968/1449 on image 2010_000572.png, accuracy 0.9782.
+[2025-10-20 08:00:05,134 INFO test.py line 217 30680] Evaluating 969/1449 on image 2010_000573.png, accuracy 0.9749.
+[2025-10-20 08:00:05,156 INFO test.py line 217 30680] Evaluating 970/1449 on image 2010_000622.png, accuracy 0.9718.
+[2025-10-20 08:00:05,180 INFO test.py line 217 30680] Evaluating 971/1449 on image 2010_000628.png, accuracy 0.9973.
+[2025-10-20 08:00:05,202 INFO test.py line 217 30680] Evaluating 972/1449 on image 2010_000639.png, accuracy 0.8534.
+[2025-10-20 08:00:05,223 INFO test.py line 217 30680] Evaluating 973/1449 on image 2010_000666.png, accuracy 0.9652.
+[2025-10-20 08:00:05,240 INFO test.py line 217 30680] Evaluating 974/1449 on image 2010_000679.png, accuracy 0.9845.
+[2025-10-20 08:00:05,258 INFO test.py line 217 30680] Evaluating 975/1449 on image 2010_000682.png, accuracy 0.9813.
+[2025-10-20 08:00:05,278 INFO test.py line 217 30680] Evaluating 976/1449 on image 2010_000683.png, accuracy 0.9794.
+[2025-10-20 08:00:05,293 INFO test.py line 217 30680] Evaluating 977/1449 on image 2010_000724.png, accuracy 0.6819.
+[2025-10-20 08:00:05,317 INFO test.py line 217 30680] Evaluating 978/1449 on image 2010_000738.png, accuracy 0.9371.
+[2025-10-20 08:00:05,337 INFO test.py line 217 30680] Evaluating 979/1449 on image 2010_000764.png, accuracy 0.9413.
+[2025-10-20 08:00:05,360 INFO test.py line 217 30680] Evaluating 980/1449 on image 2010_000788.png, accuracy 0.9752.
+[2025-10-20 08:00:05,382 INFO test.py line 217 30680] Evaluating 981/1449 on image 2010_000814.png, accuracy 0.8908.
+[2025-10-20 08:00:05,406 INFO test.py line 217 30680] Evaluating 982/1449 on image 2010_000836.png, accuracy 0.9955.
+[2025-10-20 08:00:05,427 INFO test.py line 217 30680] Evaluating 983/1449 on image 2010_000874.png, accuracy 0.9375.
+[2025-10-20 08:00:05,451 INFO test.py line 217 30680] Evaluating 984/1449 on image 2010_000904.png, accuracy 0.9880.
+[2025-10-20 08:00:05,466 INFO test.py line 217 30680] Evaluating 985/1449 on image 2010_000906.png, accuracy 0.9941.
+[2025-10-20 08:00:05,480 INFO test.py line 217 30680] Evaluating 986/1449 on image 2010_000907.png, accuracy 0.9904.
+[2025-10-20 08:00:05,495 INFO test.py line 217 30680] Evaluating 987/1449 on image 2010_000918.png, accuracy 0.9962.
+[2025-10-20 08:00:05,509 INFO test.py line 217 30680] Evaluating 988/1449 on image 2010_000929.png, accuracy 0.9980.
+[2025-10-20 08:00:05,522 INFO test.py line 217 30680] Evaluating 989/1449 on image 2010_000941.png, accuracy 0.8515.
+[2025-10-20 08:00:05,535 INFO test.py line 217 30680] Evaluating 990/1449 on image 2010_000952.png, accuracy 0.9890.
+[2025-10-20 08:00:05,549 INFO test.py line 217 30680] Evaluating 991/1449 on image 2010_000961.png, accuracy 0.9937.
+[2025-10-20 08:00:05,561 INFO test.py line 217 30680] Evaluating 992/1449 on image 2010_001000.png, accuracy 0.9827.
+[2025-10-20 08:00:05,573 INFO test.py line 217 30680] Evaluating 993/1449 on image 2010_001010.png, accuracy 0.9731.
+[2025-10-20 08:00:05,586 INFO test.py line 217 30680] Evaluating 994/1449 on image 2010_001011.png, accuracy 0.8826.
+[2025-10-20 08:00:05,601 INFO test.py line 217 30680] Evaluating 995/1449 on image 2010_001016.png, accuracy 0.9914.
+[2025-10-20 08:00:05,617 INFO test.py line 217 30680] Evaluating 996/1449 on image 2010_001017.png, accuracy 0.9833.
+[2025-10-20 08:00:05,629 INFO test.py line 217 30680] Evaluating 997/1449 on image 2010_001024.png, accuracy 0.9338.
+[2025-10-20 08:00:05,641 INFO test.py line 217 30680] Evaluating 998/1449 on image 2010_001036.png, accuracy 0.9830.
+[2025-10-20 08:00:05,653 INFO test.py line 217 30680] Evaluating 999/1449 on image 2010_001061.png, accuracy 0.9918.
+[2025-10-20 08:00:05,665 INFO test.py line 217 30680] Evaluating 1000/1449 on image 2010_001069.png, accuracy 0.9888.
+[2025-10-20 08:00:05,680 INFO test.py line 217 30680] Evaluating 1001/1449 on image 2010_001070.png, accuracy 0.9905.
+[2025-10-20 08:00:05,695 INFO test.py line 217 30680] Evaluating 1002/1449 on image 2010_001079.png, accuracy 0.9773.
+[2025-10-20 08:00:05,711 INFO test.py line 217 30680] Evaluating 1003/1449 on image 2010_001104.png, accuracy 0.9798.
+[2025-10-20 08:00:05,727 INFO test.py line 217 30680] Evaluating 1004/1449 on image 2010_001124.png, accuracy 0.9789.
+[2025-10-20 08:00:05,739 INFO test.py line 217 30680] Evaluating 1005/1449 on image 2010_001149.png, accuracy 0.9785.
+[2025-10-20 08:00:05,751 INFO test.py line 217 30680] Evaluating 1006/1449 on image 2010_001151.png, accuracy 0.9865.
+[2025-10-20 08:00:05,761 INFO test.py line 217 30680] Evaluating 1007/1449 on image 2010_001174.png, accuracy 0.9867.
+[2025-10-20 08:00:05,772 INFO test.py line 217 30680] Evaluating 1008/1449 on image 2010_001206.png, accuracy 0.9848.
+[2025-10-20 08:00:05,785 INFO test.py line 217 30680] Evaluating 1009/1449 on image 2010_001246.png, accuracy 0.9575.
+[2025-10-20 08:00:05,797 INFO test.py line 217 30680] Evaluating 1010/1449 on image 2010_001251.png, accuracy 0.9676.
+[2025-10-20 08:00:05,813 INFO test.py line 217 30680] Evaluating 1011/1449 on image 2010_001256.png, accuracy 0.9651.
+[2025-10-20 08:00:05,826 INFO test.py line 217 30680] Evaluating 1012/1449 on image 2010_001264.png, accuracy 0.9664.
+[2025-10-20 08:00:05,840 INFO test.py line 217 30680] Evaluating 1013/1449 on image 2010_001292.png, accuracy 0.9853.
+[2025-10-20 08:00:05,852 INFO test.py line 217 30680] Evaluating 1014/1449 on image 2010_001313.png, accuracy 0.9868.
+[2025-10-20 08:00:05,864 INFO test.py line 217 30680] Evaluating 1015/1449 on image 2010_001327.png, accuracy 0.4479.
+[2025-10-20 08:00:05,879 INFO test.py line 217 30680] Evaluating 1016/1449 on image 2010_001331.png, accuracy 0.9557.
+[2025-10-20 08:00:05,892 INFO test.py line 217 30680] Evaluating 1017/1449 on image 2010_001351.png, accuracy 0.9870.
+[2025-10-20 08:00:05,912 INFO test.py line 217 30680] Evaluating 1018/1449 on image 2010_001367.png, accuracy 0.8474.
+[2025-10-20 08:00:05,923 INFO test.py line 217 30680] Evaluating 1019/1449 on image 2010_001376.png, accuracy 0.9379.
+[2025-10-20 08:00:05,940 INFO test.py line 217 30680] Evaluating 1020/1449 on image 2010_001403.png, accuracy 0.9284.
+[2025-10-20 08:00:05,959 INFO test.py line 217 30680] Evaluating 1021/1449 on image 2010_001448.png, accuracy 0.9833.
+[2025-10-20 08:00:05,975 INFO test.py line 217 30680] Evaluating 1022/1449 on image 2010_001451.png, accuracy 0.5683.
+[2025-10-20 08:00:05,998 INFO test.py line 217 30680] Evaluating 1023/1449 on image 2010_001522.png, accuracy 0.9888.
+[2025-10-20 08:00:06,021 INFO test.py line 217 30680] Evaluating 1024/1449 on image 2010_001534.png, accuracy 0.9590.
+[2025-10-20 08:00:06,042 INFO test.py line 217 30680] Evaluating 1025/1449 on image 2010_001553.png, accuracy 0.7944.
+[2025-10-20 08:00:06,066 INFO test.py line 217 30680] Evaluating 1026/1449 on image 2010_001557.png, accuracy 0.9794.
+[2025-10-20 08:00:06,089 INFO test.py line 217 30680] Evaluating 1027/1449 on image 2010_001563.png, accuracy 0.9870.
+[2025-10-20 08:00:06,111 INFO test.py line 217 30680] Evaluating 1028/1449 on image 2010_001577.png, accuracy 0.9392.
+[2025-10-20 08:00:06,134 INFO test.py line 217 30680] Evaluating 1029/1449 on image 2010_001579.png, accuracy 0.8744.
+[2025-10-20 08:00:06,153 INFO test.py line 217 30680] Evaluating 1030/1449 on image 2010_001646.png, accuracy 0.9606.
+[2025-10-20 08:00:06,176 INFO test.py line 217 30680] Evaluating 1031/1449 on image 2010_001656.png, accuracy 0.9916.
+[2025-10-20 08:00:06,196 INFO test.py line 217 30680] Evaluating 1032/1449 on image 2010_001692.png, accuracy 0.9570.
+[2025-10-20 08:00:06,221 INFO test.py line 217 30680] Evaluating 1033/1449 on image 2010_001699.png, accuracy 0.9186.
+[2025-10-20 08:00:06,243 INFO test.py line 217 30680] Evaluating 1034/1449 on image 2010_001734.png, accuracy 0.9879.
+[2025-10-20 08:00:06,264 INFO test.py line 217 30680] Evaluating 1035/1449 on image 2010_001752.png, accuracy 0.9405.
+[2025-10-20 08:00:06,286 INFO test.py line 217 30680] Evaluating 1036/1449 on image 2010_001767.png, accuracy 0.8725.
+[2025-10-20 08:00:06,307 INFO test.py line 217 30680] Evaluating 1037/1449 on image 2010_001768.png, accuracy 0.9915.
+[2025-10-20 08:00:06,331 INFO test.py line 217 30680] Evaluating 1038/1449 on image 2010_001773.png, accuracy 0.9092.
+[2025-10-20 08:00:06,354 INFO test.py line 217 30680] Evaluating 1039/1449 on image 2010_001820.png, accuracy 0.9964.
+[2025-10-20 08:00:06,374 INFO test.py line 217 30680] Evaluating 1040/1449 on image 2010_001830.png, accuracy 0.4914.
+[2025-10-20 08:00:06,397 INFO test.py line 217 30680] Evaluating 1041/1449 on image 2010_001851.png, accuracy 0.9518.
+[2025-10-20 08:00:06,422 INFO test.py line 217 30680] Evaluating 1042/1449 on image 2010_001908.png, accuracy 0.9729.
+[2025-10-20 08:00:06,442 INFO test.py line 217 30680] Evaluating 1043/1449 on image 2010_001913.png, accuracy 0.9904.
+[2025-10-20 08:00:06,456 INFO test.py line 217 30680] Evaluating 1044/1449 on image 2010_001951.png, accuracy 0.9888.
+[2025-10-20 08:00:06,470 INFO test.py line 217 30680] Evaluating 1045/1449 on image 2010_001956.png, accuracy 0.9846.
+[2025-10-20 08:00:06,483 INFO test.py line 217 30680] Evaluating 1046/1449 on image 2010_001962.png, accuracy 0.9160.
+[2025-10-20 08:00:06,497 INFO test.py line 217 30680] Evaluating 1047/1449 on image 2010_001966.png, accuracy 0.9917.
+[2025-10-20 08:00:06,514 INFO test.py line 217 30680] Evaluating 1048/1449 on image 2010_001995.png, accuracy 0.9909.
+[2025-10-20 08:00:06,528 INFO test.py line 217 30680] Evaluating 1049/1449 on image 2010_002017.png, accuracy 0.8742.
+[2025-10-20 08:00:06,541 INFO test.py line 217 30680] Evaluating 1050/1449 on image 2010_002025.png, accuracy 0.9747.
+[2025-10-20 08:00:06,555 INFO test.py line 217 30680] Evaluating 1051/1449 on image 2010_002030.png, accuracy 0.8869.
+[2025-10-20 08:00:06,567 INFO test.py line 217 30680] Evaluating 1052/1449 on image 2010_002106.png, accuracy 0.8440.
+[2025-10-20 08:00:06,581 INFO test.py line 217 30680] Evaluating 1053/1449 on image 2010_002137.png, accuracy 0.7776.
+[2025-10-20 08:00:06,594 INFO test.py line 217 30680] Evaluating 1054/1449 on image 2010_002142.png, accuracy 0.7603.
+[2025-10-20 08:00:06,610 INFO test.py line 217 30680] Evaluating 1055/1449 on image 2010_002146.png, accuracy 0.9884.
+[2025-10-20 08:00:06,623 INFO test.py line 217 30680] Evaluating 1056/1449 on image 2010_002147.png, accuracy 0.9676.
+[2025-10-20 08:00:06,635 INFO test.py line 217 30680] Evaluating 1057/1449 on image 2010_002150.png, accuracy 0.9888.
+[2025-10-20 08:00:06,648 INFO test.py line 217 30680] Evaluating 1058/1449 on image 2010_002161.png, accuracy 0.9168.
+[2025-10-20 08:00:06,662 INFO test.py line 217 30680] Evaluating 1059/1449 on image 2010_002200.png, accuracy 0.9871.
+[2025-10-20 08:00:06,676 INFO test.py line 217 30680] Evaluating 1060/1449 on image 2010_002228.png, accuracy 0.9843.
+[2025-10-20 08:00:06,689 INFO test.py line 217 30680] Evaluating 1061/1449 on image 2010_002232.png, accuracy 0.9537.
+[2025-10-20 08:00:06,703 INFO test.py line 217 30680] Evaluating 1062/1449 on image 2010_002251.png, accuracy 0.9555.
+[2025-10-20 08:00:06,716 INFO test.py line 217 30680] Evaluating 1063/1449 on image 2010_002271.png, accuracy 0.9746.
+[2025-10-20 08:00:06,729 INFO test.py line 217 30680] Evaluating 1064/1449 on image 2010_002305.png, accuracy 0.9988.
+[2025-10-20 08:00:06,742 INFO test.py line 217 30680] Evaluating 1065/1449 on image 2010_002310.png, accuracy 0.9908.
+[2025-10-20 08:00:06,754 INFO test.py line 217 30680] Evaluating 1066/1449 on image 2010_002336.png, accuracy 0.8120.
+[2025-10-20 08:00:06,768 INFO test.py line 217 30680] Evaluating 1067/1449 on image 2010_002348.png, accuracy 0.9350.
+[2025-10-20 08:00:06,781 INFO test.py line 217 30680] Evaluating 1068/1449 on image 2010_002361.png, accuracy 0.9565.
+[2025-10-20 08:00:06,795 INFO test.py line 217 30680] Evaluating 1069/1449 on image 2010_002390.png, accuracy 0.9431.
+[2025-10-20 08:00:06,809 INFO test.py line 217 30680] Evaluating 1070/1449 on image 2010_002396.png, accuracy 0.9475.
+[2025-10-20 08:00:06,824 INFO test.py line 217 30680] Evaluating 1071/1449 on image 2010_002422.png, accuracy 0.9514.
+[2025-10-20 08:00:06,838 INFO test.py line 217 30680] Evaluating 1072/1449 on image 2010_002450.png, accuracy 0.9983.
+[2025-10-20 08:00:06,851 INFO test.py line 217 30680] Evaluating 1073/1449 on image 2010_002480.png, accuracy 0.9812.
+[2025-10-20 08:00:06,864 INFO test.py line 217 30680] Evaluating 1074/1449 on image 2010_002512.png, accuracy 0.9456.
+[2025-10-20 08:00:06,877 INFO test.py line 217 30680] Evaluating 1075/1449 on image 2010_002531.png, accuracy 0.7632.
+[2025-10-20 08:00:06,891 INFO test.py line 217 30680] Evaluating 1076/1449 on image 2010_002536.png, accuracy 0.8912.
+[2025-10-20 08:00:06,907 INFO test.py line 217 30680] Evaluating 1077/1449 on image 2010_002538.png, accuracy 0.9889.
+[2025-10-20 08:00:06,919 INFO test.py line 217 30680] Evaluating 1078/1449 on image 2010_002546.png, accuracy 0.9555.
+[2025-10-20 08:00:06,932 INFO test.py line 217 30680] Evaluating 1079/1449 on image 2010_002623.png, accuracy 0.7746.
+[2025-10-20 08:00:06,946 INFO test.py line 217 30680] Evaluating 1080/1449 on image 2010_002682.png, accuracy 0.9298.
+[2025-10-20 08:00:06,959 INFO test.py line 217 30680] Evaluating 1081/1449 on image 2010_002691.png, accuracy 0.9751.
+[2025-10-20 08:00:06,973 INFO test.py line 217 30680] Evaluating 1082/1449 on image 2010_002693.png, accuracy 0.8861.
+[2025-10-20 08:00:06,985 INFO test.py line 217 30680] Evaluating 1083/1449 on image 2010_002701.png, accuracy 0.9979.
+[2025-10-20 08:00:06,998 INFO test.py line 217 30680] Evaluating 1084/1449 on image 2010_002763.png, accuracy 0.7831.
+[2025-10-20 08:00:07,012 INFO test.py line 217 30680] Evaluating 1085/1449 on image 2010_002792.png, accuracy 0.9257.
+[2025-10-20 08:00:07,025 INFO test.py line 217 30680] Evaluating 1086/1449 on image 2010_002868.png, accuracy 0.9708.
+[2025-10-20 08:00:07,039 INFO test.py line 217 30680] Evaluating 1087/1449 on image 2010_002900.png, accuracy 0.9171.
+[2025-10-20 08:00:07,051 INFO test.py line 217 30680] Evaluating 1088/1449 on image 2010_002902.png, accuracy 0.9673.
+[2025-10-20 08:00:07,065 INFO test.py line 217 30680] Evaluating 1089/1449 on image 2010_002921.png, accuracy 0.9265.
+[2025-10-20 08:00:07,079 INFO test.py line 217 30680] Evaluating 1090/1449 on image 2010_002929.png, accuracy 0.9447.
+[2025-10-20 08:00:07,090 INFO test.py line 217 30680] Evaluating 1091/1449 on image 2010_002939.png, accuracy 0.9592.
+[2025-10-20 08:00:07,108 INFO test.py line 217 30680] Evaluating 1092/1449 on image 2010_002988.png, accuracy 0.9824.
+[2025-10-20 08:00:07,126 INFO test.py line 217 30680] Evaluating 1093/1449 on image 2010_003014.png, accuracy 0.9202.
+[2025-10-20 08:00:07,140 INFO test.py line 217 30680] Evaluating 1094/1449 on image 2010_003060.png, accuracy 0.9749.
+[2025-10-20 08:00:07,153 INFO test.py line 217 30680] Evaluating 1095/1449 on image 2010_003123.png, accuracy 0.5997.
+[2025-10-20 08:00:07,166 INFO test.py line 217 30680] Evaluating 1096/1449 on image 2010_003127.png, accuracy 0.9852.
+[2025-10-20 08:00:07,178 INFO test.py line 217 30680] Evaluating 1097/1449 on image 2010_003132.png, accuracy 0.7684.
+[2025-10-20 08:00:07,191 INFO test.py line 217 30680] Evaluating 1098/1449 on image 2010_003168.png, accuracy 0.9923.
+[2025-10-20 08:00:07,206 INFO test.py line 217 30680] Evaluating 1099/1449 on image 2010_003183.png, accuracy 0.9917.
+[2025-10-20 08:00:07,219 INFO test.py line 217 30680] Evaluating 1100/1449 on image 2010_003187.png, accuracy 0.9689.
+[2025-10-20 08:00:07,233 INFO test.py line 217 30680] Evaluating 1101/1449 on image 2010_003207.png, accuracy 0.9824.
+[2025-10-20 08:00:07,250 INFO test.py line 217 30680] Evaluating 1102/1449 on image 2010_003231.png, accuracy 0.9732.
+[2025-10-20 08:00:07,263 INFO test.py line 217 30680] Evaluating 1103/1449 on image 2010_003239.png, accuracy 0.9063.
+[2025-10-20 08:00:07,279 INFO test.py line 217 30680] Evaluating 1104/1449 on image 2010_003275.png, accuracy 0.9040.
+[2025-10-20 08:00:07,292 INFO test.py line 217 30680] Evaluating 1105/1449 on image 2010_003276.png, accuracy 0.9840.
+[2025-10-20 08:00:07,304 INFO test.py line 217 30680] Evaluating 1106/1449 on image 2010_003293.png, accuracy 0.9625.
+[2025-10-20 08:00:07,317 INFO test.py line 217 30680] Evaluating 1107/1449 on image 2010_003302.png, accuracy 0.9331.
+[2025-10-20 08:00:07,330 INFO test.py line 217 30680] Evaluating 1108/1449 on image 2010_003325.png, accuracy 0.8328.
+[2025-10-20 08:00:07,343 INFO test.py line 217 30680] Evaluating 1109/1449 on image 2010_003362.png, accuracy 0.9675.
+[2025-10-20 08:00:07,354 INFO test.py line 217 30680] Evaluating 1110/1449 on image 2010_003365.png, accuracy 0.9649.
+[2025-10-20 08:00:07,366 INFO test.py line 217 30680] Evaluating 1111/1449 on image 2010_003381.png, accuracy 0.8827.
+[2025-10-20 08:00:07,378 INFO test.py line 217 30680] Evaluating 1112/1449 on image 2010_003402.png, accuracy 0.8624.
+[2025-10-20 08:00:07,393 INFO test.py line 217 30680] Evaluating 1113/1449 on image 2010_003409.png, accuracy 0.9742.
+[2025-10-20 08:00:07,406 INFO test.py line 217 30680] Evaluating 1114/1449 on image 2010_003418.png, accuracy 0.9928.
+[2025-10-20 08:00:07,419 INFO test.py line 217 30680] Evaluating 1115/1449 on image 2010_003446.png, accuracy 0.9623.
+[2025-10-20 08:00:07,431 INFO test.py line 217 30680] Evaluating 1116/1449 on image 2010_003453.png, accuracy 0.9678.
+[2025-10-20 08:00:07,444 INFO test.py line 217 30680] Evaluating 1117/1449 on image 2010_003468.png, accuracy 0.9600.
+[2025-10-20 08:00:07,461 INFO test.py line 217 30680] Evaluating 1118/1449 on image 2010_003473.png, accuracy 0.9630.
+[2025-10-20 08:00:07,478 INFO test.py line 217 30680] Evaluating 1119/1449 on image 2010_003495.png, accuracy 0.9809.
+[2025-10-20 08:00:07,497 INFO test.py line 217 30680] Evaluating 1120/1449 on image 2010_003506.png, accuracy 0.9821.
+[2025-10-20 08:00:07,519 INFO test.py line 217 30680] Evaluating 1121/1449 on image 2010_003514.png, accuracy 0.9854.
+[2025-10-20 08:00:07,540 INFO test.py line 217 30680] Evaluating 1122/1449 on image 2010_003531.png, accuracy 0.9384.
+[2025-10-20 08:00:07,562 INFO test.py line 217 30680] Evaluating 1123/1449 on image 2010_003532.png, accuracy 0.9507.
+[2025-10-20 08:00:07,583 INFO test.py line 217 30680] Evaluating 1124/1449 on image 2010_003541.png, accuracy 0.9766.
+[2025-10-20 08:00:07,605 INFO test.py line 217 30680] Evaluating 1125/1449 on image 2010_003547.png, accuracy 0.9891.
+[2025-10-20 08:00:07,628 INFO test.py line 217 30680] Evaluating 1126/1449 on image 2010_003597.png, accuracy 0.8610.
+[2025-10-20 08:00:07,650 INFO test.py line 217 30680] Evaluating 1127/1449 on image 2010_003675.png, accuracy 0.9332.
+[2025-10-20 08:00:07,675 INFO test.py line 217 30680] Evaluating 1128/1449 on image 2010_003708.png, accuracy 0.9926.
+[2025-10-20 08:00:07,697 INFO test.py line 217 30680] Evaluating 1129/1449 on image 2010_003716.png, accuracy 0.9859.
+[2025-10-20 08:00:07,723 INFO test.py line 217 30680] Evaluating 1130/1449 on image 2010_003746.png, accuracy 0.8890.
+[2025-10-20 08:00:07,744 INFO test.py line 217 30680] Evaluating 1131/1449 on image 2010_003758.png, accuracy 0.9866.
+[2025-10-20 08:00:07,766 INFO test.py line 217 30680] Evaluating 1132/1449 on image 2010_003764.png, accuracy 0.9627.
+[2025-10-20 08:00:07,785 INFO test.py line 217 30680] Evaluating 1133/1449 on image 2010_003768.png, accuracy 0.9648.
+[2025-10-20 08:00:07,808 INFO test.py line 217 30680] Evaluating 1134/1449 on image 2010_003771.png, accuracy 0.9880.
+[2025-10-20 08:00:07,831 INFO test.py line 217 30680] Evaluating 1135/1449 on image 2010_003772.png, accuracy 0.9720.
+[2025-10-20 08:00:07,855 INFO test.py line 217 30680] Evaluating 1136/1449 on image 2010_003781.png, accuracy 0.9125.
+[2025-10-20 08:00:07,878 INFO test.py line 217 30680] Evaluating 1137/1449 on image 2010_003813.png, accuracy 0.9921.
+[2025-10-20 08:00:07,895 INFO test.py line 217 30680] Evaluating 1138/1449 on image 2010_003820.png, accuracy 0.8419.
+[2025-10-20 08:00:07,916 INFO test.py line 217 30680] Evaluating 1139/1449 on image 2010_003854.png, accuracy 0.9851.
+[2025-10-20 08:00:07,940 INFO test.py line 217 30680] Evaluating 1140/1449 on image 2010_003912.png, accuracy 0.9315.
+[2025-10-20 08:00:07,965 INFO test.py line 217 30680] Evaluating 1141/1449 on image 2010_003915.png, accuracy 0.9880.
+[2025-10-20 08:00:07,986 INFO test.py line 217 30680] Evaluating 1142/1449 on image 2010_003947.png, accuracy 0.9249.
+[2025-10-20 08:00:08,009 INFO test.py line 217 30680] Evaluating 1143/1449 on image 2010_003956.png, accuracy 0.9861.
+[2025-10-20 08:00:08,032 INFO test.py line 217 30680] Evaluating 1144/1449 on image 2010_003971.png, accuracy 0.7129.
+[2025-10-20 08:00:08,056 INFO test.py line 217 30680] Evaluating 1145/1449 on image 2010_004041.png, accuracy 0.9644.
+[2025-10-20 08:00:08,079 INFO test.py line 217 30680] Evaluating 1146/1449 on image 2010_004042.png, accuracy 0.9862.
+[2025-10-20 08:00:08,099 INFO test.py line 217 30680] Evaluating 1147/1449 on image 2010_004056.png, accuracy 0.6838.
+[2025-10-20 08:00:08,124 INFO test.py line 217 30680] Evaluating 1148/1449 on image 2010_004063.png, accuracy 0.9802.
+[2025-10-20 08:00:08,144 INFO test.py line 217 30680] Evaluating 1149/1449 on image 2010_004104.png, accuracy 0.9639.
+[2025-10-20 08:00:08,167 INFO test.py line 217 30680] Evaluating 1150/1449 on image 2010_004120.png, accuracy 0.9770.
+[2025-10-20 08:00:08,187 INFO test.py line 217 30680] Evaluating 1151/1449 on image 2010_004149.png, accuracy 0.7514.
+[2025-10-20 08:00:08,208 INFO test.py line 217 30680] Evaluating 1152/1449 on image 2010_004165.png, accuracy 0.9078.
+[2025-10-20 08:00:08,231 INFO test.py line 217 30680] Evaluating 1153/1449 on image 2010_004208.png, accuracy 0.9917.
+[2025-10-20 08:00:08,255 INFO test.py line 217 30680] Evaluating 1154/1449 on image 2010_004219.png, accuracy 0.9358.
+[2025-10-20 08:00:08,279 INFO test.py line 217 30680] Evaluating 1155/1449 on image 2010_004226.png, accuracy 0.9620.
+[2025-10-20 08:00:08,302 INFO test.py line 217 30680] Evaluating 1156/1449 on image 2010_004314.png, accuracy 0.9764.
+[2025-10-20 08:00:08,323 INFO test.py line 217 30680] Evaluating 1157/1449 on image 2010_004320.png, accuracy 0.9465.
+[2025-10-20 08:00:08,344 INFO test.py line 217 30680] Evaluating 1158/1449 on image 2010_004322.png, accuracy 0.4796.
+[2025-10-20 08:00:08,367 INFO test.py line 217 30680] Evaluating 1159/1449 on image 2010_004337.png, accuracy 0.9889.
+[2025-10-20 08:00:08,386 INFO test.py line 217 30680] Evaluating 1160/1449 on image 2010_004348.png, accuracy 0.9684.
+[2025-10-20 08:00:08,409 INFO test.py line 217 30680] Evaluating 1161/1449 on image 2010_004355.png, accuracy 0.9801.
+[2025-10-20 08:00:08,432 INFO test.py line 217 30680] Evaluating 1162/1449 on image 2010_004369.png, accuracy 0.9818.
+[2025-10-20 08:00:08,455 INFO test.py line 217 30680] Evaluating 1163/1449 on image 2010_004382.png, accuracy 0.9019.
+[2025-10-20 08:00:08,478 INFO test.py line 217 30680] Evaluating 1164/1449 on image 2010_004419.png, accuracy 0.9902.
+[2025-10-20 08:00:08,499 INFO test.py line 217 30680] Evaluating 1165/1449 on image 2010_004432.png, accuracy 0.6434.
+[2025-10-20 08:00:08,522 INFO test.py line 217 30680] Evaluating 1166/1449 on image 2010_004472.png, accuracy 0.7717.
+[2025-10-20 08:00:08,545 INFO test.py line 217 30680] Evaluating 1167/1449 on image 2010_004479.png, accuracy 0.9209.
+[2025-10-20 08:00:08,568 INFO test.py line 217 30680] Evaluating 1168/1449 on image 2010_004519.png, accuracy 0.9801.
+[2025-10-20 08:00:08,589 INFO test.py line 217 30680] Evaluating 1169/1449 on image 2010_004520.png, accuracy 0.9622.
+[2025-10-20 08:00:08,610 INFO test.py line 217 30680] Evaluating 1170/1449 on image 2010_004529.png, accuracy 0.8453.
+[2025-10-20 08:00:08,632 INFO test.py line 217 30680] Evaluating 1171/1449 on image 2010_004543.png, accuracy 0.8965.
+[2025-10-20 08:00:08,660 INFO test.py line 217 30680] Evaluating 1172/1449 on image 2010_004550.png, accuracy 0.9200.
+[2025-10-20 08:00:08,681 INFO test.py line 217 30680] Evaluating 1173/1449 on image 2010_004551.png, accuracy 1.0000.
+[2025-10-20 08:00:08,703 INFO test.py line 217 30680] Evaluating 1174/1449 on image 2010_004556.png, accuracy 0.9908.
+[2025-10-20 08:00:08,726 INFO test.py line 217 30680] Evaluating 1175/1449 on image 2010_004559.png, accuracy 0.9706.
+[2025-10-20 08:00:08,747 INFO test.py line 217 30680] Evaluating 1176/1449 on image 2010_004628.png, accuracy 0.9891.
+[2025-10-20 08:00:08,770 INFO test.py line 217 30680] Evaluating 1177/1449 on image 2010_004635.png, accuracy 0.9823.
+[2025-10-20 08:00:08,791 INFO test.py line 217 30680] Evaluating 1178/1449 on image 2010_004662.png, accuracy 0.7409.
+[2025-10-20 08:00:08,813 INFO test.py line 217 30680] Evaluating 1179/1449 on image 2010_004697.png, accuracy 0.9410.
+[2025-10-20 08:00:08,835 INFO test.py line 217 30680] Evaluating 1180/1449 on image 2010_004757.png, accuracy 0.8080.
+[2025-10-20 08:00:08,857 INFO test.py line 217 30680] Evaluating 1181/1449 on image 2010_004763.png, accuracy 0.5786.
+[2025-10-20 08:00:08,880 INFO test.py line 217 30680] Evaluating 1182/1449 on image 2010_004772.png, accuracy 0.9705.
+[2025-10-20 08:00:08,901 INFO test.py line 217 30680] Evaluating 1183/1449 on image 2010_004783.png, accuracy 0.8696.
+[2025-10-20 08:00:08,924 INFO test.py line 217 30680] Evaluating 1184/1449 on image 2010_004789.png, accuracy 0.9719.
+[2025-10-20 08:00:08,946 INFO test.py line 217 30680] Evaluating 1185/1449 on image 2010_004795.png, accuracy 0.9575.
+[2025-10-20 08:00:08,969 INFO test.py line 217 30680] Evaluating 1186/1449 on image 2010_004815.png, accuracy 0.9822.
+[2025-10-20 08:00:08,992 INFO test.py line 217 30680] Evaluating 1187/1449 on image 2010_004825.png, accuracy 0.8472.
+[2025-10-20 08:00:09,018 INFO test.py line 217 30680] Evaluating 1188/1449 on image 2010_004828.png, accuracy 0.8730.
+[2025-10-20 08:00:09,041 INFO test.py line 217 30680] Evaluating 1189/1449 on image 2010_004856.png, accuracy 0.9737.
+[2025-10-20 08:00:09,064 INFO test.py line 217 30680] Evaluating 1190/1449 on image 2010_004857.png, accuracy 0.8761.
+[2025-10-20 08:00:09,086 INFO test.py line 217 30680] Evaluating 1191/1449 on image 2010_004861.png, accuracy 0.9755.
+[2025-10-20 08:00:09,107 INFO test.py line 217 30680] Evaluating 1192/1449 on image 2010_004941.png, accuracy 0.9577.
+[2025-10-20 08:00:09,130 INFO test.py line 217 30680] Evaluating 1193/1449 on image 2010_004946.png, accuracy 0.9790.
+[2025-10-20 08:00:09,149 INFO test.py line 217 30680] Evaluating 1194/1449 on image 2010_004951.png, accuracy 0.3152.
+[2025-10-20 08:00:09,169 INFO test.py line 217 30680] Evaluating 1195/1449 on image 2010_004980.png, accuracy 0.9779.
+[2025-10-20 08:00:09,192 INFO test.py line 217 30680] Evaluating 1196/1449 on image 2010_004994.png, accuracy 0.9600.
+[2025-10-20 08:00:09,209 INFO test.py line 217 30680] Evaluating 1197/1449 on image 2010_005013.png, accuracy 0.8385.
+[2025-10-20 08:00:09,231 INFO test.py line 217 30680] Evaluating 1198/1449 on image 2010_005021.png, accuracy 0.8014.
+[2025-10-20 08:00:09,254 INFO test.py line 217 30680] Evaluating 1199/1449 on image 2010_005046.png, accuracy 0.9148.
+[2025-10-20 08:00:09,277 INFO test.py line 217 30680] Evaluating 1200/1449 on image 2010_005063.png, accuracy 0.9924.
+[2025-10-20 08:00:09,296 INFO test.py line 217 30680] Evaluating 1201/1449 on image 2010_005108.png, accuracy 0.7543.
+[2025-10-20 08:00:09,320 INFO test.py line 217 30680] Evaluating 1202/1449 on image 2010_005118.png, accuracy 0.9801.
+[2025-10-20 08:00:09,344 INFO test.py line 217 30680] Evaluating 1203/1449 on image 2010_005159.png, accuracy 0.9401.
+[2025-10-20 08:00:09,367 INFO test.py line 217 30680] Evaluating 1204/1449 on image 2010_005160.png, accuracy 0.9338.
+[2025-10-20 08:00:09,385 INFO test.py line 217 30680] Evaluating 1205/1449 on image 2010_005166.png, accuracy 0.9090.
+[2025-10-20 08:00:09,407 INFO test.py line 217 30680] Evaluating 1206/1449 on image 2010_005174.png, accuracy 0.9110.
+[2025-10-20 08:00:09,428 INFO test.py line 217 30680] Evaluating 1207/1449 on image 2010_005180.png, accuracy 0.9460.
+[2025-10-20 08:00:09,444 INFO test.py line 217 30680] Evaluating 1208/1449 on image 2010_005187.png, accuracy 0.9233.
+[2025-10-20 08:00:09,466 INFO test.py line 217 30680] Evaluating 1209/1449 on image 2010_005206.png, accuracy 0.9836.
+[2025-10-20 08:00:09,488 INFO test.py line 217 30680] Evaluating 1210/1449 on image 2010_005245.png, accuracy 0.9912.
+[2025-10-20 08:00:09,510 INFO test.py line 217 30680] Evaluating 1211/1449 on image 2010_005252.png, accuracy 0.9047.
+[2025-10-20 08:00:09,531 INFO test.py line 217 30680] Evaluating 1212/1449 on image 2010_005284.png, accuracy 0.9401.
+[2025-10-20 08:00:09,549 INFO test.py line 217 30680] Evaluating 1213/1449 on image 2010_005305.png, accuracy 0.7690.
+[2025-10-20 08:00:09,571 INFO test.py line 217 30680] Evaluating 1214/1449 on image 2010_005344.png, accuracy 0.9195.
+[2025-10-20 08:00:09,592 INFO test.py line 217 30680] Evaluating 1215/1449 on image 2010_005353.png, accuracy 0.9967.
+[2025-10-20 08:00:09,614 INFO test.py line 217 30680] Evaluating 1216/1449 on image 2010_005366.png, accuracy 0.9346.
+[2025-10-20 08:00:09,634 INFO test.py line 217 30680] Evaluating 1217/1449 on image 2010_005401.png, accuracy 0.8930.
+[2025-10-20 08:00:09,657 INFO test.py line 217 30680] Evaluating 1218/1449 on image 2010_005421.png, accuracy 0.9941.
+[2025-10-20 08:00:09,676 INFO test.py line 217 30680] Evaluating 1219/1449 on image 2010_005428.png, accuracy 0.9117.
+[2025-10-20 08:00:09,698 INFO test.py line 217 30680] Evaluating 1220/1449 on image 2010_005432.png, accuracy 0.9868.
+[2025-10-20 08:00:09,722 INFO test.py line 217 30680] Evaluating 1221/1449 on image 2010_005433.png, accuracy 0.9734.
+[2025-10-20 08:00:09,744 INFO test.py line 217 30680] Evaluating 1222/1449 on image 2010_005496.png, accuracy 0.9894.
+[2025-10-20 08:00:09,766 INFO test.py line 217 30680] Evaluating 1223/1449 on image 2010_005501.png, accuracy 0.9562.
+[2025-10-20 08:00:09,788 INFO test.py line 217 30680] Evaluating 1224/1449 on image 2010_005508.png, accuracy 0.9224.
+[2025-10-20 08:00:09,813 INFO test.py line 217 30680] Evaluating 1225/1449 on image 2010_005531.png, accuracy 0.9746.
+[2025-10-20 08:00:09,833 INFO test.py line 217 30680] Evaluating 1226/1449 on image 2010_005534.png, accuracy 0.9846.
+[2025-10-20 08:00:09,856 INFO test.py line 217 30680] Evaluating 1227/1449 on image 2010_005575.png, accuracy 0.9838.
+[2025-10-20 08:00:09,877 INFO test.py line 217 30680] Evaluating 1228/1449 on image 2010_005582.png, accuracy 0.9351.
+[2025-10-20 08:00:09,899 INFO test.py line 217 30680] Evaluating 1229/1449 on image 2010_005606.png, accuracy 0.8056.
+[2025-10-20 08:00:09,924 INFO test.py line 217 30680] Evaluating 1230/1449 on image 2010_005626.png, accuracy 0.9278.
+[2025-10-20 08:00:09,944 INFO test.py line 217 30680] Evaluating 1231/1449 on image 2010_005644.png, accuracy 0.8593.
+[2025-10-20 08:00:09,964 INFO test.py line 217 30680] Evaluating 1232/1449 on image 2010_005664.png, accuracy 0.9221.
+[2025-10-20 08:00:09,989 INFO test.py line 217 30680] Evaluating 1233/1449 on image 2010_005705.png, accuracy 0.9853.
+[2025-10-20 08:00:10,012 INFO test.py line 217 30680] Evaluating 1234/1449 on image 2010_005706.png, accuracy 0.9904.
+[2025-10-20 08:00:10,035 INFO test.py line 217 30680] Evaluating 1235/1449 on image 2010_005709.png, accuracy 0.8720.
+[2025-10-20 08:00:10,056 INFO test.py line 217 30680] Evaluating 1236/1449 on image 2010_005718.png, accuracy 0.9542.
+[2025-10-20 08:00:10,077 INFO test.py line 217 30680] Evaluating 1237/1449 on image 2010_005719.png, accuracy 0.9881.
+[2025-10-20 08:00:10,102 INFO test.py line 217 30680] Evaluating 1238/1449 on image 2010_005727.png, accuracy 0.9717.
+[2025-10-20 08:00:10,124 INFO test.py line 217 30680] Evaluating 1239/1449 on image 2010_005762.png, accuracy 0.8845.
+[2025-10-20 08:00:10,145 INFO test.py line 217 30680] Evaluating 1240/1449 on image 2010_005788.png, accuracy 0.9775.
+[2025-10-20 08:00:10,166 INFO test.py line 217 30680] Evaluating 1241/1449 on image 2010_005860.png, accuracy 0.9456.
+[2025-10-20 08:00:10,188 INFO test.py line 217 30680] Evaluating 1242/1449 on image 2010_005871.png, accuracy 0.8767.
+[2025-10-20 08:00:10,211 INFO test.py line 217 30680] Evaluating 1243/1449 on image 2010_005877.png, accuracy 0.9843.
+[2025-10-20 08:00:10,234 INFO test.py line 217 30680] Evaluating 1244/1449 on image 2010_005888.png, accuracy 0.9899.
+[2025-10-20 08:00:10,258 INFO test.py line 217 30680] Evaluating 1245/1449 on image 2010_005899.png, accuracy 0.9905.
+[2025-10-20 08:00:10,280 INFO test.py line 217 30680] Evaluating 1246/1449 on image 2010_005922.png, accuracy 0.9951.
+[2025-10-20 08:00:10,304 INFO test.py line 217 30680] Evaluating 1247/1449 on image 2010_005991.png, accuracy 0.7777.
+[2025-10-20 08:00:10,325 INFO test.py line 217 30680] Evaluating 1248/1449 on image 2010_005992.png, accuracy 0.8577.
+[2025-10-20 08:00:10,345 INFO test.py line 217 30680] Evaluating 1249/1449 on image 2010_006026.png, accuracy 0.9799.
+[2025-10-20 08:00:10,368 INFO test.py line 217 30680] Evaluating 1250/1449 on image 2010_006034.png, accuracy 0.9745.
+[2025-10-20 08:00:10,389 INFO test.py line 217 30680] Evaluating 1251/1449 on image 2010_006054.png, accuracy 0.9862.
+[2025-10-20 08:00:10,413 INFO test.py line 217 30680] Evaluating 1252/1449 on image 2010_006070.png, accuracy 0.8196.
+[2025-10-20 08:00:10,436 INFO test.py line 217 30680] Evaluating 1253/1449 on image 2011_000045.png, accuracy 0.9895.
+[2025-10-20 08:00:10,458 INFO test.py line 217 30680] Evaluating 1254/1449 on image 2011_000051.png, accuracy 0.8746.
+[2025-10-20 08:00:10,481 INFO test.py line 217 30680] Evaluating 1255/1449 on image 2011_000054.png, accuracy 0.9765.
+[2025-10-20 08:00:10,503 INFO test.py line 217 30680] Evaluating 1256/1449 on image 2011_000066.png, accuracy 0.8324.
+[2025-10-20 08:00:10,526 INFO test.py line 217 30680] Evaluating 1257/1449 on image 2011_000070.png, accuracy 0.9388.
+[2025-10-20 08:00:10,549 INFO test.py line 217 30680] Evaluating 1258/1449 on image 2011_000112.png, accuracy 0.9869.
+[2025-10-20 08:00:10,570 INFO test.py line 217 30680] Evaluating 1259/1449 on image 2011_000173.png, accuracy 0.9809.
+[2025-10-20 08:00:10,592 INFO test.py line 217 30680] Evaluating 1260/1449 on image 2011_000178.png, accuracy 0.8875.
+[2025-10-20 08:00:10,618 INFO test.py line 217 30680] Evaluating 1261/1449 on image 2011_000185.png, accuracy 0.9915.
+[2025-10-20 08:00:10,640 INFO test.py line 217 30680] Evaluating 1262/1449 on image 2011_000226.png, accuracy 0.9265.
+[2025-10-20 08:00:10,660 INFO test.py line 217 30680] Evaluating 1263/1449 on image 2011_000234.png, accuracy 0.9745.
+[2025-10-20 08:00:10,682 INFO test.py line 217 30680] Evaluating 1264/1449 on image 2011_000238.png, accuracy 0.9251.
+[2025-10-20 08:00:10,705 INFO test.py line 217 30680] Evaluating 1265/1449 on image 2011_000239.png, accuracy 0.9105.
+[2025-10-20 08:00:10,725 INFO test.py line 217 30680] Evaluating 1266/1449 on image 2011_000248.png, accuracy 0.9228.
+[2025-10-20 08:00:10,745 INFO test.py line 217 30680] Evaluating 1267/1449 on image 2011_000283.png, accuracy 0.9885.
+[2025-10-20 08:00:10,767 INFO test.py line 217 30680] Evaluating 1268/1449 on image 2011_000291.png, accuracy 0.9758.
+[2025-10-20 08:00:10,789 INFO test.py line 217 30680] Evaluating 1269/1449 on image 2011_000310.png, accuracy 0.9734.
+[2025-10-20 08:00:10,809 INFO test.py line 217 30680] Evaluating 1270/1449 on image 2011_000312.png, accuracy 0.9915.
+[2025-10-20 08:00:10,831 INFO test.py line 217 30680] Evaluating 1271/1449 on image 2011_000338.png, accuracy 0.9369.
+[2025-10-20 08:00:10,853 INFO test.py line 217 30680] Evaluating 1272/1449 on image 2011_000396.png, accuracy 0.9850.
+[2025-10-20 08:00:10,876 INFO test.py line 217 30680] Evaluating 1273/1449 on image 2011_000412.png, accuracy 0.8557.
+[2025-10-20 08:00:10,898 INFO test.py line 217 30680] Evaluating 1274/1449 on image 2011_000419.png, accuracy 0.9708.
+[2025-10-20 08:00:10,921 INFO test.py line 217 30680] Evaluating 1275/1449 on image 2011_000435.png, accuracy 0.9282.
+[2025-10-20 08:00:10,944 INFO test.py line 217 30680] Evaluating 1276/1449 on image 2011_000436.png, accuracy 0.9958.
+[2025-10-20 08:00:10,966 INFO test.py line 217 30680] Evaluating 1277/1449 on image 2011_000438.png, accuracy 0.9470.
+[2025-10-20 08:00:10,987 INFO test.py line 217 30680] Evaluating 1278/1449 on image 2011_000455.png, accuracy 0.9419.
+[2025-10-20 08:00:11,008 INFO test.py line 217 30680] Evaluating 1279/1449 on image 2011_000456.png, accuracy 0.9931.
+[2025-10-20 08:00:11,028 INFO test.py line 217 30680] Evaluating 1280/1449 on image 2011_000479.png, accuracy 0.9466.
+[2025-10-20 08:00:11,049 INFO test.py line 217 30680] Evaluating 1281/1449 on image 2011_000481.png, accuracy 0.9916.
+[2025-10-20 08:00:11,069 INFO test.py line 217 30680] Evaluating 1282/1449 on image 2011_000482.png, accuracy 0.9746.
+[2025-10-20 08:00:11,091 INFO test.py line 217 30680] Evaluating 1283/1449 on image 2011_000503.png, accuracy 0.9791.
+[2025-10-20 08:00:11,118 INFO test.py line 217 30680] Evaluating 1284/1449 on image 2011_000512.png, accuracy 0.9437.
+[2025-10-20 08:00:11,138 INFO test.py line 217 30680] Evaluating 1285/1449 on image 2011_000521.png, accuracy 0.9852.
+[2025-10-20 08:00:11,159 INFO test.py line 217 30680] Evaluating 1286/1449 on image 2011_000526.png, accuracy 0.9722.
+[2025-10-20 08:00:11,181 INFO test.py line 217 30680] Evaluating 1287/1449 on image 2011_000536.png, accuracy 0.9766.
+[2025-10-20 08:00:11,200 INFO test.py line 217 30680] Evaluating 1288/1449 on image 2011_000548.png, accuracy 0.9390.
+[2025-10-20 08:00:11,223 INFO test.py line 217 30680] Evaluating 1289/1449 on image 2011_000566.png, accuracy 0.9418.
+[2025-10-20 08:00:11,244 INFO test.py line 217 30680] Evaluating 1290/1449 on image 2011_000585.png, accuracy 0.9088.
+[2025-10-20 08:00:11,266 INFO test.py line 217 30680] Evaluating 1291/1449 on image 2011_000598.png, accuracy 0.8866.
+[2025-10-20 08:00:11,287 INFO test.py line 217 30680] Evaluating 1292/1449 on image 2011_000607.png, accuracy 0.8958.
+[2025-10-20 08:00:11,308 INFO test.py line 217 30680] Evaluating 1293/1449 on image 2011_000618.png, accuracy 0.7656.
+[2025-10-20 08:00:11,330 INFO test.py line 217 30680] Evaluating 1294/1449 on image 2011_000638.png, accuracy 0.9637.
+[2025-10-20 08:00:11,352 INFO test.py line 217 30680] Evaluating 1295/1449 on image 2011_000658.png, accuracy 0.9618.
+[2025-10-20 08:00:11,372 INFO test.py line 217 30680] Evaluating 1296/1449 on image 2011_000661.png, accuracy 0.4638.
+[2025-10-20 08:00:11,392 INFO test.py line 217 30680] Evaluating 1297/1449 on image 2011_000669.png, accuracy 0.9929.
+[2025-10-20 08:00:11,414 INFO test.py line 217 30680] Evaluating 1298/1449 on image 2011_000747.png, accuracy 0.9316.
+[2025-10-20 08:00:11,436 INFO test.py line 217 30680] Evaluating 1299/1449 on image 2011_000780.png, accuracy 0.8724.
+[2025-10-20 08:00:11,459 INFO test.py line 217 30680] Evaluating 1300/1449 on image 2011_000789.png, accuracy 0.9873.
+[2025-10-20 08:00:11,480 INFO test.py line 217 30680] Evaluating 1301/1449 on image 2011_000807.png, accuracy 0.9960.
+[2025-10-20 08:00:11,502 INFO test.py line 217 30680] Evaluating 1302/1449 on image 2011_000809.png, accuracy 0.9075.
+[2025-10-20 08:00:11,524 INFO test.py line 217 30680] Evaluating 1303/1449 on image 2011_000813.png, accuracy 0.8680.
+[2025-10-20 08:00:11,546 INFO test.py line 217 30680] Evaluating 1304/1449 on image 2011_000830.png, accuracy 0.9692.
+[2025-10-20 08:00:11,569 INFO test.py line 217 30680] Evaluating 1305/1449 on image 2011_000843.png, accuracy 0.9432.
+[2025-10-20 08:00:11,589 INFO test.py line 217 30680] Evaluating 1306/1449 on image 2011_000874.png, accuracy 0.9922.
+[2025-10-20 08:00:11,611 INFO test.py line 217 30680] Evaluating 1307/1449 on image 2011_000888.png, accuracy 0.9665.
+[2025-10-20 08:00:11,632 INFO test.py line 217 30680] Evaluating 1308/1449 on image 2011_000900.png, accuracy 0.9535.
+[2025-10-20 08:00:11,655 INFO test.py line 217 30680] Evaluating 1309/1449 on image 2011_000912.png, accuracy 0.9940.
+[2025-10-20 08:00:11,677 INFO test.py line 217 30680] Evaluating 1310/1449 on image 2011_000953.png, accuracy 0.9613.
+[2025-10-20 08:00:11,697 INFO test.py line 217 30680] Evaluating 1311/1449 on image 2011_000969.png, accuracy 0.9769.
+[2025-10-20 08:00:11,721 INFO test.py line 217 30680] Evaluating 1312/1449 on image 2011_001005.png, accuracy 0.9806.
+[2025-10-20 08:00:11,742 INFO test.py line 217 30680] Evaluating 1313/1449 on image 2011_001014.png, accuracy 0.9186.
+[2025-10-20 08:00:11,764 INFO test.py line 217 30680] Evaluating 1314/1449 on image 2011_001020.png, accuracy 0.9838.
+[2025-10-20 08:00:11,786 INFO test.py line 217 30680] Evaluating 1315/1449 on image 2011_001047.png, accuracy 0.9871.
+[2025-10-20 08:00:11,808 INFO test.py line 217 30680] Evaluating 1316/1449 on image 2011_001060.png, accuracy 0.7471.
+[2025-10-20 08:00:11,830 INFO test.py line 217 30680] Evaluating 1317/1449 on image 2011_001064.png, accuracy 0.9793.
+[2025-10-20 08:00:11,852 INFO test.py line 217 30680] Evaluating 1318/1449 on image 2011_001069.png, accuracy 0.8381.
+[2025-10-20 08:00:11,866 INFO test.py line 217 30680] Evaluating 1319/1449 on image 2011_001071.png, accuracy 0.7100.
+[2025-10-20 08:00:11,886 INFO test.py line 217 30680] Evaluating 1320/1449 on image 2011_001082.png, accuracy 0.9975.
+[2025-10-20 08:00:11,907 INFO test.py line 217 30680] Evaluating 1321/1449 on image 2011_001110.png, accuracy 0.9667.
+[2025-10-20 08:00:11,926 INFO test.py line 217 30680] Evaluating 1322/1449 on image 2011_001114.png, accuracy 0.9919.
+[2025-10-20 08:00:11,953 INFO test.py line 217 30680] Evaluating 1323/1449 on image 2011_001159.png, accuracy 0.8682.
+[2025-10-20 08:00:11,975 INFO test.py line 217 30680] Evaluating 1324/1449 on image 2011_001161.png, accuracy 0.9582.
+[2025-10-20 08:00:11,995 INFO test.py line 217 30680] Evaluating 1325/1449 on image 2011_001190.png, accuracy 0.9808.
+[2025-10-20 08:00:12,015 INFO test.py line 217 30680] Evaluating 1326/1449 on image 2011_001232.png, accuracy 0.9700.
+[2025-10-20 08:00:12,036 INFO test.py line 217 30680] Evaluating 1327/1449 on image 2011_001263.png, accuracy 0.9886.
+[2025-10-20 08:00:12,053 INFO test.py line 217 30680] Evaluating 1328/1449 on image 2011_001276.png, accuracy 0.8356.
+[2025-10-20 08:00:12,076 INFO test.py line 217 30680] Evaluating 1329/1449 on image 2011_001281.png, accuracy 0.9799.
+[2025-10-20 08:00:12,097 INFO test.py line 217 30680] Evaluating 1330/1449 on image 2011_001287.png, accuracy 0.9867.
+[2025-10-20 08:00:12,123 INFO test.py line 217 30680] Evaluating 1331/1449 on image 2011_001292.png, accuracy 0.9895.
+[2025-10-20 08:00:12,145 INFO test.py line 217 30680] Evaluating 1332/1449 on image 2011_001313.png, accuracy 0.9927.
+[2025-10-20 08:00:12,165 INFO test.py line 217 30680] Evaluating 1333/1449 on image 2011_001341.png, accuracy 0.9757.
+[2025-10-20 08:00:12,186 INFO test.py line 217 30680] Evaluating 1334/1449 on image 2011_001346.png, accuracy 0.9041.
+[2025-10-20 08:00:12,211 INFO test.py line 217 30680] Evaluating 1335/1449 on image 2011_001350.png, accuracy 0.9883.
+[2025-10-20 08:00:12,231 INFO test.py line 217 30680] Evaluating 1336/1449 on image 2011_001407.png, accuracy 0.9856.
+[2025-10-20 08:00:12,251 INFO test.py line 217 30680] Evaluating 1337/1449 on image 2011_001416.png, accuracy 0.6010.
+[2025-10-20 08:00:12,272 INFO test.py line 217 30680] Evaluating 1338/1449 on image 2011_001421.png, accuracy 0.9914.
+[2025-10-20 08:00:12,292 INFO test.py line 217 30680] Evaluating 1339/1449 on image 2011_001434.png, accuracy 0.9494.
+[2025-10-20 08:00:12,314 INFO test.py line 217 30680] Evaluating 1340/1449 on image 2011_001447.png, accuracy 0.8416.
+[2025-10-20 08:00:12,332 INFO test.py line 217 30680] Evaluating 1341/1449 on image 2011_001489.png, accuracy 0.9990.
+[2025-10-20 08:00:12,356 INFO test.py line 217 30680] Evaluating 1342/1449 on image 2011_001529.png, accuracy 0.9958.
+[2025-10-20 08:00:12,378 INFO test.py line 217 30680] Evaluating 1343/1449 on image 2011_001530.png, accuracy 0.9610.
+[2025-10-20 08:00:12,400 INFO test.py line 217 30680] Evaluating 1344/1449 on image 2011_001534.png, accuracy 0.8681.
+[2025-10-20 08:00:12,423 INFO test.py line 217 30680] Evaluating 1345/1449 on image 2011_001546.png, accuracy 0.8065.
+[2025-10-20 08:00:12,443 INFO test.py line 217 30680] Evaluating 1346/1449 on image 2011_001567.png, accuracy 0.8509.
+[2025-10-20 08:00:12,463 INFO test.py line 217 30680] Evaluating 1347/1449 on image 2011_001589.png, accuracy 0.9886.
+[2025-10-20 08:00:12,484 INFO test.py line 217 30680] Evaluating 1348/1449 on image 2011_001597.png, accuracy 0.9682.
+[2025-10-20 08:00:12,504 INFO test.py line 217 30680] Evaluating 1349/1449 on image 2011_001601.png, accuracy 0.6932.
+[2025-10-20 08:00:12,525 INFO test.py line 217 30680] Evaluating 1350/1449 on image 2011_001607.png, accuracy 0.9819.
+[2025-10-20 08:00:12,544 INFO test.py line 217 30680] Evaluating 1351/1449 on image 2011_001613.png, accuracy 0.9922.
+[2025-10-20 08:00:12,564 INFO test.py line 217 30680] Evaluating 1352/1449 on image 2011_001614.png, accuracy 0.9822.
+[2025-10-20 08:00:12,587 INFO test.py line 217 30680] Evaluating 1353/1449 on image 2011_001619.png, accuracy 0.9341.
+[2025-10-20 08:00:12,609 INFO test.py line 217 30680] Evaluating 1354/1449 on image 2011_001624.png, accuracy 0.9926.
+[2025-10-20 08:00:12,631 INFO test.py line 217 30680] Evaluating 1355/1449 on image 2011_001642.png, accuracy 0.9535.
+[2025-10-20 08:00:12,649 INFO test.py line 217 30680] Evaluating 1356/1449 on image 2011_001665.png, accuracy 0.4288.
+[2025-10-20 08:00:12,671 INFO test.py line 217 30680] Evaluating 1357/1449 on image 2011_001669.png, accuracy 0.9860.
+[2025-10-20 08:00:12,698 INFO test.py line 217 30680] Evaluating 1358/1449 on image 2011_001674.png, accuracy 0.9249.
+[2025-10-20 08:00:12,722 INFO test.py line 217 30680] Evaluating 1359/1449 on image 2011_001708.png, accuracy 0.9703.
+[2025-10-20 08:00:12,744 INFO test.py line 217 30680] Evaluating 1360/1449 on image 2011_001713.png, accuracy 0.7413.
+[2025-10-20 08:00:12,766 INFO test.py line 217 30680] Evaluating 1361/1449 on image 2011_001714.png, accuracy 0.8240.
+[2025-10-20 08:00:12,778 INFO test.py line 217 30680] Evaluating 1362/1449 on image 2011_001722.png, accuracy 0.9859.
+[2025-10-20 08:00:12,800 INFO test.py line 217 30680] Evaluating 1363/1449 on image 2011_001726.png, accuracy 0.9418.
+[2025-10-20 08:00:12,822 INFO test.py line 217 30680] Evaluating 1364/1449 on image 2011_001745.png, accuracy 0.8862.
+[2025-10-20 08:00:12,843 INFO test.py line 217 30680] Evaluating 1365/1449 on image 2011_001748.png, accuracy 0.9961.
+[2025-10-20 08:00:12,866 INFO test.py line 217 30680] Evaluating 1366/1449 on image 2011_001775.png, accuracy 0.9247.
+[2025-10-20 08:00:12,889 INFO test.py line 217 30680] Evaluating 1367/1449 on image 2011_001782.png, accuracy 0.9913.
+[2025-10-20 08:00:12,912 INFO test.py line 217 30680] Evaluating 1368/1449 on image 2011_001793.png, accuracy 0.9710.
+[2025-10-20 08:00:12,935 INFO test.py line 217 30680] Evaluating 1369/1449 on image 2011_001794.png, accuracy 0.9674.
+[2025-10-20 08:00:12,958 INFO test.py line 217 30680] Evaluating 1370/1449 on image 2011_001812.png, accuracy 0.8921.
+[2025-10-20 08:00:12,981 INFO test.py line 217 30680] Evaluating 1371/1449 on image 2011_001862.png, accuracy 0.9574.
+[2025-10-20 08:00:13,004 INFO test.py line 217 30680] Evaluating 1372/1449 on image 2011_001863.png, accuracy 0.8652.
+[2025-10-20 08:00:13,025 INFO test.py line 217 30680] Evaluating 1373/1449 on image 2011_001868.png, accuracy 0.9523.
+[2025-10-20 08:00:13,048 INFO test.py line 217 30680] Evaluating 1374/1449 on image 2011_001880.png, accuracy 0.9121.
+[2025-10-20 08:00:13,074 INFO test.py line 217 30680] Evaluating 1375/1449 on image 2011_001910.png, accuracy 0.9625.
+[2025-10-20 08:00:13,097 INFO test.py line 217 30680] Evaluating 1376/1449 on image 2011_001984.png, accuracy 0.9775.
+[2025-10-20 08:00:13,125 INFO test.py line 217 30680] Evaluating 1377/1449 on image 2011_001988.png, accuracy 0.9521.
+[2025-10-20 08:00:13,148 INFO test.py line 217 30680] Evaluating 1378/1449 on image 2011_002002.png, accuracy 0.9684.
+[2025-10-20 08:00:13,175 INFO test.py line 217 30680] Evaluating 1379/1449 on image 2011_002040.png, accuracy 0.9594.
+[2025-10-20 08:00:13,197 INFO test.py line 217 30680] Evaluating 1380/1449 on image 2011_002041.png, accuracy 0.9847.
+[2025-10-20 08:00:13,222 INFO test.py line 217 30680] Evaluating 1381/1449 on image 2011_002064.png, accuracy 0.8846.
+[2025-10-20 08:00:13,245 INFO test.py line 217 30680] Evaluating 1382/1449 on image 2011_002075.png, accuracy 0.8977.
+[2025-10-20 08:00:13,267 INFO test.py line 217 30680] Evaluating 1383/1449 on image 2011_002098.png, accuracy 0.9442.
+[2025-10-20 08:00:13,288 INFO test.py line 217 30680] Evaluating 1384/1449 on image 2011_002110.png, accuracy 0.9255.
+[2025-10-20 08:00:13,309 INFO test.py line 217 30680] Evaluating 1385/1449 on image 2011_002121.png, accuracy 0.8404.
+[2025-10-20 08:00:13,331 INFO test.py line 217 30680] Evaluating 1386/1449 on image 2011_002124.png, accuracy 0.9264.
+[2025-10-20 08:00:13,354 INFO test.py line 217 30680] Evaluating 1387/1449 on image 2011_002150.png, accuracy 0.9928.
+[2025-10-20 08:00:13,377 INFO test.py line 217 30680] Evaluating 1388/1449 on image 2011_002156.png, accuracy 0.9641.
+[2025-10-20 08:00:13,399 INFO test.py line 217 30680] Evaluating 1389/1449 on image 2011_002178.png, accuracy 0.6711.
+[2025-10-20 08:00:13,424 INFO test.py line 217 30680] Evaluating 1390/1449 on image 2011_002200.png, accuracy 0.9055.
+[2025-10-20 08:00:13,446 INFO test.py line 217 30680] Evaluating 1391/1449 on image 2011_002223.png, accuracy 0.9695.
+[2025-10-20 08:00:13,469 INFO test.py line 217 30680] Evaluating 1392/1449 on image 2011_002244.png, accuracy 0.9993.
+[2025-10-20 08:00:13,490 INFO test.py line 217 30680] Evaluating 1393/1449 on image 2011_002247.png, accuracy 0.9002.
+[2025-10-20 08:00:13,512 INFO test.py line 217 30680] Evaluating 1394/1449 on image 2011_002279.png, accuracy 0.9768.
+[2025-10-20 08:00:13,533 INFO test.py line 217 30680] Evaluating 1395/1449 on image 2011_002295.png, accuracy 0.9889.
+[2025-10-20 08:00:13,555 INFO test.py line 217 30680] Evaluating 1396/1449 on image 2011_002298.png, accuracy 0.9251.
+[2025-10-20 08:00:13,578 INFO test.py line 217 30680] Evaluating 1397/1449 on image 2011_002308.png, accuracy 0.9781.
+[2025-10-20 08:00:13,601 INFO test.py line 217 30680] Evaluating 1398/1449 on image 2011_002317.png, accuracy 0.9618.
+[2025-10-20 08:00:13,624 INFO test.py line 217 30680] Evaluating 1399/1449 on image 2011_002322.png, accuracy 0.9467.
+[2025-10-20 08:00:13,645 INFO test.py line 217 30680] Evaluating 1400/1449 on image 2011_002327.png, accuracy 0.9275.
+[2025-10-20 08:00:13,665 INFO test.py line 217 30680] Evaluating 1401/1449 on image 2011_002343.png, accuracy 0.6252.
+[2025-10-20 08:00:13,687 INFO test.py line 217 30680] Evaluating 1402/1449 on image 2011_002358.png, accuracy 0.8880.
+[2025-10-20 08:00:13,709 INFO test.py line 217 30680] Evaluating 1403/1449 on image 2011_002371.png, accuracy 0.9824.
+[2025-10-20 08:00:13,731 INFO test.py line 217 30680] Evaluating 1404/1449 on image 2011_002379.png, accuracy 0.9817.
+[2025-10-20 08:00:13,754 INFO test.py line 217 30680] Evaluating 1405/1449 on image 2011_002391.png, accuracy 0.8658.
+[2025-10-20 08:00:13,778 INFO test.py line 217 30680] Evaluating 1406/1449 on image 2011_002498.png, accuracy 0.9042.
+[2025-10-20 08:00:13,801 INFO test.py line 217 30680] Evaluating 1407/1449 on image 2011_002509.png, accuracy 0.9596.
+[2025-10-20 08:00:13,822 INFO test.py line 217 30680] Evaluating 1408/1449 on image 2011_002515.png, accuracy 0.9511.
+[2025-10-20 08:00:13,843 INFO test.py line 217 30680] Evaluating 1409/1449 on image 2011_002532.png, accuracy 0.8484.
+[2025-10-20 08:00:13,865 INFO test.py line 217 30680] Evaluating 1410/1449 on image 2011_002535.png, accuracy 0.9925.
+[2025-10-20 08:00:13,888 INFO test.py line 217 30680] Evaluating 1411/1449 on image 2011_002548.png, accuracy 0.9877.
+[2025-10-20 08:00:13,911 INFO test.py line 217 30680] Evaluating 1412/1449 on image 2011_002575.png, accuracy 0.6910.
+[2025-10-20 08:00:13,933 INFO test.py line 217 30680] Evaluating 1413/1449 on image 2011_002578.png, accuracy 0.9757.
+[2025-10-20 08:00:13,957 INFO test.py line 217 30680] Evaluating 1414/1449 on image 2011_002589.png, accuracy 0.9729.
+[2025-10-20 08:00:13,979 INFO test.py line 217 30680] Evaluating 1415/1449 on image 2011_002592.png, accuracy 0.9121.
+[2025-10-20 08:00:13,999 INFO test.py line 217 30680] Evaluating 1416/1449 on image 2011_002623.png, accuracy 0.9374.
+[2025-10-20 08:00:14,016 INFO test.py line 217 30680] Evaluating 1417/1449 on image 2011_002641.png, accuracy 0.9559.
+[2025-10-20 08:00:14,039 INFO test.py line 217 30680] Evaluating 1418/1449 on image 2011_002644.png, accuracy 0.9013.
+[2025-10-20 08:00:14,060 INFO test.py line 217 30680] Evaluating 1419/1449 on image 2011_002662.png, accuracy 0.9942.
+[2025-10-20 08:00:14,082 INFO test.py line 217 30680] Evaluating 1420/1449 on image 2011_002675.png, accuracy 0.9495.
+[2025-10-20 08:00:14,105 INFO test.py line 217 30680] Evaluating 1421/1449 on image 2011_002685.png, accuracy 0.9502.
+[2025-10-20 08:00:14,130 INFO test.py line 217 30680] Evaluating 1422/1449 on image 2011_002713.png, accuracy 0.9045.
+[2025-10-20 08:00:14,153 INFO test.py line 217 30680] Evaluating 1423/1449 on image 2011_002730.png, accuracy 0.9912.
+[2025-10-20 08:00:14,171 INFO test.py line 217 30680] Evaluating 1424/1449 on image 2011_002754.png, accuracy 0.9924.
+[2025-10-20 08:00:14,184 INFO test.py line 217 30680] Evaluating 1425/1449 on image 2011_002812.png, accuracy 0.9740.
+[2025-10-20 08:00:14,211 INFO test.py line 217 30680] Evaluating 1426/1449 on image 2011_002863.png, accuracy 0.9380.
+[2025-10-20 08:00:14,234 INFO test.py line 217 30680] Evaluating 1427/1449 on image 2011_002879.png, accuracy 0.9652.
+[2025-10-20 08:00:14,257 INFO test.py line 217 30680] Evaluating 1428/1449 on image 2011_002885.png, accuracy 0.9788.
+[2025-10-20 08:00:14,277 INFO test.py line 217 30680] Evaluating 1429/1449 on image 2011_002929.png, accuracy 0.9863.
+[2025-10-20 08:00:14,300 INFO test.py line 217 30680] Evaluating 1430/1449 on image 2011_002951.png, accuracy 0.9397.
+[2025-10-20 08:00:14,324 INFO test.py line 217 30680] Evaluating 1431/1449 on image 2011_002975.png, accuracy 0.9679.
+[2025-10-20 08:00:14,345 INFO test.py line 217 30680] Evaluating 1432/1449 on image 2011_002993.png, accuracy 0.9942.
+[2025-10-20 08:00:14,367 INFO test.py line 217 30680] Evaluating 1433/1449 on image 2011_002997.png, accuracy 0.9682.
+[2025-10-20 08:00:14,389 INFO test.py line 217 30680] Evaluating 1434/1449 on image 2011_003003.png, accuracy 0.9050.
+[2025-10-20 08:00:14,409 INFO test.py line 217 30680] Evaluating 1435/1449 on image 2011_003011.png, accuracy 0.8598.
+[2025-10-20 08:00:14,431 INFO test.py line 217 30680] Evaluating 1436/1449 on image 2011_003019.png, accuracy 0.9275.
+[2025-10-20 08:00:14,452 INFO test.py line 217 30680] Evaluating 1437/1449 on image 2011_003030.png, accuracy 0.9349.
+[2025-10-20 08:00:14,475 INFO test.py line 217 30680] Evaluating 1438/1449 on image 2011_003055.png, accuracy 0.9390.
+[2025-10-20 08:00:14,497 INFO test.py line 217 30680] Evaluating 1439/1449 on image 2011_003085.png, accuracy 0.9853.
+[2025-10-20 08:00:14,521 INFO test.py line 217 30680] Evaluating 1440/1449 on image 2011_003103.png, accuracy 0.8858.
+[2025-10-20 08:00:14,542 INFO test.py line 217 30680] Evaluating 1441/1449 on image 2011_003114.png, accuracy 0.9535.
+[2025-10-20 08:00:14,565 INFO test.py line 217 30680] Evaluating 1442/1449 on image 2011_003145.png, accuracy 0.9722.
+[2025-10-20 08:00:14,577 INFO test.py line 217 30680] Evaluating 1443/1449 on image 2011_003146.png, accuracy 0.9543.
+[2025-10-20 08:00:14,587 INFO test.py line 217 30680] Evaluating 1444/1449 on image 2011_003182.png, accuracy 0.4222.
+[2025-10-20 08:00:14,600 INFO test.py line 217 30680] Evaluating 1445/1449 on image 2011_003197.png, accuracy 0.8727.
+[2025-10-20 08:00:14,612 INFO test.py line 217 30680] Evaluating 1446/1449 on image 2011_003205.png, accuracy 0.9930.
+[2025-10-20 08:00:14,623 INFO test.py line 217 30680] Evaluating 1447/1449 on image 2011_003240.png, accuracy 0.9484.
+[2025-10-20 08:00:14,633 INFO test.py line 217 30680] Evaluating 1448/1449 on image 2011_003256.png, accuracy 0.8141.
+[2025-10-20 08:00:14,655 INFO test.py line 217 30680] Evaluating 1449/1449 on image 2011_003271.png, accuracy 0.7773.
+[2025-10-20 08:00:14,655 INFO test.py line 225 30680] Eval result: mIoU/mAcc/allAcc 0.6969/0.8040/0.9311.
+[2025-10-20 08:00:14,655 INFO test.py line 227 30680] Class_0 result: iou/accuracy 0.9289/0.9647, name: background.
+[2025-10-20 08:00:14,655 INFO test.py line 227 30680] Class_1 result: iou/accuracy 0.8306/0.8966, name: aeroplane.
+[2025-10-20 08:00:14,655 INFO test.py line 227 30680] Class_2 result: iou/accuracy 0.4073/0.6073, name: bicycle.
+[2025-10-20 08:00:14,655 INFO test.py line 227 30680] Class_3 result: iou/accuracy 0.8518/0.9233, name: bird.
+[2025-10-20 08:00:14,655 INFO test.py line 227 30680] Class_4 result: iou/accuracy 0.7196/0.7968, name: boat.
+[2025-10-20 08:00:14,655 INFO test.py line 227 30680] Class_5 result: iou/accuracy 0.6472/0.8190, name: bottle.
+[2025-10-20 08:00:14,655 INFO test.py line 227 30680] Class_6 result: iou/accuracy 0.8494/0.9348, name: bus.
+[2025-10-20 08:00:14,655 INFO test.py line 227 30680] Class_7 result: iou/accuracy 0.8022/0.8851, name: car.
+[2025-10-20 08:00:14,655 INFO test.py line 227 30680] Class_8 result: iou/accuracy 0.8518/0.9523, name: cat.
+[2025-10-20 08:00:14,655 INFO test.py line 227 30680] Class_9 result: iou/accuracy 0.3066/0.4363, name: chair.
+[2025-10-20 08:00:14,656 INFO test.py line 227 30680] Class_10 result: iou/accuracy 0.6701/0.7257, name: cow.
+[2025-10-20 08:00:14,656 INFO test.py line 227 30680] Class_11 result: iou/accuracy 0.5633/0.6644, name: diningtable.
+[2025-10-20 08:00:14,656 INFO test.py line 227 30680] Class_12 result: iou/accuracy 0.7826/0.8904, name: dog.
+[2025-10-20 08:00:14,656 INFO test.py line 227 30680] Class_13 result: iou/accuracy 0.6951/0.8906, name: horse.
+[2025-10-20 08:00:14,656 INFO test.py line 227 30680] Class_14 result: iou/accuracy 0.7638/0.8647, name: motorbike.
+[2025-10-20 08:00:14,656 INFO test.py line 227 30680] Class_15 result: iou/accuracy 0.8219/0.9108, name: person.
+[2025-10-20 08:00:14,656 INFO test.py line 227 30680] Class_16 result: iou/accuracy 0.4683/0.5942, name: pottedplant.
+[2025-10-20 08:00:14,656 INFO test.py line 227 30680] Class_17 result: iou/accuracy 0.7413/0.8316, name: sheep.
+[2025-10-20 08:00:14,656 INFO test.py line 227 30680] Class_18 result: iou/accuracy 0.5286/0.6691, name: sofa.
+[2025-10-20 08:00:14,656 INFO test.py line 227 30680] Class_19 result: iou/accuracy 0.7918/0.8541, name: train.
+[2025-10-20 08:00:14,656 INFO test.py line 227 30680] Class_20 result: iou/accuracy 0.6136/0.7716, name: tvmonitor.

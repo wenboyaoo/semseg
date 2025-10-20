@@ -1,0 +1,724 @@
+[2025-10-20 07:51:56,709 INFO train.py line 123 26138] arch: psp
+aux_weight: 0.4
+base_lr: 0.01
+base_size: 512
+batch_size: 16
+batch_size_val: 8
+classes: 21
+colors_path: data/voc2012/voc2012_colors.txt
+data_root: dataset/voc2012
+dist_backend: nccl
+dist_url: tcp://127.0.0.1:6789
+distributed: False
+epochs: 50
+evaluate: False
+has_prediction: False
+ignore_label: 255
+index_split: 5
+index_start: 0
+index_step: 0
+manual_seed: None
+model_path: exp/voc2012/pspnet50/model/train_epoch_50.pth
+momentum: 0.9
+multiprocessing_distributed: False
+names_path: data/voc2012/voc2012_names.txt
+ngpus_per_node: 1
+power: 0.9
+print_freq: 10
+rank: 0
+resume: None
+rotate_max: 10
+rotate_min: -10
+save_folder: exp/voc2012/pspnet50/result/epoch_50/val/ss
+save_freq: 1
+save_path: exp/voc2012/pspnet50/model
+scale_max: 2.0
+scale_min: 0.5
+scales: [1.0]
+split: val
+start_epoch: 0
+sync_bn: False
+test_gpu: [0]
+test_h: 224
+test_list: dataset/voc2012/list/val.txt
+test_w: 224
+train_gpu: [0]
+train_h: 224
+train_list: dataset/voc2012/list/train.txt
+train_w: 224
+val_list: dataset/voc2012/list/val.txt
+weight: None
+weight_decay: 0.0001
+workers: 16
+world_size: 1
+zoom_factor: 32
+[2025-10-20 07:51:56,709 INFO train.py line 124 26138] => creating model ...
+[2025-10-20 07:51:56,709 INFO train.py line 125 26138] Classes: 21
+[2025-10-20 07:51:56,709 INFO train.py line 126 26138] PSPNet(
+  (criterion): CrossEntropyLoss()
+  (backbone): DINOv3ConvNextModel(
+    (stages): ModuleList(
+      (0): DINOv3ConvNextStage(
+        (downsample_layers): ModuleList(
+          (0): Conv2d(3, 96, kernel_size=(4, 4), stride=(4, 4))
+          (1): DINOv3ConvNextLayerNorm((96,), eps=1e-06, elementwise_affine=True)
+        )
+        (layers): ModuleList(
+          (0-2): 3 x DINOv3ConvNextLayer(
+            (depthwise_conv): Conv2d(96, 96, kernel_size=(7, 7), stride=(1, 1), padding=(3, 3), groups=96)
+            (layer_norm): DINOv3ConvNextLayerNorm((96,), eps=1e-06, elementwise_affine=True)
+            (pointwise_conv1): Linear(in_features=96, out_features=384, bias=True)
+            (activation_fn): GELUActivation()
+            (pointwise_conv2): Linear(in_features=384, out_features=96, bias=True)
+            (drop_path): Identity()
+          )
+        )
+      )
+      (1): DINOv3ConvNextStage(
+        (downsample_layers): ModuleList(
+          (0): DINOv3ConvNextLayerNorm((96,), eps=1e-06, elementwise_affine=True)
+          (1): Conv2d(96, 192, kernel_size=(2, 2), stride=(2, 2))
+        )
+        (layers): ModuleList(
+          (0-2): 3 x DINOv3ConvNextLayer(
+            (depthwise_conv): Conv2d(192, 192, kernel_size=(7, 7), stride=(1, 1), padding=(3, 3), groups=192)
+            (layer_norm): DINOv3ConvNextLayerNorm((192,), eps=1e-06, elementwise_affine=True)
+            (pointwise_conv1): Linear(in_features=192, out_features=768, bias=True)
+            (activation_fn): GELUActivation()
+            (pointwise_conv2): Linear(in_features=768, out_features=192, bias=True)
+            (drop_path): Identity()
+          )
+        )
+      )
+      (2): DINOv3ConvNextStage(
+        (downsample_layers): ModuleList(
+          (0): DINOv3ConvNextLayerNorm((192,), eps=1e-06, elementwise_affine=True)
+          (1): Conv2d(192, 384, kernel_size=(2, 2), stride=(2, 2))
+        )
+        (layers): ModuleList(
+          (0-8): 9 x DINOv3ConvNextLayer(
+            (depthwise_conv): Conv2d(384, 384, kernel_size=(7, 7), stride=(1, 1), padding=(3, 3), groups=384)
+            (layer_norm): DINOv3ConvNextLayerNorm((384,), eps=1e-06, elementwise_affine=True)
+            (pointwise_conv1): Linear(in_features=384, out_features=1536, bias=True)
+            (activation_fn): GELUActivation()
+            (pointwise_conv2): Linear(in_features=1536, out_features=384, bias=True)
+            (drop_path): Identity()
+          )
+        )
+      )
+      (3): DINOv3ConvNextStage(
+        (downsample_layers): ModuleList(
+          (0): DINOv3ConvNextLayerNorm((384,), eps=1e-06, elementwise_affine=True)
+          (1): Conv2d(384, 768, kernel_size=(2, 2), stride=(2, 2))
+        )
+        (layers): ModuleList(
+          (0-2): 3 x DINOv3ConvNextLayer(
+            (depthwise_conv): Conv2d(768, 768, kernel_size=(7, 7), stride=(1, 1), padding=(3, 3), groups=768)
+            (layer_norm): DINOv3ConvNextLayerNorm((768,), eps=1e-06, elementwise_affine=True)
+            (pointwise_conv1): Linear(in_features=768, out_features=3072, bias=True)
+            (activation_fn): GELUActivation()
+            (pointwise_conv2): Linear(in_features=3072, out_features=768, bias=True)
+            (drop_path): Identity()
+          )
+        )
+      )
+    )
+    (layer_norm): LayerNorm((768,), eps=1e-06, elementwise_affine=True)
+    (pool): AdaptiveAvgPool2d(output_size=1)
+  )
+  (ppm): PPM(
+    (features): ModuleList(
+      (0): Sequential(
+        (0): AdaptiveAvgPool2d(output_size=1)
+        (1): Conv2d(768, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (2): BatchNorm2d(192, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (3): ReLU(inplace=True)
+      )
+      (1): Sequential(
+        (0): AdaptiveAvgPool2d(output_size=2)
+        (1): Conv2d(768, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (2): BatchNorm2d(192, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (3): ReLU(inplace=True)
+      )
+      (2): Sequential(
+        (0): AdaptiveAvgPool2d(output_size=3)
+        (1): Conv2d(768, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (2): BatchNorm2d(192, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (3): ReLU(inplace=True)
+      )
+      (3): Sequential(
+        (0): AdaptiveAvgPool2d(output_size=6)
+        (1): Conv2d(768, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (2): BatchNorm2d(192, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (3): ReLU(inplace=True)
+      )
+    )
+  )
+  (cls): Sequential(
+    (0): Conv2d(1536, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU(inplace=True)
+    (3): Dropout2d(p=0.1, inplace=False)
+    (4): Conv2d(512, 21, kernel_size=(1, 1), stride=(1, 1))
+  )
+  (aux): Sequential(
+    (0): Conv2d(384, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU(inplace=True)
+    (3): Dropout2d(p=0.1, inplace=False)
+    (4): Conv2d(256, 21, kernel_size=(1, 1), stride=(1, 1))
+  )
+)
+Totally 1464 samples in train set.
+Starting Checking image&label pair train list...
+Checking image&label pair train list done!
+[2025-10-20 07:52:01,002 INFO train.py line 282 26138] Epoch: [1/50][10/91] Data 0.001 (0.099) Batch 0.038 (0.403) Remain 00:30:27 MainLoss 2.3301 AuxLoss 1.9509 Loss 3.1105 Accuracy 0.6995.
+[2025-10-20 07:52:01,369 INFO train.py line 282 26138] Epoch: [1/50][20/91] Data 0.001 (0.050) Batch 0.036 (0.220) Remain 00:16:34 MainLoss 2.1414 AuxLoss 1.7377 Loss 2.8365 Accuracy 0.5472.
+[2025-10-20 07:52:01,759 INFO train.py line 282 26138] Epoch: [1/50][30/91] Data 0.001 (0.034) Batch 0.038 (0.159) Remain 00:12:00 MainLoss 1.4636 AuxLoss 0.9632 Loss 1.8489 Accuracy 0.6807.
+[2025-10-20 07:52:02,148 INFO train.py line 282 26138] Epoch: [1/50][40/91] Data 0.001 (0.025) Batch 0.039 (0.129) Remain 00:09:43 MainLoss 1.2950 AuxLoss 1.1273 Loss 1.7460 Accuracy 0.6962.
+[2025-10-20 07:52:02,516 INFO train.py line 282 26138] Epoch: [1/50][50/91] Data 0.001 (0.021) Batch 0.035 (0.111) Remain 00:08:18 MainLoss 1.2636 AuxLoss 1.2418 Loss 1.7603 Accuracy 0.6876.
+[2025-10-20 07:52:02,855 INFO train.py line 282 26138] Epoch: [1/50][60/91] Data 0.001 (0.017) Batch 0.034 (0.098) Remain 00:07:19 MainLoss 1.6037 AuxLoss 1.5885 Loss 2.2391 Accuracy 0.5460.
+[2025-10-20 07:52:03,188 INFO train.py line 282 26138] Epoch: [1/50][70/91] Data 0.000 (0.015) Batch 0.033 (0.089) Remain 00:06:37 MainLoss 1.3086 AuxLoss 1.3345 Loss 1.8424 Accuracy 0.6809.
+[2025-10-20 07:52:03,521 INFO train.py line 282 26138] Epoch: [1/50][80/91] Data 0.001 (0.013) Batch 0.033 (0.082) Remain 00:06:05 MainLoss 1.7593 AuxLoss 1.1764 Loss 2.2298 Accuracy 0.6253.
+[2025-10-20 07:52:03,853 INFO train.py line 282 26138] Epoch: [1/50][90/91] Data 0.001 (0.012) Batch 0.033 (0.076) Remain 00:05:40 MainLoss 1.1789 AuxLoss 1.1671 Loss 1.6457 Accuracy 0.6875.
+[2025-10-20 07:52:03,954 INFO train.py line 309 26138] Train result at epoch [1/50]: mIoU/mAcc/allAcc 0.0707/0.1055/0.6176.
+[2025-10-20 07:52:03,954 INFO train.py line 208 26138] Saving checkpoint to: exp/voc2012/pspnet50/model/train_epoch_1.pth
+[2025-10-20 07:52:05,678 INFO train.py line 282 26138] Epoch: [2/50][10/91] Data 0.001 (0.073) Batch 0.034 (0.107) Remain 00:07:58 MainLoss 1.7457 AuxLoss 1.3973 Loss 2.3046 Accuracy 0.5343.
+[2025-10-20 07:52:06,025 INFO train.py line 282 26138] Epoch: [2/50][20/91] Data 0.001 (0.037) Batch 0.034 (0.071) Remain 00:05:15 MainLoss 1.2490 AuxLoss 1.0803 Loss 1.6812 Accuracy 0.6669.
+[2025-10-20 07:52:06,369 INFO train.py line 282 26138] Epoch: [2/50][30/91] Data 0.001 (0.025) Batch 0.035 (0.059) Remain 00:04:20 MainLoss 1.5591 AuxLoss 1.6266 Loss 2.2097 Accuracy 0.5676.
+[2025-10-20 07:52:06,714 INFO train.py line 282 26138] Epoch: [2/50][40/91] Data 0.001 (0.019) Batch 0.034 (0.053) Remain 00:03:53 MainLoss 1.1938 AuxLoss 1.0256 Loss 1.6041 Accuracy 0.7148.
+[2025-10-20 07:52:07,055 INFO train.py line 282 26138] Epoch: [2/50][50/91] Data 0.001 (0.015) Batch 0.034 (0.049) Remain 00:03:36 MainLoss 0.9640 AuxLoss 0.9659 Loss 1.3504 Accuracy 0.7171.
+[2025-10-20 07:52:07,397 INFO train.py line 282 26138] Epoch: [2/50][60/91] Data 0.001 (0.013) Batch 0.034 (0.047) Remain 00:03:24 MainLoss 1.3475 AuxLoss 1.2697 Loss 1.8554 Accuracy 0.6628.
+[2025-10-20 07:52:07,730 INFO train.py line 282 26138] Epoch: [2/50][70/91] Data 0.001 (0.011) Batch 0.033 (0.045) Remain 00:03:16 MainLoss 1.1438 AuxLoss 1.1504 Loss 1.6039 Accuracy 0.6655.
+[2025-10-20 07:52:08,064 INFO train.py line 282 26138] Epoch: [2/50][80/91] Data 0.001 (0.010) Batch 0.033 (0.043) Remain 00:03:09 MainLoss 0.7539 AuxLoss 0.8522 Loss 1.0948 Accuracy 0.7570.
+[2025-10-20 07:52:08,398 INFO train.py line 282 26138] Epoch: [2/50][90/91] Data 0.001 (0.009) Batch 0.033 (0.042) Remain 00:03:04 MainLoss 1.1579 AuxLoss 1.3258 Loss 1.6882 Accuracy 0.6670.
+[2025-10-20 07:52:08,507 INFO train.py line 309 26138] Train result at epoch [2/50]: mIoU/mAcc/allAcc 0.1169/0.1696/0.6697.
+[2025-10-20 07:52:08,507 INFO train.py line 208 26138] Saving checkpoint to: exp/voc2012/pspnet50/model/train_epoch_2.pth
+[2025-10-20 07:52:09,998 INFO train.py line 282 26138] Epoch: [3/50][10/91] Data 0.000 (0.064) Batch 0.033 (0.099) Remain 00:07:09 MainLoss 0.8688 AuxLoss 1.1823 Loss 1.3418 Accuracy 0.7083.
+[2025-10-20 07:52:10,335 INFO train.py line 282 26138] Epoch: [3/50][20/91] Data 0.000 (0.032) Batch 0.035 (0.066) Remain 00:04:47 MainLoss 0.5210 AuxLoss 0.7447 Loss 0.8189 Accuracy 0.8395.
+[2025-10-20 07:52:10,671 INFO train.py line 282 26138] Epoch: [3/50][30/91] Data 0.001 (0.022) Batch 0.034 (0.055) Remain 00:03:59 MainLoss 1.1476 AuxLoss 1.4054 Loss 1.7098 Accuracy 0.6125.
+[2025-10-20 07:52:11,011 INFO train.py line 282 26138] Epoch: [3/50][40/91] Data 0.001 (0.017) Batch 0.034 (0.050) Remain 00:03:36 MainLoss 0.7925 AuxLoss 0.7784 Loss 1.1038 Accuracy 0.7836.
+[2025-10-20 07:52:11,347 INFO train.py line 282 26138] Epoch: [3/50][50/91] Data 0.001 (0.013) Batch 0.034 (0.047) Remain 00:03:21 MainLoss 0.7110 AuxLoss 0.7626 Loss 1.0160 Accuracy 0.7697.
+[2025-10-20 07:52:11,684 INFO train.py line 282 26138] Epoch: [3/50][60/91] Data 0.001 (0.011) Batch 0.034 (0.045) Remain 00:03:11 MainLoss 0.8181 AuxLoss 0.9623 Loss 1.2030 Accuracy 0.6884.
+[2025-10-20 07:52:12,016 INFO train.py line 282 26138] Epoch: [3/50][70/91] Data 0.000 (0.010) Batch 0.033 (0.043) Remain 00:03:04 MainLoss 0.6178 AuxLoss 0.8485 Loss 0.9572 Accuracy 0.8053.
+[2025-10-20 07:52:12,345 INFO train.py line 282 26138] Epoch: [3/50][80/91] Data 0.000 (0.009) Batch 0.033 (0.042) Remain 00:02:58 MainLoss 0.4283 AuxLoss 0.7171 Loss 0.7151 Accuracy 0.8825.
+[2025-10-20 07:52:12,674 INFO train.py line 282 26138] Epoch: [3/50][90/91] Data 0.000 (0.008) Batch 0.033 (0.041) Remain 00:02:54 MainLoss 0.8642 AuxLoss 0.9403 Loss 1.2404 Accuracy 0.6916.
+[2025-10-20 07:52:12,791 INFO train.py line 309 26138] Train result at epoch [3/50]: mIoU/mAcc/allAcc 0.2414/0.3273/0.7503.
+[2025-10-20 07:52:12,791 INFO train.py line 208 26138] Saving checkpoint to: exp/voc2012/pspnet50/model/train_epoch_3.pth
+[2025-10-20 07:52:14,595 INFO train.py line 282 26138] Epoch: [4/50][10/91] Data 0.002 (0.075) Batch 0.042 (0.115) Remain 00:08:11 MainLoss 0.8902 AuxLoss 1.2054 Loss 1.3724 Accuracy 0.7115.
+[2025-10-20 07:52:14,999 INFO train.py line 282 26138] Epoch: [4/50][20/91] Data 0.001 (0.038) Batch 0.042 (0.078) Remain 00:05:31 MainLoss 1.0566 AuxLoss 0.9404 Loss 1.4327 Accuracy 0.7236.
+[2025-10-20 07:52:15,411 INFO train.py line 282 26138] Epoch: [4/50][30/91] Data 0.001 (0.026) Batch 0.041 (0.066) Remain 00:04:38 MainLoss 0.7485 AuxLoss 0.8819 Loss 1.1012 Accuracy 0.7608.
+[2025-10-20 07:52:15,822 INFO train.py line 282 26138] Epoch: [4/50][40/91] Data 0.001 (0.020) Batch 0.040 (0.059) Remain 00:04:12 MainLoss 0.4807 AuxLoss 0.7204 Loss 0.7689 Accuracy 0.8533.
+[2025-10-20 07:52:16,164 INFO train.py line 282 26138] Epoch: [4/50][50/91] Data 0.001 (0.016) Batch 0.034 (0.054) Remain 00:03:50 MainLoss 1.3279 AuxLoss 0.9240 Loss 1.6975 Accuracy 0.8058.
+[2025-10-20 07:52:16,504 INFO train.py line 282 26138] Epoch: [4/50][60/91] Data 0.001 (0.013) Batch 0.034 (0.051) Remain 00:03:35 MainLoss 0.5476 AuxLoss 0.7717 Loss 0.8562 Accuracy 0.8108.
+[2025-10-20 07:52:16,835 INFO train.py line 282 26138] Epoch: [4/50][70/91] Data 0.000 (0.012) Batch 0.033 (0.048) Remain 00:03:23 MainLoss 0.9178 AuxLoss 0.7543 Loss 1.2196 Accuracy 0.7567.
+[2025-10-20 07:52:17,164 INFO train.py line 282 26138] Epoch: [4/50][80/91] Data 0.000 (0.010) Batch 0.033 (0.047) Remain 00:03:15 MainLoss 0.5436 AuxLoss 0.6450 Loss 0.8016 Accuracy 0.8535.
+[2025-10-20 07:52:17,493 INFO train.py line 282 26138] Epoch: [4/50][90/91] Data 0.000 (0.009) Batch 0.033 (0.045) Remain 00:03:08 MainLoss 0.4709 AuxLoss 0.6807 Loss 0.7432 Accuracy 0.8439.
+[2025-10-20 07:52:17,604 INFO train.py line 309 26138] Train result at epoch [4/50]: mIoU/mAcc/allAcc 0.3596/0.4634/0.7848.
+[2025-10-20 07:52:17,604 INFO train.py line 208 26138] Saving checkpoint to: exp/voc2012/pspnet50/model/train_epoch_4.pth
+[2025-10-20 07:52:19,285 INFO train.py line 282 26138] Epoch: [5/50][10/91] Data 0.001 (0.072) Batch 0.037 (0.112) Remain 00:07:47 MainLoss 0.3871 AuxLoss 0.6509 Loss 0.6475 Accuracy 0.8889.
+[2025-10-20 07:52:19,671 INFO train.py line 282 26138] Epoch: [5/50][20/91] Data 0.001 (0.037) Batch 0.039 (0.075) Remain 00:05:13 MainLoss 0.6208 AuxLoss 0.6849 Loss 0.8948 Accuracy 0.7430.
+[2025-10-20 07:52:20,077 INFO train.py line 282 26138] Epoch: [5/50][30/91] Data 0.001 (0.025) Batch 0.039 (0.064) Remain 00:04:24 MainLoss 0.8109 AuxLoss 0.9943 Loss 1.2086 Accuracy 0.7081.
+[2025-10-20 07:52:20,475 INFO train.py line 282 26138] Epoch: [5/50][40/91] Data 0.001 (0.019) Batch 0.041 (0.058) Remain 00:03:59 MainLoss 0.7161 AuxLoss 0.6751 Loss 0.9862 Accuracy 0.7791.
+[2025-10-20 07:52:20,840 INFO train.py line 282 26138] Epoch: [5/50][50/91] Data 0.001 (0.015) Batch 0.036 (0.053) Remain 00:03:41 MainLoss 0.6012 AuxLoss 0.8105 Loss 0.9253 Accuracy 0.7852.
+[2025-10-20 07:52:21,217 INFO train.py line 282 26138] Epoch: [5/50][60/91] Data 0.001 (0.013) Batch 0.037 (0.051) Remain 00:03:29 MainLoss 0.9991 AuxLoss 1.2868 Loss 1.5138 Accuracy 0.7311.
+[2025-10-20 07:52:21,574 INFO train.py line 282 26138] Epoch: [5/50][70/91] Data 0.001 (0.011) Batch 0.035 (0.049) Remain 00:03:20 MainLoss 0.4647 AuxLoss 0.7121 Loss 0.7495 Accuracy 0.8124.
+[2025-10-20 07:52:21,922 INFO train.py line 282 26138] Epoch: [5/50][80/91] Data 0.001 (0.010) Batch 0.035 (0.047) Remain 00:03:12 MainLoss 0.6923 AuxLoss 0.8018 Loss 1.0131 Accuracy 0.7391.
+[2025-10-20 07:52:22,271 INFO train.py line 282 26138] Epoch: [5/50][90/91] Data 0.001 (0.009) Batch 0.035 (0.046) Remain 00:03:06 MainLoss 0.8906 AuxLoss 1.0638 Loss 1.3161 Accuracy 0.7626.
+[2025-10-20 07:52:22,384 INFO train.py line 309 26138] Train result at epoch [5/50]: mIoU/mAcc/allAcc 0.4192/0.5256/0.8144.
+[2025-10-20 07:52:22,384 INFO train.py line 208 26138] Saving checkpoint to: exp/voc2012/pspnet50/model/train_epoch_5.pth
+[2025-10-20 07:52:24,216 INFO train.py line 282 26138] Epoch: [6/50][10/91] Data 0.001 (0.075) Batch 0.043 (0.116) Remain 00:07:55 MainLoss 0.4073 AuxLoss 0.7425 Loss 0.7044 Accuracy 0.9037.
+[2025-10-20 07:52:24,628 INFO train.py line 282 26138] Epoch: [6/50][20/91] Data 0.001 (0.038) Batch 0.039 (0.079) Remain 00:05:21 MainLoss 0.8709 AuxLoss 1.1449 Loss 1.3289 Accuracy 0.7440.
+[2025-10-20 07:52:25,012 INFO train.py line 282 26138] Epoch: [6/50][30/91] Data 0.001 (0.026) Batch 0.039 (0.065) Remain 00:04:25 MainLoss 0.5495 AuxLoss 0.7643 Loss 0.8553 Accuracy 0.7811.
+[2025-10-20 07:52:25,384 INFO train.py line 282 26138] Epoch: [6/50][40/91] Data 0.001 (0.020) Batch 0.036 (0.058) Remain 00:03:56 MainLoss 0.6611 AuxLoss 0.8358 Loss 0.9954 Accuracy 0.7845.
+[2025-10-20 07:52:25,775 INFO train.py line 282 26138] Epoch: [6/50][50/91] Data 0.001 (0.016) Batch 0.037 (0.054) Remain 00:03:40 MainLoss 0.7647 AuxLoss 0.8737 Loss 1.1141 Accuracy 0.7993.
+[2025-10-20 07:52:26,132 INFO train.py line 282 26138] Epoch: [6/50][60/91] Data 0.001 (0.013) Batch 0.034 (0.051) Remain 00:03:27 MainLoss 0.3871 AuxLoss 0.9450 Loss 0.7651 Accuracy 0.8768.
+[2025-10-20 07:52:26,468 INFO train.py line 282 26138] Epoch: [6/50][70/91] Data 0.000 (0.012) Batch 0.033 (0.049) Remain 00:03:16 MainLoss 0.4084 AuxLoss 0.7414 Loss 0.7050 Accuracy 0.8496.
+[2025-10-20 07:52:26,802 INFO train.py line 282 26138] Epoch: [6/50][80/91] Data 0.000 (0.010) Batch 0.033 (0.047) Remain 00:03:08 MainLoss 0.4607 AuxLoss 0.6987 Loss 0.7402 Accuracy 0.8469.
+[2025-10-20 07:52:27,135 INFO train.py line 282 26138] Epoch: [6/50][90/91] Data 0.000 (0.009) Batch 0.033 (0.045) Remain 00:03:01 MainLoss 0.5417 AuxLoss 0.5537 Loss 0.7632 Accuracy 0.8650.
+[2025-10-20 07:52:27,245 INFO train.py line 309 26138] Train result at epoch [6/50]: mIoU/mAcc/allAcc 0.4999/0.6145/0.8408.
+[2025-10-20 07:52:27,246 INFO train.py line 208 26138] Saving checkpoint to: exp/voc2012/pspnet50/model/train_epoch_6.pth
+[2025-10-20 07:52:28,960 INFO train.py line 282 26138] Epoch: [7/50][10/91] Data 0.001 (0.069) Batch 0.037 (0.105) Remain 00:06:59 MainLoss 0.4625 AuxLoss 0.6532 Loss 0.7238 Accuracy 0.8337.
+[2025-10-20 07:52:29,316 INFO train.py line 282 26138] Epoch: [7/50][20/91] Data 0.001 (0.035) Batch 0.034 (0.070) Remain 00:04:40 MainLoss 0.6263 AuxLoss 0.8711 Loss 0.9747 Accuracy 0.7969.
+[2025-10-20 07:52:29,666 INFO train.py line 282 26138] Epoch: [7/50][30/91] Data 0.000 (0.024) Batch 0.034 (0.059) Remain 00:03:52 MainLoss 0.4016 AuxLoss 0.7730 Loss 0.7108 Accuracy 0.8796.
+[2025-10-20 07:52:30,006 INFO train.py line 282 26138] Epoch: [7/50][40/91] Data 0.001 (0.018) Batch 0.034 (0.052) Remain 00:03:27 MainLoss 0.3539 AuxLoss 0.4261 Loss 0.5244 Accuracy 0.8944.
+[2025-10-20 07:52:30,343 INFO train.py line 282 26138] Epoch: [7/50][50/91] Data 0.001 (0.014) Batch 0.034 (0.049) Remain 00:03:12 MainLoss 0.5513 AuxLoss 0.9972 Loss 0.9502 Accuracy 0.7696.
+[2025-10-20 07:52:30,680 INFO train.py line 282 26138] Epoch: [7/50][60/91] Data 0.001 (0.012) Batch 0.034 (0.046) Remain 00:03:02 MainLoss 0.2334 AuxLoss 0.6244 Loss 0.4832 Accuracy 0.9278.
+[2025-10-20 07:52:31,014 INFO train.py line 282 26138] Epoch: [7/50][70/91] Data 0.000 (0.011) Batch 0.033 (0.044) Remain 00:02:54 MainLoss 0.5361 AuxLoss 1.2690 Loss 1.0437 Accuracy 0.8297.
+[2025-10-20 07:52:31,345 INFO train.py line 282 26138] Epoch: [7/50][80/91] Data 0.000 (0.009) Batch 0.033 (0.043) Remain 00:02:48 MainLoss 0.3601 AuxLoss 0.6059 Loss 0.6024 Accuracy 0.8896.
+[2025-10-20 07:52:31,675 INFO train.py line 282 26138] Epoch: [7/50][90/91] Data 0.001 (0.008) Batch 0.033 (0.042) Remain 00:02:43 MainLoss 0.5493 AuxLoss 0.9122 Loss 0.9142 Accuracy 0.7896.
+[2025-10-20 07:52:31,789 INFO train.py line 309 26138] Train result at epoch [7/50]: mIoU/mAcc/allAcc 0.4922/0.6084/0.8397.
+[2025-10-20 07:52:31,790 INFO train.py line 208 26138] Saving checkpoint to: exp/voc2012/pspnet50/model/train_epoch_7.pth
+[2025-10-20 07:52:33,570 INFO train.py line 282 26138] Epoch: [8/50][10/91] Data 0.001 (0.084) Batch 0.034 (0.117) Remain 00:07:37 MainLoss 0.3764 AuxLoss 0.6275 Loss 0.6274 Accuracy 0.8707.
+[2025-10-20 07:52:33,906 INFO train.py line 282 26138] Epoch: [8/50][20/91] Data 0.000 (0.042) Batch 0.033 (0.075) Remain 00:04:53 MainLoss 0.3969 AuxLoss 0.6991 Loss 0.6765 Accuracy 0.8222.
+[2025-10-20 07:52:34,242 INFO train.py line 282 26138] Epoch: [8/50][30/91] Data 0.001 (0.028) Batch 0.034 (0.061) Remain 00:03:58 MainLoss 0.2550 AuxLoss 0.4146 Loss 0.4209 Accuracy 0.9099.
+[2025-10-20 07:52:34,577 INFO train.py line 282 26138] Epoch: [8/50][40/91] Data 0.001 (0.021) Batch 0.033 (0.054) Remain 00:03:30 MainLoss 0.6311 AuxLoss 0.7198 Loss 0.9190 Accuracy 0.7977.
+[2025-10-20 07:52:34,913 INFO train.py line 282 26138] Epoch: [8/50][50/91] Data 0.001 (0.017) Batch 0.034 (0.050) Remain 00:03:14 MainLoss 0.5796 AuxLoss 1.0842 Loss 1.0133 Accuracy 0.8132.
+[2025-10-20 07:52:35,246 INFO train.py line 282 26138] Epoch: [8/50][60/91] Data 0.001 (0.014) Batch 0.033 (0.047) Remain 00:03:02 MainLoss 0.3171 AuxLoss 0.4419 Loss 0.4938 Accuracy 0.8898.
+[2025-10-20 07:52:35,578 INFO train.py line 282 26138] Epoch: [8/50][70/91] Data 0.000 (0.012) Batch 0.033 (0.045) Remain 00:02:54 MainLoss 0.3652 AuxLoss 0.7056 Loss 0.6474 Accuracy 0.8878.
+[2025-10-20 07:52:35,908 INFO train.py line 282 26138] Epoch: [8/50][80/91] Data 0.000 (0.011) Batch 0.033 (0.044) Remain 00:02:48 MainLoss 0.3485 AuxLoss 0.5954 Loss 0.5867 Accuracy 0.8995.
+[2025-10-20 07:52:36,237 INFO train.py line 282 26138] Epoch: [8/50][90/91] Data 0.000 (0.010) Batch 0.033 (0.043) Remain 00:02:43 MainLoss 0.4812 AuxLoss 0.6982 Loss 0.7605 Accuracy 0.7935.
+[2025-10-20 07:52:36,344 INFO train.py line 309 26138] Train result at epoch [8/50]: mIoU/mAcc/allAcc 0.5384/0.6550/0.8569.
+[2025-10-20 07:52:36,345 INFO train.py line 208 26138] Saving checkpoint to: exp/voc2012/pspnet50/model/train_epoch_8.pth
+[2025-10-20 07:52:38,124 INFO train.py line 282 26138] Epoch: [9/50][10/91] Data 0.001 (0.081) Batch 0.036 (0.117) Remain 00:07:26 MainLoss 0.3446 AuxLoss 0.5382 Loss 0.5599 Accuracy 0.9070.
+[2025-10-20 07:52:38,464 INFO train.py line 282 26138] Epoch: [9/50][20/91] Data 0.001 (0.041) Batch 0.034 (0.076) Remain 00:04:47 MainLoss 0.2973 AuxLoss 0.5923 Loss 0.5342 Accuracy 0.8897.
+[2025-10-20 07:52:38,806 INFO train.py line 282 26138] Epoch: [9/50][30/91] Data 0.000 (0.027) Batch 0.034 (0.062) Remain 00:03:54 MainLoss 0.4174 AuxLoss 0.8329 Loss 0.7506 Accuracy 0.8540.
+[2025-10-20 07:52:39,144 INFO train.py line 282 26138] Epoch: [9/50][40/91] Data 0.001 (0.021) Batch 0.034 (0.055) Remain 00:03:27 MainLoss 0.3309 AuxLoss 0.6395 Loss 0.5867 Accuracy 0.8827.
+[2025-10-20 07:52:39,481 INFO train.py line 282 26138] Epoch: [9/50][50/91] Data 0.001 (0.017) Batch 0.034 (0.051) Remain 00:03:10 MainLoss 0.4101 AuxLoss 0.6285 Loss 0.6615 Accuracy 0.8569.
+[2025-10-20 07:52:39,823 INFO train.py line 282 26138] Epoch: [9/50][60/91] Data 0.001 (0.014) Batch 0.034 (0.048) Remain 00:02:59 MainLoss 0.3710 AuxLoss 0.4946 Loss 0.5688 Accuracy 0.8865.
+[2025-10-20 07:52:40,157 INFO train.py line 282 26138] Epoch: [9/50][70/91] Data 0.000 (0.012) Batch 0.033 (0.046) Remain 00:02:51 MainLoss 0.2252 AuxLoss 0.3844 Loss 0.3789 Accuracy 0.9308.
+[2025-10-20 07:52:40,491 INFO train.py line 282 26138] Epoch: [9/50][80/91] Data 0.000 (0.011) Batch 0.033 (0.044) Remain 00:02:45 MainLoss 0.4312 AuxLoss 0.6757 Loss 0.7014 Accuracy 0.8533.
+[2025-10-20 07:52:40,824 INFO train.py line 282 26138] Epoch: [9/50][90/91] Data 0.000 (0.010) Batch 0.033 (0.043) Remain 00:02:40 MainLoss 0.3708 AuxLoss 0.7698 Loss 0.6787 Accuracy 0.8774.
+[2025-10-20 07:52:40,936 INFO train.py line 309 26138] Train result at epoch [9/50]: mIoU/mAcc/allAcc 0.5617/0.6726/0.8584.
+[2025-10-20 07:52:40,937 INFO train.py line 208 26138] Saving checkpoint to: exp/voc2012/pspnet50/model/train_epoch_9.pth
+[2025-10-20 07:52:42,692 INFO train.py line 282 26138] Epoch: [10/50][10/91] Data 0.001 (0.074) Batch 0.035 (0.109) Remain 00:06:46 MainLoss 0.6474 AuxLoss 1.1288 Loss 1.0990 Accuracy 0.8123.
+[2025-10-20 07:52:43,062 INFO train.py line 282 26138] Epoch: [10/50][20/91] Data 0.001 (0.038) Batch 0.036 (0.073) Remain 00:04:31 MainLoss 0.3663 AuxLoss 0.6541 Loss 0.6279 Accuracy 0.8507.
+[2025-10-20 07:52:43,441 INFO train.py line 282 26138] Epoch: [10/50][30/91] Data 0.001 (0.025) Batch 0.037 (0.061) Remain 00:03:47 MainLoss 0.3882 AuxLoss 0.5934 Loss 0.6256 Accuracy 0.8646.
+[2025-10-20 07:52:43,824 INFO train.py line 282 26138] Epoch: [10/50][40/91] Data 0.001 (0.019) Batch 0.038 (0.056) Remain 00:03:25 MainLoss 0.2130 AuxLoss 0.4637 Loss 0.3985 Accuracy 0.9341.
+[2025-10-20 07:52:44,204 INFO train.py line 282 26138] Epoch: [10/50][50/91] Data 0.001 (0.016) Batch 0.036 (0.052) Remain 00:03:11 MainLoss 0.4113 AuxLoss 0.6935 Loss 0.6888 Accuracy 0.8076.
+[2025-10-20 07:52:44,585 INFO train.py line 282 26138] Epoch: [10/50][60/91] Data 0.001 (0.013) Batch 0.034 (0.050) Remain 00:03:02 MainLoss 0.3033 AuxLoss 0.7920 Loss 0.6201 Accuracy 0.8975.
+[2025-10-20 07:52:44,922 INFO train.py line 282 26138] Epoch: [10/50][70/91] Data 0.000 (0.011) Batch 0.033 (0.047) Remain 00:02:53 MainLoss 0.7399 AuxLoss 0.9452 Loss 1.1179 Accuracy 0.7747.
+[2025-10-20 07:52:45,255 INFO train.py line 282 26138] Epoch: [10/50][80/91] Data 0.000 (0.010) Batch 0.033 (0.046) Remain 00:02:46 MainLoss 0.4005 AuxLoss 0.5645 Loss 0.6263 Accuracy 0.8679.
+[2025-10-20 07:52:45,588 INFO train.py line 282 26138] Epoch: [10/50][90/91] Data 0.000 (0.009) Batch 0.033 (0.044) Remain 00:02:41 MainLoss 0.3488 AuxLoss 0.8917 Loss 0.7055 Accuracy 0.8838.
+[2025-10-20 07:52:45,699 INFO train.py line 309 26138] Train result at epoch [10/50]: mIoU/mAcc/allAcc 0.5707/0.6819/0.8649.
+[2025-10-20 07:52:45,699 INFO train.py line 208 26138] Saving checkpoint to: exp/voc2012/pspnet50/model/train_epoch_10.pth
+[2025-10-20 07:52:47,523 INFO train.py line 282 26138] Epoch: [11/50][10/91] Data 0.001 (0.076) Batch 0.040 (0.114) Remain 00:06:55 MainLoss 0.6037 AuxLoss 0.9846 Loss 0.9975 Accuracy 0.7544.
+[2025-10-20 07:52:47,919 INFO train.py line 282 26138] Epoch: [11/50][20/91] Data 0.001 (0.038) Batch 0.039 (0.077) Remain 00:04:38 MainLoss 0.7325 AuxLoss 1.1921 Loss 1.2093 Accuracy 0.7656.
+[2025-10-20 07:52:48,305 INFO train.py line 282 26138] Epoch: [11/50][30/91] Data 0.001 (0.026) Batch 0.041 (0.064) Remain 00:03:51 MainLoss 0.3514 AuxLoss 0.5147 Loss 0.5573 Accuracy 0.8900.
+[2025-10-20 07:52:48,683 INFO train.py line 282 26138] Epoch: [11/50][40/91] Data 0.001 (0.020) Batch 0.036 (0.058) Remain 00:03:27 MainLoss 0.5024 AuxLoss 0.6849 Loss 0.7764 Accuracy 0.8527.
+[2025-10-20 07:52:49,050 INFO train.py line 282 26138] Epoch: [11/50][50/91] Data 0.001 (0.016) Batch 0.036 (0.053) Remain 00:03:11 MainLoss 0.2768 AuxLoss 0.6264 Loss 0.5274 Accuracy 0.9063.
+[2025-10-20 07:52:49,410 INFO train.py line 282 26138] Epoch: [11/50][60/91] Data 0.001 (0.013) Batch 0.033 (0.051) Remain 00:03:00 MainLoss 0.4993 AuxLoss 0.9136 Loss 0.8647 Accuracy 0.8409.
+[2025-10-20 07:52:49,743 INFO train.py line 282 26138] Epoch: [11/50][70/91] Data 0.000 (0.012) Batch 0.033 (0.048) Remain 00:02:51 MainLoss 0.4273 AuxLoss 0.6924 Loss 0.7043 Accuracy 0.8634.
+[2025-10-20 07:52:50,075 INFO train.py line 282 26138] Epoch: [11/50][80/91] Data 0.001 (0.010) Batch 0.033 (0.046) Remain 00:02:44 MainLoss 0.4793 AuxLoss 0.4444 Loss 0.6571 Accuracy 0.8538.
+[2025-10-20 07:52:50,414 INFO train.py line 282 26138] Epoch: [11/50][90/91] Data 0.000 (0.009) Batch 0.033 (0.045) Remain 00:02:39 MainLoss 0.3683 AuxLoss 0.8325 Loss 0.7013 Accuracy 0.8681.
+[2025-10-20 07:52:50,535 INFO train.py line 309 26138] Train result at epoch [11/50]: mIoU/mAcc/allAcc 0.5767/0.6856/0.8646.
+[2025-10-20 07:52:50,535 INFO train.py line 208 26138] Saving checkpoint to: exp/voc2012/pspnet50/model/train_epoch_11.pth
+[2025-10-20 07:52:52,409 INFO train.py line 282 26138] Epoch: [12/50][10/91] Data 0.001 (0.079) Batch 0.040 (0.119) Remain 00:07:00 MainLoss 0.3521 AuxLoss 0.3990 Loss 0.5117 Accuracy 0.8754.
+[2025-10-20 07:52:52,801 INFO train.py line 282 26138] Epoch: [12/50][20/91] Data 0.001 (0.040) Batch 0.040 (0.079) Remain 00:04:38 MainLoss 0.3329 AuxLoss 0.5575 Loss 0.5559 Accuracy 0.9005.
+[2025-10-20 07:52:53,191 INFO train.py line 282 26138] Epoch: [12/50][30/91] Data 0.001 (0.027) Batch 0.038 (0.066) Remain 00:03:50 MainLoss 0.4646 AuxLoss 0.6872 Loss 0.7395 Accuracy 0.8546.
+[2025-10-20 07:52:53,577 INFO train.py line 282 26138] Epoch: [12/50][40/91] Data 0.001 (0.021) Batch 0.039 (0.059) Remain 00:03:26 MainLoss 0.3027 AuxLoss 0.3177 Loss 0.4298 Accuracy 0.8927.
+[2025-10-20 07:52:53,964 INFO train.py line 282 26138] Epoch: [12/50][50/91] Data 0.001 (0.017) Batch 0.039 (0.055) Remain 00:03:11 MainLoss 0.2017 AuxLoss 0.3992 Loss 0.3614 Accuracy 0.9319.
+[2025-10-20 07:52:54,358 INFO train.py line 282 26138] Epoch: [12/50][60/91] Data 0.001 (0.014) Batch 0.039 (0.052) Remain 00:03:02 MainLoss 0.3355 AuxLoss 0.3831 Loss 0.4888 Accuracy 0.8797.
+[2025-10-20 07:52:54,733 INFO train.py line 282 26138] Epoch: [12/50][70/91] Data 0.001 (0.012) Batch 0.037 (0.050) Remain 00:02:54 MainLoss 0.2442 AuxLoss 0.5298 Loss 0.4561 Accuracy 0.9276.
+[2025-10-20 07:52:55,112 INFO train.py line 282 26138] Epoch: [12/50][80/91] Data 0.001 (0.011) Batch 0.038 (0.049) Remain 00:02:48 MainLoss 0.5530 AuxLoss 0.8272 Loss 0.8839 Accuracy 0.8422.
+[2025-10-20 07:52:55,491 INFO train.py line 282 26138] Epoch: [12/50][90/91] Data 0.001 (0.010) Batch 0.038 (0.047) Remain 00:02:44 MainLoss 0.8064 AuxLoss 0.9160 Loss 1.1728 Accuracy 0.7742.
+[2025-10-20 07:52:55,615 INFO train.py line 309 26138] Train result at epoch [12/50]: mIoU/mAcc/allAcc 0.5887/0.7002/0.8730.
+[2025-10-20 07:52:55,615 INFO train.py line 208 26138] Saving checkpoint to: exp/voc2012/pspnet50/model/train_epoch_12.pth
+[2025-10-20 07:52:57,301 INFO train.py line 282 26138] Epoch: [13/50][10/91] Data 0.001 (0.071) Batch 0.034 (0.105) Remain 00:06:01 MainLoss 0.5914 AuxLoss 0.8659 Loss 0.9377 Accuracy 0.8332.
+[2025-10-20 07:52:57,641 INFO train.py line 282 26138] Epoch: [13/50][20/91] Data 0.001 (0.036) Batch 0.034 (0.069) Remain 00:03:58 MainLoss 0.3585 AuxLoss 0.6280 Loss 0.6097 Accuracy 0.8819.
+[2025-10-20 07:52:57,982 INFO train.py line 282 26138] Epoch: [13/50][30/91] Data 0.001 (0.024) Batch 0.034 (0.058) Remain 00:03:17 MainLoss 0.3264 AuxLoss 0.8154 Loss 0.6525 Accuracy 0.8895.
+[2025-10-20 07:52:58,323 INFO train.py line 282 26138] Epoch: [13/50][40/91] Data 0.001 (0.018) Batch 0.035 (0.052) Remain 00:02:57 MainLoss 0.5002 AuxLoss 0.6635 Loss 0.7656 Accuracy 0.8162.
+[2025-10-20 07:52:58,666 INFO train.py line 282 26138] Epoch: [13/50][50/91] Data 0.000 (0.015) Batch 0.034 (0.048) Remain 00:02:44 MainLoss 0.2892 AuxLoss 0.5944 Loss 0.5270 Accuracy 0.8988.
+[2025-10-20 07:52:59,006 INFO train.py line 282 26138] Epoch: [13/50][60/91] Data 0.001 (0.012) Batch 0.034 (0.046) Remain 00:02:36 MainLoss 0.2490 AuxLoss 0.4060 Loss 0.4114 Accuracy 0.9016.
+[2025-10-20 07:52:59,341 INFO train.py line 282 26138] Epoch: [13/50][70/91] Data 0.000 (0.011) Batch 0.033 (0.044) Remain 00:02:29 MainLoss 0.3958 AuxLoss 0.7329 Loss 0.6890 Accuracy 0.8570.
+[2025-10-20 07:52:59,674 INFO train.py line 282 26138] Epoch: [13/50][80/91] Data 0.000 (0.009) Batch 0.033 (0.043) Remain 00:02:24 MainLoss 0.4127 AuxLoss 0.6650 Loss 0.6787 Accuracy 0.8758.
+[2025-10-20 07:53:00,005 INFO train.py line 282 26138] Epoch: [13/50][90/91] Data 0.000 (0.008) Batch 0.033 (0.042) Remain 00:02:20 MainLoss 0.2426 AuxLoss 0.6677 Loss 0.5097 Accuracy 0.9384.
+[2025-10-20 07:53:00,116 INFO train.py line 309 26138] Train result at epoch [13/50]: mIoU/mAcc/allAcc 0.6081/0.7210/0.8721.
+[2025-10-20 07:53:00,116 INFO train.py line 208 26138] Saving checkpoint to: exp/voc2012/pspnet50/model/train_epoch_13.pth
+[2025-10-20 07:53:01,967 INFO train.py line 282 26138] Epoch: [14/50][10/91] Data 0.001 (0.074) Batch 0.039 (0.117) Remain 00:06:32 MainLoss 0.6061 AuxLoss 0.9001 Loss 0.9661 Accuracy 0.7694.
+[2025-10-20 07:53:02,355 INFO train.py line 282 26138] Epoch: [14/50][20/91] Data 0.001 (0.038) Batch 0.039 (0.078) Remain 00:04:20 MainLoss 0.2494 AuxLoss 0.4870 Loss 0.4442 Accuracy 0.9134.
+[2025-10-20 07:53:02,758 INFO train.py line 282 26138] Epoch: [14/50][30/91] Data 0.001 (0.026) Batch 0.040 (0.065) Remain 00:03:38 MainLoss 0.2994 AuxLoss 0.6126 Loss 0.5445 Accuracy 0.8881.
+[2025-10-20 07:53:03,148 INFO train.py line 282 26138] Epoch: [14/50][40/91] Data 0.001 (0.019) Batch 0.042 (0.059) Remain 00:03:15 MainLoss 0.4667 AuxLoss 0.7520 Loss 0.7675 Accuracy 0.8134.
+[2025-10-20 07:53:03,547 INFO train.py line 282 26138] Epoch: [14/50][50/91] Data 0.001 (0.016) Batch 0.038 (0.055) Remain 00:03:02 MainLoss 0.2800 AuxLoss 0.6924 Loss 0.5569 Accuracy 0.8825.
+[2025-10-20 07:53:03,948 INFO train.py line 282 26138] Epoch: [14/50][60/91] Data 0.002 (0.013) Batch 0.040 (0.053) Remain 00:02:53 MainLoss 0.3391 AuxLoss 0.7135 Loss 0.6245 Accuracy 0.8777.
+[2025-10-20 07:53:04,326 INFO train.py line 282 26138] Epoch: [14/50][70/91] Data 0.001 (0.012) Batch 0.038 (0.050) Remain 00:02:46 MainLoss 0.2773 AuxLoss 0.4440 Loss 0.4550 Accuracy 0.9031.
+[2025-10-20 07:53:04,707 INFO train.py line 282 26138] Epoch: [14/50][80/91] Data 0.001 (0.010) Batch 0.038 (0.049) Remain 00:02:40 MainLoss 0.2717 AuxLoss 0.7729 Loss 0.5808 Accuracy 0.8798.
+[2025-10-20 07:53:05,090 INFO train.py line 282 26138] Epoch: [14/50][90/91] Data 0.001 (0.009) Batch 0.038 (0.048) Remain 00:02:36 MainLoss 0.3395 AuxLoss 0.8257 Loss 0.6698 Accuracy 0.8778.
+[2025-10-20 07:53:05,207 INFO train.py line 309 26138] Train result at epoch [14/50]: mIoU/mAcc/allAcc 0.6317/0.7396/0.8801.
+[2025-10-20 07:53:05,208 INFO train.py line 208 26138] Saving checkpoint to: exp/voc2012/pspnet50/model/train_epoch_14.pth
+[2025-10-20 07:53:07,064 INFO train.py line 282 26138] Epoch: [15/50][10/91] Data 0.001 (0.074) Batch 0.035 (0.111) Remain 00:06:04 MainLoss 0.2035 AuxLoss 0.3987 Loss 0.3629 Accuracy 0.9356.
+[2025-10-20 07:53:07,407 INFO train.py line 282 26138] Epoch: [15/50][20/91] Data 0.001 (0.037) Batch 0.034 (0.073) Remain 00:03:57 MainLoss 0.3033 AuxLoss 0.6134 Loss 0.5487 Accuracy 0.9027.
+[2025-10-20 07:53:07,747 INFO train.py line 282 26138] Epoch: [15/50][30/91] Data 0.001 (0.025) Batch 0.034 (0.060) Remain 00:03:14 MainLoss 0.2128 AuxLoss 0.6034 Loss 0.4541 Accuracy 0.9303.
+[2025-10-20 07:53:08,081 INFO train.py line 282 26138] Epoch: [15/50][40/91] Data 0.000 (0.019) Batch 0.033 (0.053) Remain 00:02:52 MainLoss 0.1659 AuxLoss 0.6180 Loss 0.4131 Accuracy 0.9525.
+[2025-10-20 07:53:08,417 INFO train.py line 282 26138] Epoch: [15/50][50/91] Data 0.001 (0.015) Batch 0.033 (0.049) Remain 00:02:39 MainLoss 0.3301 AuxLoss 0.5274 Loss 0.5411 Accuracy 0.8673.
+[2025-10-20 07:53:08,756 INFO train.py line 282 26138] Epoch: [15/50][60/91] Data 0.001 (0.013) Batch 0.034 (0.047) Remain 00:02:30 MainLoss 0.2521 AuxLoss 0.3959 Loss 0.4104 Accuracy 0.9119.
+[2025-10-20 07:53:09,092 INFO train.py line 282 26138] Epoch: [15/50][70/91] Data 0.001 (0.011) Batch 0.033 (0.045) Remain 00:02:23 MainLoss 0.2249 AuxLoss 0.3495 Loss 0.3647 Accuracy 0.9322.
+[2025-10-20 07:53:09,426 INFO train.py line 282 26138] Epoch: [15/50][80/91] Data 0.000 (0.010) Batch 0.033 (0.043) Remain 00:02:18 MainLoss 0.2156 AuxLoss 0.5438 Loss 0.4331 Accuracy 0.9144.
+[2025-10-20 07:53:09,760 INFO train.py line 282 26138] Epoch: [15/50][90/91] Data 0.000 (0.009) Batch 0.033 (0.042) Remain 00:02:14 MainLoss 0.3583 AuxLoss 0.5940 Loss 0.5959 Accuracy 0.8646.
+[2025-10-20 07:53:09,878 INFO train.py line 309 26138] Train result at epoch [15/50]: mIoU/mAcc/allAcc 0.6509/0.7559/0.8902.
+[2025-10-20 07:53:09,879 INFO train.py line 208 26138] Saving checkpoint to: exp/voc2012/pspnet50/model/train_epoch_15.pth
+[2025-10-20 07:53:11,677 INFO train.py line 282 26138] Epoch: [16/50][10/91] Data 0.001 (0.076) Batch 0.034 (0.110) Remain 00:05:49 MainLoss 0.1434 AuxLoss 0.5432 Loss 0.3607 Accuracy 0.9543.
+[2025-10-20 07:53:12,014 INFO train.py line 282 26138] Epoch: [16/50][20/91] Data 0.001 (0.038) Batch 0.034 (0.072) Remain 00:03:47 MainLoss 0.2286 AuxLoss 0.7051 Loss 0.5106 Accuracy 0.9193.
+[2025-10-20 07:53:12,353 INFO train.py line 282 26138] Epoch: [16/50][30/91] Data 0.001 (0.026) Batch 0.034 (0.059) Remain 00:03:06 MainLoss 0.3205 AuxLoss 0.4796 Loss 0.5123 Accuracy 0.8884.
+[2025-10-20 07:53:12,694 INFO train.py line 282 26138] Epoch: [16/50][40/91] Data 0.001 (0.020) Batch 0.034 (0.053) Remain 00:02:46 MainLoss 0.3975 AuxLoss 0.8287 Loss 0.7290 Accuracy 0.8739.
+[2025-10-20 07:53:13,034 INFO train.py line 282 26138] Epoch: [16/50][50/91] Data 0.001 (0.016) Batch 0.034 (0.049) Remain 00:02:34 MainLoss 0.5440 AuxLoss 0.8933 Loss 0.9014 Accuracy 0.7969.
+[2025-10-20 07:53:13,373 INFO train.py line 282 26138] Epoch: [16/50][60/91] Data 0.001 (0.013) Batch 0.034 (0.047) Remain 00:02:25 MainLoss 0.2386 AuxLoss 0.4638 Loss 0.4241 Accuracy 0.9133.
+[2025-10-20 07:53:13,708 INFO train.py line 282 26138] Epoch: [16/50][70/91] Data 0.001 (0.011) Batch 0.033 (0.045) Remain 00:02:19 MainLoss 0.7650 AuxLoss 0.8604 Loss 1.1091 Accuracy 0.8267.
+[2025-10-20 07:53:14,042 INFO train.py line 282 26138] Epoch: [16/50][80/91] Data 0.000 (0.010) Batch 0.033 (0.043) Remain 00:02:14 MainLoss 0.4139 AuxLoss 0.7826 Loss 0.7270 Accuracy 0.8448.
+[2025-10-20 07:53:14,376 INFO train.py line 282 26138] Epoch: [16/50][90/91] Data 0.000 (0.009) Batch 0.033 (0.042) Remain 00:02:10 MainLoss 0.3241 AuxLoss 0.6225 Loss 0.5731 Accuracy 0.8777.
+[2025-10-20 07:53:14,490 INFO train.py line 309 26138] Train result at epoch [16/50]: mIoU/mAcc/allAcc 0.6473/0.7504/0.8904.
+[2025-10-20 07:53:14,490 INFO train.py line 208 26138] Saving checkpoint to: exp/voc2012/pspnet50/model/train_epoch_16.pth
+[2025-10-20 07:53:16,299 INFO train.py line 282 26138] Epoch: [17/50][10/91] Data 0.001 (0.076) Batch 0.033 (0.110) Remain 00:05:40 MainLoss 0.2624 AuxLoss 0.5093 Loss 0.4661 Accuracy 0.9047.
+[2025-10-20 07:53:16,637 INFO train.py line 282 26138] Epoch: [17/50][20/91] Data 0.001 (0.038) Batch 0.034 (0.072) Remain 00:03:41 MainLoss 0.3391 AuxLoss 0.6453 Loss 0.5972 Accuracy 0.8470.
+[2025-10-20 07:53:16,976 INFO train.py line 282 26138] Epoch: [17/50][30/91] Data 0.001 (0.026) Batch 0.034 (0.059) Remain 00:03:01 MainLoss 0.2294 AuxLoss 0.3578 Loss 0.3725 Accuracy 0.9346.
+[2025-10-20 07:53:17,313 INFO train.py line 282 26138] Epoch: [17/50][40/91] Data 0.001 (0.019) Batch 0.034 (0.053) Remain 00:02:41 MainLoss 0.4462 AuxLoss 1.0360 Loss 0.8606 Accuracy 0.8101.
+[2025-10-20 07:53:17,652 INFO train.py line 282 26138] Epoch: [17/50][50/91] Data 0.001 (0.016) Batch 0.034 (0.049) Remain 00:02:29 MainLoss 0.2563 AuxLoss 0.4494 Loss 0.4361 Accuracy 0.9095.
+[2025-10-20 07:53:17,990 INFO train.py line 282 26138] Epoch: [17/50][60/91] Data 0.001 (0.013) Batch 0.034 (0.047) Remain 00:02:21 MainLoss 0.3756 AuxLoss 0.6229 Loss 0.6247 Accuracy 0.8854.
+[2025-10-20 07:53:18,322 INFO train.py line 282 26138] Epoch: [17/50][70/91] Data 0.001 (0.011) Batch 0.033 (0.045) Remain 00:02:15 MainLoss 0.3924 AuxLoss 0.5898 Loss 0.6283 Accuracy 0.8935.
+[2025-10-20 07:53:18,653 INFO train.py line 282 26138] Epoch: [17/50][80/91] Data 0.001 (0.010) Batch 0.033 (0.043) Remain 00:02:10 MainLoss 0.4092 AuxLoss 0.7219 Loss 0.6980 Accuracy 0.8867.
+[2025-10-20 07:53:18,984 INFO train.py line 282 26138] Epoch: [17/50][90/91] Data 0.001 (0.009) Batch 0.033 (0.042) Remain 00:02:06 MainLoss 0.2956 AuxLoss 0.5810 Loss 0.5280 Accuracy 0.8964.
+[2025-10-20 07:53:19,099 INFO train.py line 309 26138] Train result at epoch [17/50]: mIoU/mAcc/allAcc 0.6485/0.7493/0.8958.
+[2025-10-20 07:53:19,099 INFO train.py line 208 26138] Saving checkpoint to: exp/voc2012/pspnet50/model/train_epoch_17.pth
+[2025-10-20 07:53:20,865 INFO train.py line 282 26138] Epoch: [18/50][10/91] Data 0.001 (0.064) Batch 0.035 (0.099) Remain 00:04:55 MainLoss 0.2215 AuxLoss 0.5770 Loss 0.4523 Accuracy 0.9390.
+[2025-10-20 07:53:21,206 INFO train.py line 282 26138] Epoch: [18/50][20/91] Data 0.001 (0.032) Batch 0.034 (0.066) Remain 00:03:18 MainLoss 0.4197 AuxLoss 0.4738 Loss 0.6092 Accuracy 0.8665.
+[2025-10-20 07:53:21,544 INFO train.py line 282 26138] Epoch: [18/50][30/91] Data 0.000 (0.022) Batch 0.034 (0.056) Remain 00:02:45 MainLoss 0.4153 AuxLoss 0.6868 Loss 0.6900 Accuracy 0.8512.
+[2025-10-20 07:53:21,886 INFO train.py line 282 26138] Epoch: [18/50][40/91] Data 0.001 (0.017) Batch 0.035 (0.050) Remain 00:02:28 MainLoss 0.3554 AuxLoss 0.6696 Loss 0.6232 Accuracy 0.8310.
+[2025-10-20 07:53:22,225 INFO train.py line 282 26138] Epoch: [18/50][50/91] Data 0.001 (0.013) Batch 0.034 (0.047) Remain 00:02:18 MainLoss 0.2833 AuxLoss 0.4349 Loss 0.4573 Accuracy 0.9000.
+[2025-10-20 07:53:22,563 INFO train.py line 282 26138] Epoch: [18/50][60/91] Data 0.001 (0.011) Batch 0.034 (0.045) Remain 00:02:11 MainLoss 0.4009 AuxLoss 0.6638 Loss 0.6664 Accuracy 0.8588.
+[2025-10-20 07:53:22,894 INFO train.py line 282 26138] Epoch: [18/50][70/91] Data 0.000 (0.010) Batch 0.033 (0.043) Remain 00:02:06 MainLoss 0.2537 AuxLoss 0.6056 Loss 0.4959 Accuracy 0.9229.
+[2025-10-20 07:53:23,225 INFO train.py line 282 26138] Epoch: [18/50][80/91] Data 0.001 (0.009) Batch 0.033 (0.042) Remain 00:02:02 MainLoss 0.2577 AuxLoss 0.8952 Loss 0.6158 Accuracy 0.9115.
+[2025-10-20 07:53:23,556 INFO train.py line 282 26138] Epoch: [18/50][90/91] Data 0.001 (0.008) Batch 0.033 (0.041) Remain 00:01:59 MainLoss 0.2418 AuxLoss 0.3600 Loss 0.3858 Accuracy 0.9162.
+[2025-10-20 07:53:23,674 INFO train.py line 309 26138] Train result at epoch [18/50]: mIoU/mAcc/allAcc 0.6616/0.7640/0.8942.
+[2025-10-20 07:53:23,675 INFO train.py line 208 26138] Saving checkpoint to: exp/voc2012/pspnet50/model/train_epoch_18.pth
+[2025-10-20 07:53:25,450 INFO train.py line 282 26138] Epoch: [19/50][10/91] Data 0.001 (0.075) Batch 0.037 (0.113) Remain 00:05:27 MainLoss 0.2609 AuxLoss 0.3813 Loss 0.4134 Accuracy 0.9085.
+[2025-10-20 07:53:25,817 INFO train.py line 282 26138] Epoch: [19/50][20/91] Data 0.001 (0.038) Batch 0.036 (0.075) Remain 00:03:36 MainLoss 0.2961 AuxLoss 0.4361 Loss 0.4705 Accuracy 0.9028.
+[2025-10-20 07:53:26,185 INFO train.py line 282 26138] Epoch: [19/50][30/91] Data 0.001 (0.026) Batch 0.036 (0.062) Remain 00:02:59 MainLoss 0.1849 AuxLoss 0.3963 Loss 0.3434 Accuracy 0.9396.
+[2025-10-20 07:53:26,551 INFO train.py line 282 26138] Epoch: [19/50][40/91] Data 0.001 (0.019) Batch 0.039 (0.056) Remain 00:02:40 MainLoss 0.1724 AuxLoss 0.4155 Loss 0.3386 Accuracy 0.9438.
+[2025-10-20 07:53:26,925 INFO train.py line 282 26138] Epoch: [19/50][50/91] Data 0.001 (0.016) Batch 0.037 (0.052) Remain 00:02:29 MainLoss 0.1909 AuxLoss 0.2973 Loss 0.3098 Accuracy 0.9364.
+[2025-10-20 07:53:27,298 INFO train.py line 282 26138] Epoch: [19/50][60/91] Data 0.001 (0.013) Batch 0.037 (0.050) Remain 00:02:21 MainLoss 0.1958 AuxLoss 0.5960 Loss 0.4342 Accuracy 0.9331.
+[2025-10-20 07:53:27,652 INFO train.py line 282 26138] Epoch: [19/50][70/91] Data 0.001 (0.012) Batch 0.035 (0.048) Remain 00:02:15 MainLoss 0.3142 AuxLoss 0.5752 Loss 0.5443 Accuracy 0.9054.
+[2025-10-20 07:53:28,003 INFO train.py line 282 26138] Epoch: [19/50][80/91] Data 0.001 (0.010) Batch 0.035 (0.046) Remain 00:02:10 MainLoss 0.3218 AuxLoss 0.6095 Loss 0.5656 Accuracy 0.8926.
+[2025-10-20 07:53:28,356 INFO train.py line 282 26138] Epoch: [19/50][90/91] Data 0.001 (0.009) Batch 0.035 (0.045) Remain 00:02:06 MainLoss 0.2045 AuxLoss 0.3032 Loss 0.3258 Accuracy 0.9211.
+[2025-10-20 07:53:28,475 INFO train.py line 309 26138] Train result at epoch [19/50]: mIoU/mAcc/allAcc 0.6713/0.7721/0.8977.
+[2025-10-20 07:53:28,475 INFO train.py line 208 26138] Saving checkpoint to: exp/voc2012/pspnet50/model/train_epoch_19.pth
+[2025-10-20 07:53:30,267 INFO train.py line 282 26138] Epoch: [20/50][10/91] Data 0.001 (0.072) Batch 0.039 (0.111) Remain 00:05:13 MainLoss 0.5144 AuxLoss 0.5795 Loss 0.7462 Accuracy 0.8466.
+[2025-10-20 07:53:30,651 INFO train.py line 282 26138] Epoch: [20/50][20/91] Data 0.001 (0.036) Batch 0.041 (0.075) Remain 00:03:29 MainLoss 0.3540 AuxLoss 0.7274 Loss 0.6450 Accuracy 0.8577.
+[2025-10-20 07:53:31,037 INFO train.py line 282 26138] Epoch: [20/50][30/91] Data 0.001 (0.025) Batch 0.035 (0.063) Remain 00:02:55 MainLoss 0.1888 AuxLoss 0.3389 Loss 0.3244 Accuracy 0.9328.
+[2025-10-20 07:53:31,408 INFO train.py line 282 26138] Epoch: [20/50][40/91] Data 0.001 (0.019) Batch 0.037 (0.056) Remain 00:02:36 MainLoss 0.2950 AuxLoss 0.5697 Loss 0.5229 Accuracy 0.8931.
+[2025-10-20 07:53:31,759 INFO train.py line 282 26138] Epoch: [20/50][50/91] Data 0.000 (0.015) Batch 0.034 (0.052) Remain 00:02:24 MainLoss 0.2151 AuxLoss 0.3657 Loss 0.3614 Accuracy 0.9260.
+[2025-10-20 07:53:32,097 INFO train.py line 282 26138] Epoch: [20/50][60/91] Data 0.001 (0.013) Batch 0.034 (0.049) Remain 00:02:15 MainLoss 0.2879 AuxLoss 0.5969 Loss 0.5267 Accuracy 0.8958.
+[2025-10-20 07:53:32,431 INFO train.py line 282 26138] Epoch: [20/50][70/91] Data 0.001 (0.011) Batch 0.033 (0.047) Remain 00:02:08 MainLoss 0.2692 AuxLoss 0.4528 Loss 0.4504 Accuracy 0.9196.
+[2025-10-20 07:53:32,762 INFO train.py line 282 26138] Epoch: [20/50][80/91] Data 0.001 (0.010) Batch 0.033 (0.045) Remain 00:02:03 MainLoss 0.2089 AuxLoss 0.5619 Loss 0.4337 Accuracy 0.9221.
+[2025-10-20 07:53:33,096 INFO train.py line 282 26138] Epoch: [20/50][90/91] Data 0.000 (0.009) Batch 0.033 (0.044) Remain 00:01:59 MainLoss 0.2250 AuxLoss 0.3985 Loss 0.3845 Accuracy 0.9222.
+[2025-10-20 07:53:33,211 INFO train.py line 309 26138] Train result at epoch [20/50]: mIoU/mAcc/allAcc 0.6956/0.7893/0.9038.
+[2025-10-20 07:53:33,212 INFO train.py line 208 26138] Saving checkpoint to: exp/voc2012/pspnet50/model/train_epoch_20.pth
+[2025-10-20 07:53:35,063 INFO train.py line 282 26138] Epoch: [21/50][10/91] Data 0.001 (0.077) Batch 0.037 (0.115) Remain 00:05:12 MainLoss 0.4413 AuxLoss 0.7120 Loss 0.7261 Accuracy 0.8275.
+[2025-10-20 07:53:35,428 INFO train.py line 282 26138] Epoch: [21/50][20/91] Data 0.001 (0.039) Batch 0.037 (0.076) Remain 00:03:25 MainLoss 0.2904 AuxLoss 0.5315 Loss 0.5030 Accuracy 0.8749.
+[2025-10-20 07:53:35,799 INFO train.py line 282 26138] Epoch: [21/50][30/91] Data 0.001 (0.026) Batch 0.035 (0.063) Remain 00:02:49 MainLoss 0.2566 AuxLoss 0.4371 Loss 0.4314 Accuracy 0.9023.
+[2025-10-20 07:53:36,153 INFO train.py line 282 26138] Epoch: [21/50][40/91] Data 0.001 (0.020) Batch 0.034 (0.056) Remain 00:02:30 MainLoss 0.1612 AuxLoss 0.3608 Loss 0.3056 Accuracy 0.9450.
+[2025-10-20 07:53:36,493 INFO train.py line 282 26138] Epoch: [21/50][50/91] Data 0.001 (0.016) Batch 0.035 (0.052) Remain 00:02:18 MainLoss 0.2299 AuxLoss 0.4604 Loss 0.4140 Accuracy 0.9243.
+[2025-10-20 07:53:36,831 INFO train.py line 282 26138] Epoch: [21/50][60/91] Data 0.001 (0.014) Batch 0.034 (0.049) Remain 00:02:09 MainLoss 0.5987 AuxLoss 1.2528 Loss 1.0998 Accuracy 0.7953.
+[2025-10-20 07:53:37,167 INFO train.py line 282 26138] Epoch: [21/50][70/91] Data 0.001 (0.012) Batch 0.033 (0.046) Remain 00:02:03 MainLoss 0.2542 AuxLoss 0.6260 Loss 0.5046 Accuracy 0.9171.
+[2025-10-20 07:53:37,500 INFO train.py line 282 26138] Epoch: [21/50][80/91] Data 0.000 (0.010) Batch 0.033 (0.045) Remain 00:01:58 MainLoss 0.3454 AuxLoss 0.5217 Loss 0.5541 Accuracy 0.8442.
+[2025-10-20 07:53:37,834 INFO train.py line 282 26138] Epoch: [21/50][90/91] Data 0.001 (0.009) Batch 0.033 (0.044) Remain 00:01:55 MainLoss 0.1991 AuxLoss 0.4433 Loss 0.3764 Accuracy 0.9282.
+[2025-10-20 07:53:37,947 INFO train.py line 309 26138] Train result at epoch [21/50]: mIoU/mAcc/allAcc 0.7093/0.7995/0.9096.
+[2025-10-20 07:53:37,948 INFO train.py line 208 26138] Saving checkpoint to: exp/voc2012/pspnet50/model/train_epoch_21.pth
+[2025-10-20 07:53:39,766 INFO train.py line 282 26138] Epoch: [22/50][10/91] Data 0.001 (0.074) Batch 0.040 (0.113) Remain 00:04:55 MainLoss 0.1505 AuxLoss 0.5963 Loss 0.3890 Accuracy 0.9536.
+[2025-10-20 07:53:40,136 INFO train.py line 282 26138] Epoch: [22/50][20/91] Data 0.001 (0.038) Batch 0.038 (0.075) Remain 00:03:15 MainLoss 0.1671 AuxLoss 0.3979 Loss 0.3262 Accuracy 0.9373.
+[2025-10-20 07:53:40,509 INFO train.py line 282 26138] Epoch: [22/50][30/91] Data 0.001 (0.025) Batch 0.040 (0.062) Remain 00:02:42 MainLoss 0.2868 AuxLoss 0.5088 Loss 0.4903 Accuracy 0.8706.
+[2025-10-20 07:53:40,874 INFO train.py line 282 26138] Epoch: [22/50][40/91] Data 0.000 (0.019) Batch 0.034 (0.056) Remain 00:02:25 MainLoss 0.2243 AuxLoss 0.4102 Loss 0.3883 Accuracy 0.9123.
+[2025-10-20 07:53:41,215 INFO train.py line 282 26138] Epoch: [22/50][50/91] Data 0.001 (0.016) Batch 0.035 (0.051) Remain 00:02:13 MainLoss 0.1975 AuxLoss 0.3142 Loss 0.3232 Accuracy 0.9453.
+[2025-10-20 07:53:41,560 INFO train.py line 282 26138] Epoch: [22/50][60/91] Data 0.001 (0.013) Batch 0.034 (0.049) Remain 00:02:05 MainLoss 0.2354 AuxLoss 0.5657 Loss 0.4617 Accuracy 0.9131.
+[2025-10-20 07:53:41,902 INFO train.py line 282 26138] Epoch: [22/50][70/91] Data 0.001 (0.011) Batch 0.033 (0.047) Remain 00:01:59 MainLoss 0.2511 AuxLoss 0.4361 Loss 0.4256 Accuracy 0.9274.
+[2025-10-20 07:53:42,235 INFO train.py line 282 26138] Epoch: [22/50][80/91] Data 0.000 (0.010) Batch 0.033 (0.045) Remain 00:01:54 MainLoss 0.3443 AuxLoss 0.6591 Loss 0.6079 Accuracy 0.8788.
+[2025-10-20 07:53:42,572 INFO train.py line 282 26138] Epoch: [22/50][90/91] Data 0.001 (0.009) Batch 0.033 (0.044) Remain 00:01:51 MainLoss 0.2630 AuxLoss 0.5994 Loss 0.5028 Accuracy 0.9242.
+[2025-10-20 07:53:42,692 INFO train.py line 309 26138] Train result at epoch [22/50]: mIoU/mAcc/allAcc 0.7040/0.7922/0.9083.
+[2025-10-20 07:53:42,692 INFO train.py line 208 26138] Saving checkpoint to: exp/voc2012/pspnet50/model/train_epoch_22.pth
+[2025-10-20 07:53:44,491 INFO train.py line 282 26138] Epoch: [23/50][10/91] Data 0.001 (0.077) Batch 0.034 (0.112) Remain 00:04:45 MainLoss 0.2185 AuxLoss 0.3867 Loss 0.3731 Accuracy 0.9229.
+[2025-10-20 07:53:44,835 INFO train.py line 282 26138] Epoch: [23/50][20/91] Data 0.001 (0.039) Batch 0.034 (0.073) Remain 00:03:05 MainLoss 0.2133 AuxLoss 0.5829 Loss 0.4465 Accuracy 0.9289.
+[2025-10-20 07:53:45,187 INFO train.py line 282 26138] Epoch: [23/50][30/91] Data 0.001 (0.026) Batch 0.035 (0.061) Remain 00:02:32 MainLoss 0.3036 AuxLoss 0.4432 Loss 0.4809 Accuracy 0.8854.
+[2025-10-20 07:53:45,527 INFO train.py line 282 26138] Epoch: [23/50][40/91] Data 0.001 (0.020) Batch 0.034 (0.054) Remain 00:02:15 MainLoss 0.2701 AuxLoss 0.4762 Loss 0.4606 Accuracy 0.9084.
+[2025-10-20 07:53:45,871 INFO train.py line 282 26138] Epoch: [23/50][50/91] Data 0.001 (0.016) Batch 0.035 (0.050) Remain 00:02:05 MainLoss 0.4009 AuxLoss 0.6963 Loss 0.6794 Accuracy 0.8756.
+[2025-10-20 07:53:46,213 INFO train.py line 282 26138] Epoch: [23/50][60/91] Data 0.001 (0.013) Batch 0.035 (0.047) Remain 00:01:58 MainLoss 0.2345 AuxLoss 0.4586 Loss 0.4180 Accuracy 0.9266.
+[2025-10-20 07:53:46,551 INFO train.py line 282 26138] Epoch: [23/50][70/91] Data 0.001 (0.012) Batch 0.033 (0.045) Remain 00:01:52 MainLoss 0.2653 AuxLoss 0.6103 Loss 0.5094 Accuracy 0.9072.
+[2025-10-20 07:53:46,883 INFO train.py line 282 26138] Epoch: [23/50][80/91] Data 0.000 (0.010) Batch 0.033 (0.044) Remain 00:01:48 MainLoss 0.1602 AuxLoss 0.3285 Loss 0.2916 Accuracy 0.9567.
+[2025-10-20 07:53:47,215 INFO train.py line 282 26138] Epoch: [23/50][90/91] Data 0.001 (0.009) Batch 0.034 (0.043) Remain 00:01:45 MainLoss 0.1992 AuxLoss 0.6361 Loss 0.4537 Accuracy 0.9404.
+[2025-10-20 07:53:47,329 INFO train.py line 309 26138] Train result at epoch [23/50]: mIoU/mAcc/allAcc 0.7239/0.8157/0.9135.
+[2025-10-20 07:53:47,330 INFO train.py line 208 26138] Saving checkpoint to: exp/voc2012/pspnet50/model/train_epoch_23.pth
+[2025-10-20 07:53:49,053 INFO train.py line 282 26138] Epoch: [24/50][10/91] Data 0.001 (0.061) Batch 0.034 (0.095) Remain 00:03:52 MainLoss 0.3045 AuxLoss 0.4073 Loss 0.4675 Accuracy 0.9043.
+[2025-10-20 07:53:49,389 INFO train.py line 282 26138] Epoch: [24/50][20/91] Data 0.001 (0.031) Batch 0.034 (0.064) Remain 00:02:36 MainLoss 0.3729 AuxLoss 0.3916 Loss 0.5295 Accuracy 0.8634.
+[2025-10-20 07:53:49,727 INFO train.py line 282 26138] Epoch: [24/50][30/91] Data 0.000 (0.021) Batch 0.033 (0.054) Remain 00:02:11 MainLoss 0.3437 AuxLoss 0.6157 Loss 0.5900 Accuracy 0.8766.
+[2025-10-20 07:53:50,066 INFO train.py line 282 26138] Epoch: [24/50][40/91] Data 0.001 (0.016) Batch 0.034 (0.049) Remain 00:01:58 MainLoss 0.2780 AuxLoss 0.6307 Loss 0.5303 Accuracy 0.9162.
+[2025-10-20 07:53:50,404 INFO train.py line 282 26138] Epoch: [24/50][50/91] Data 0.001 (0.013) Batch 0.034 (0.046) Remain 00:01:50 MainLoss 0.2820 AuxLoss 0.4143 Loss 0.4477 Accuracy 0.8917.
+[2025-10-20 07:53:50,744 INFO train.py line 282 26138] Epoch: [24/50][60/91] Data 0.001 (0.011) Batch 0.034 (0.044) Remain 00:01:45 MainLoss 0.3761 AuxLoss 0.6835 Loss 0.6494 Accuracy 0.8881.
+[2025-10-20 07:53:51,078 INFO train.py line 282 26138] Epoch: [24/50][70/91] Data 0.000 (0.009) Batch 0.033 (0.043) Remain 00:01:41 MainLoss 0.1731 AuxLoss 0.4885 Loss 0.3685 Accuracy 0.9398.
+[2025-10-20 07:53:51,409 INFO train.py line 282 26138] Epoch: [24/50][80/91] Data 0.000 (0.008) Batch 0.033 (0.041) Remain 00:01:38 MainLoss 0.7947 AuxLoss 0.6764 Loss 1.0653 Accuracy 0.8736.
+[2025-10-20 07:53:51,739 INFO train.py line 282 26138] Epoch: [24/50][90/91] Data 0.000 (0.007) Batch 0.033 (0.040) Remain 00:01:35 MainLoss 0.1728 AuxLoss 0.4952 Loss 0.3709 Accuracy 0.9300.
+[2025-10-20 07:53:51,871 INFO train.py line 309 26138] Train result at epoch [24/50]: mIoU/mAcc/allAcc 0.7297/0.8208/0.9174.
+[2025-10-20 07:53:51,871 INFO train.py line 208 26138] Saving checkpoint to: exp/voc2012/pspnet50/model/train_epoch_24.pth
+[2025-10-20 07:53:53,582 INFO train.py line 282 26138] Epoch: [25/50][10/91] Data 0.001 (0.077) Batch 0.036 (0.114) Remain 00:04:29 MainLoss 0.1970 AuxLoss 0.5072 Loss 0.3998 Accuracy 0.9396.
+[2025-10-20 07:53:53,937 INFO train.py line 282 26138] Epoch: [25/50][20/91] Data 0.001 (0.039) Batch 0.034 (0.075) Remain 00:02:55 MainLoss 0.1865 AuxLoss 0.3299 Loss 0.3184 Accuracy 0.9377.
+[2025-10-20 07:53:54,280 INFO train.py line 282 26138] Epoch: [25/50][30/91] Data 0.001 (0.026) Batch 0.034 (0.061) Remain 00:02:23 MainLoss 0.1863 AuxLoss 0.4351 Loss 0.3604 Accuracy 0.9367.
+[2025-10-20 07:53:54,623 INFO train.py line 282 26138] Epoch: [25/50][40/91] Data 0.001 (0.020) Batch 0.035 (0.055) Remain 00:02:07 MainLoss 0.2378 AuxLoss 0.5819 Loss 0.4705 Accuracy 0.9190.
+[2025-10-20 07:53:54,963 INFO train.py line 282 26138] Epoch: [25/50][50/91] Data 0.001 (0.016) Batch 0.034 (0.051) Remain 00:01:56 MainLoss 0.2549 AuxLoss 0.6574 Loss 0.5178 Accuracy 0.9202.
+[2025-10-20 07:53:55,306 INFO train.py line 282 26138] Epoch: [25/50][60/91] Data 0.001 (0.014) Batch 0.034 (0.048) Remain 00:01:50 MainLoss 0.2344 AuxLoss 0.3075 Loss 0.3575 Accuracy 0.9249.
+[2025-10-20 07:53:55,639 INFO train.py line 282 26138] Epoch: [25/50][70/91] Data 0.000 (0.012) Batch 0.033 (0.046) Remain 00:01:45 MainLoss 0.3680 AuxLoss 0.5732 Loss 0.5973 Accuracy 0.8659.
+[2025-10-20 07:53:55,971 INFO train.py line 282 26138] Epoch: [25/50][80/91] Data 0.000 (0.010) Batch 0.033 (0.044) Remain 00:01:40 MainLoss 0.2594 AuxLoss 0.7747 Loss 0.5693 Accuracy 0.9118.
+[2025-10-20 07:53:56,304 INFO train.py line 282 26138] Epoch: [25/50][90/91] Data 0.000 (0.009) Batch 0.033 (0.043) Remain 00:01:37 MainLoss 0.2183 AuxLoss 0.5396 Loss 0.4341 Accuracy 0.9116.
+[2025-10-20 07:53:56,407 INFO train.py line 309 26138] Train result at epoch [25/50]: mIoU/mAcc/allAcc 0.7350/0.8255/0.9159.
+[2025-10-20 07:53:56,408 INFO train.py line 208 26138] Saving checkpoint to: exp/voc2012/pspnet50/model/train_epoch_25.pth
+[2025-10-20 07:53:58,092 INFO train.py line 282 26138] Epoch: [26/50][10/91] Data 0.001 (0.068) Batch 0.034 (0.103) Remain 00:03:53 MainLoss 0.1599 AuxLoss 0.4294 Loss 0.3316 Accuracy 0.9476.
+[2025-10-20 07:53:58,431 INFO train.py line 282 26138] Epoch: [26/50][20/91] Data 0.001 (0.034) Batch 0.034 (0.068) Remain 00:02:34 MainLoss 0.1913 AuxLoss 0.4646 Loss 0.3771 Accuracy 0.9330.
+[2025-10-20 07:53:58,775 INFO train.py line 282 26138] Epoch: [26/50][30/91] Data 0.001 (0.023) Batch 0.035 (0.057) Remain 00:02:08 MainLoss 0.1799 AuxLoss 0.4046 Loss 0.3417 Accuracy 0.9515.
+[2025-10-20 07:53:59,115 INFO train.py line 282 26138] Epoch: [26/50][40/91] Data 0.001 (0.017) Batch 0.034 (0.051) Remain 00:01:54 MainLoss 0.3033 AuxLoss 0.6578 Loss 0.5665 Accuracy 0.8783.
+[2025-10-20 07:53:59,457 INFO train.py line 282 26138] Epoch: [26/50][50/91] Data 0.001 (0.014) Batch 0.034 (0.048) Remain 00:01:46 MainLoss 0.2408 AuxLoss 0.8690 Loss 0.5884 Accuracy 0.9211.
+[2025-10-20 07:53:59,796 INFO train.py line 282 26138] Epoch: [26/50][60/91] Data 0.001 (0.012) Batch 0.034 (0.046) Remain 00:01:40 MainLoss 0.4022 AuxLoss 0.6736 Loss 0.6716 Accuracy 0.8737.
+[2025-10-20 07:54:00,131 INFO train.py line 282 26138] Epoch: [26/50][70/91] Data 0.001 (0.010) Batch 0.033 (0.044) Remain 00:01:36 MainLoss 0.2168 AuxLoss 0.5182 Loss 0.4240 Accuracy 0.9367.
+[2025-10-20 07:54:00,465 INFO train.py line 282 26138] Epoch: [26/50][80/91] Data 0.000 (0.009) Batch 0.033 (0.043) Remain 00:01:33 MainLoss 0.2084 AuxLoss 0.7911 Loss 0.5249 Accuracy 0.9192.
+[2025-10-20 07:54:00,799 INFO train.py line 282 26138] Epoch: [26/50][90/91] Data 0.000 (0.008) Batch 0.033 (0.042) Remain 00:01:30 MainLoss 0.2189 AuxLoss 0.3594 Loss 0.3627 Accuracy 0.9182.
+[2025-10-20 07:54:00,911 INFO train.py line 309 26138] Train result at epoch [26/50]: mIoU/mAcc/allAcc 0.7228/0.8161/0.9120.
+[2025-10-20 07:54:00,911 INFO train.py line 208 26138] Saving checkpoint to: exp/voc2012/pspnet50/model/train_epoch_26.pth
+[2025-10-20 07:54:02,437 INFO train.py line 282 26138] Epoch: [27/50][10/91] Data 0.001 (0.071) Batch 0.034 (0.106) Remain 00:03:50 MainLoss 0.2285 AuxLoss 0.3526 Loss 0.3696 Accuracy 0.9020.
+[2025-10-20 07:54:02,778 INFO train.py line 282 26138] Epoch: [27/50][20/91] Data 0.001 (0.036) Batch 0.034 (0.070) Remain 00:02:31 MainLoss 0.3617 AuxLoss 0.6428 Loss 0.6188 Accuracy 0.8271.
+[2025-10-20 07:54:03,122 INFO train.py line 282 26138] Epoch: [27/50][30/91] Data 0.001 (0.024) Batch 0.035 (0.058) Remain 00:02:05 MainLoss 0.2685 AuxLoss 0.5294 Loss 0.4803 Accuracy 0.9077.
+[2025-10-20 07:54:03,464 INFO train.py line 282 26138] Epoch: [27/50][40/91] Data 0.001 (0.018) Batch 0.034 (0.052) Remain 00:01:51 MainLoss 0.3619 AuxLoss 0.6360 Loss 0.6163 Accuracy 0.8602.
+[2025-10-20 07:54:03,802 INFO train.py line 282 26138] Epoch: [27/50][50/91] Data 0.001 (0.015) Batch 0.034 (0.049) Remain 00:01:43 MainLoss 0.2105 AuxLoss 0.4297 Loss 0.3824 Accuracy 0.9360.
+[2025-10-20 07:54:04,140 INFO train.py line 282 26138] Epoch: [27/50][60/91] Data 0.001 (0.012) Batch 0.034 (0.046) Remain 00:01:37 MainLoss 0.3062 AuxLoss 0.5477 Loss 0.5253 Accuracy 0.8704.
+[2025-10-20 07:54:04,473 INFO train.py line 282 26138] Epoch: [27/50][70/91] Data 0.000 (0.011) Batch 0.033 (0.044) Remain 00:01:33 MainLoss 0.2661 AuxLoss 0.4682 Loss 0.4533 Accuracy 0.9031.
+[2025-10-20 07:54:04,804 INFO train.py line 282 26138] Epoch: [27/50][80/91] Data 0.000 (0.009) Batch 0.033 (0.043) Remain 00:01:30 MainLoss 0.1633 AuxLoss 0.2687 Loss 0.2708 Accuracy 0.9489.
+[2025-10-20 07:54:05,135 INFO train.py line 282 26138] Epoch: [27/50][90/91] Data 0.000 (0.008) Batch 0.033 (0.042) Remain 00:01:27 MainLoss 0.2248 AuxLoss 0.5328 Loss 0.4379 Accuracy 0.9321.
+[2025-10-20 07:54:05,253 INFO train.py line 309 26138] Train result at epoch [27/50]: mIoU/mAcc/allAcc 0.6963/0.7922/0.9055.
+[2025-10-20 07:54:05,254 INFO train.py line 208 26138] Saving checkpoint to: exp/voc2012/pspnet50/model/train_epoch_27.pth
+[2025-10-20 07:54:06,938 INFO train.py line 282 26138] Epoch: [28/50][10/91] Data 0.001 (0.068) Batch 0.034 (0.103) Remain 00:03:33 MainLoss 0.1542 AuxLoss 0.4942 Loss 0.3518 Accuracy 0.9519.
+[2025-10-20 07:54:07,281 INFO train.py line 282 26138] Epoch: [28/50][20/91] Data 0.001 (0.034) Batch 0.034 (0.069) Remain 00:02:22 MainLoss 0.2908 AuxLoss 0.4227 Loss 0.4599 Accuracy 0.8962.
+[2025-10-20 07:54:07,620 INFO train.py line 282 26138] Epoch: [28/50][30/91] Data 0.001 (0.023) Batch 0.034 (0.057) Remain 00:01:57 MainLoss 0.1892 AuxLoss 0.5693 Loss 0.4170 Accuracy 0.9442.
+[2025-10-20 07:54:07,957 INFO train.py line 282 26138] Epoch: [28/50][40/91] Data 0.001 (0.018) Batch 0.033 (0.051) Remain 00:01:45 MainLoss 0.2832 AuxLoss 0.4298 Loss 0.4551 Accuracy 0.9027.
+[2025-10-20 07:54:08,296 INFO train.py line 282 26138] Epoch: [28/50][50/91] Data 0.001 (0.014) Batch 0.034 (0.048) Remain 00:01:37 MainLoss 0.2636 AuxLoss 0.3862 Loss 0.4180 Accuracy 0.9123.
+[2025-10-20 07:54:08,635 INFO train.py line 282 26138] Epoch: [28/50][60/91] Data 0.001 (0.012) Batch 0.034 (0.045) Remain 00:01:32 MainLoss 0.2220 AuxLoss 0.4250 Loss 0.3920 Accuracy 0.9121.
+[2025-10-20 07:54:08,969 INFO train.py line 282 26138] Epoch: [28/50][70/91] Data 0.000 (0.010) Batch 0.033 (0.044) Remain 00:01:28 MainLoss 0.2304 AuxLoss 0.5344 Loss 0.4441 Accuracy 0.9029.
+[2025-10-20 07:54:09,300 INFO train.py line 282 26138] Epoch: [28/50][80/91] Data 0.000 (0.009) Batch 0.033 (0.042) Remain 00:01:25 MainLoss 0.2376 AuxLoss 0.3642 Loss 0.3833 Accuracy 0.9212.
+[2025-10-20 07:54:09,630 INFO train.py line 282 26138] Epoch: [28/50][90/91] Data 0.000 (0.008) Batch 0.033 (0.041) Remain 00:01:22 MainLoss 0.1617 AuxLoss 0.4410 Loss 0.3382 Accuracy 0.9547.
+[2025-10-20 07:54:09,757 INFO train.py line 309 26138] Train result at epoch [28/50]: mIoU/mAcc/allAcc 0.7258/0.8169/0.9164.
+[2025-10-20 07:54:09,758 INFO train.py line 208 26138] Saving checkpoint to: exp/voc2012/pspnet50/model/train_epoch_28.pth
+[2025-10-20 07:54:11,483 INFO train.py line 282 26138] Epoch: [29/50][10/91] Data 0.001 (0.078) Batch 0.034 (0.112) Remain 00:03:43 MainLoss 0.1894 AuxLoss 0.3900 Loss 0.3454 Accuracy 0.9210.
+[2025-10-20 07:54:11,824 INFO train.py line 282 26138] Epoch: [29/50][20/91] Data 0.000 (0.039) Batch 0.034 (0.073) Remain 00:02:24 MainLoss 0.2722 AuxLoss 0.5246 Loss 0.4820 Accuracy 0.9074.
+[2025-10-20 07:54:12,165 INFO train.py line 282 26138] Epoch: [29/50][30/91] Data 0.000 (0.026) Batch 0.034 (0.060) Remain 00:01:58 MainLoss 0.2048 AuxLoss 0.7108 Loss 0.4891 Accuracy 0.9352.
+[2025-10-20 07:54:12,504 INFO train.py line 282 26138] Epoch: [29/50][40/91] Data 0.001 (0.020) Batch 0.035 (0.054) Remain 00:01:45 MainLoss 0.3246 AuxLoss 0.5701 Loss 0.5526 Accuracy 0.8948.
+[2025-10-20 07:54:12,858 INFO train.py line 282 26138] Epoch: [29/50][50/91] Data 0.001 (0.016) Batch 0.034 (0.050) Remain 00:01:37 MainLoss 0.2014 AuxLoss 0.3869 Loss 0.3561 Accuracy 0.9268.
+[2025-10-20 07:54:13,207 INFO train.py line 282 26138] Epoch: [29/50][60/91] Data 0.001 (0.014) Batch 0.035 (0.047) Remain 00:01:32 MainLoss 0.1853 AuxLoss 0.6018 Loss 0.4260 Accuracy 0.9322.
+[2025-10-20 07:54:13,550 INFO train.py line 282 26138] Epoch: [29/50][70/91] Data 0.001 (0.012) Batch 0.033 (0.046) Remain 00:01:28 MainLoss 0.2653 AuxLoss 0.5004 Loss 0.4655 Accuracy 0.8979.
+[2025-10-20 07:54:13,884 INFO train.py line 282 26138] Epoch: [29/50][80/91] Data 0.001 (0.010) Batch 0.033 (0.044) Remain 00:01:24 MainLoss 0.1097 AuxLoss 0.2758 Loss 0.2200 Accuracy 0.9749.
+[2025-10-20 07:54:14,218 INFO train.py line 282 26138] Epoch: [29/50][90/91] Data 0.000 (0.009) Batch 0.033 (0.043) Remain 00:01:21 MainLoss 0.1955 AuxLoss 0.3307 Loss 0.3278 Accuracy 0.9302.
+[2025-10-20 07:54:14,334 INFO train.py line 309 26138] Train result at epoch [29/50]: mIoU/mAcc/allAcc 0.7305/0.8200/0.9152.
+[2025-10-20 07:54:14,334 INFO train.py line 208 26138] Saving checkpoint to: exp/voc2012/pspnet50/model/train_epoch_29.pth
+[2025-10-20 07:54:16,238 INFO train.py line 282 26138] Epoch: [30/50][10/91] Data 0.001 (0.070) Batch 0.035 (0.106) Remain 00:03:21 MainLoss 0.3292 AuxLoss 0.5955 Loss 0.5674 Accuracy 0.9132.
+[2025-10-20 07:54:16,653 INFO train.py line 282 26138] Epoch: [30/50][20/91] Data 0.001 (0.035) Batch 0.039 (0.074) Remain 00:02:19 MainLoss 0.3053 AuxLoss 0.5392 Loss 0.5210 Accuracy 0.9000.
+[2025-10-20 07:54:17,010 INFO train.py line 282 26138] Epoch: [30/50][30/91] Data 0.001 (0.024) Batch 0.035 (0.061) Remain 00:01:54 MainLoss 0.1809 AuxLoss 0.3637 Loss 0.3264 Accuracy 0.9390.
+[2025-10-20 07:54:17,351 INFO train.py line 282 26138] Epoch: [30/50][40/91] Data 0.001 (0.018) Batch 0.035 (0.054) Remain 00:01:41 MainLoss 0.3377 AuxLoss 0.6886 Loss 0.6131 Accuracy 0.8996.
+[2025-10-20 07:54:17,689 INFO train.py line 282 26138] Epoch: [30/50][50/91] Data 0.001 (0.015) Batch 0.034 (0.050) Remain 00:01:33 MainLoss 0.1483 AuxLoss 0.3758 Loss 0.2986 Accuracy 0.9581.
+[2025-10-20 07:54:18,029 INFO train.py line 282 26138] Epoch: [30/50][60/91] Data 0.001 (0.012) Batch 0.034 (0.048) Remain 00:01:27 MainLoss 0.2105 AuxLoss 0.4566 Loss 0.3931 Accuracy 0.9209.
+[2025-10-20 07:54:18,363 INFO train.py line 282 26138] Epoch: [30/50][70/91] Data 0.000 (0.011) Batch 0.033 (0.046) Remain 00:01:23 MainLoss 0.2169 AuxLoss 0.4256 Loss 0.3871 Accuracy 0.9309.
+[2025-10-20 07:54:18,694 INFO train.py line 282 26138] Epoch: [30/50][80/91] Data 0.000 (0.009) Batch 0.033 (0.044) Remain 00:01:20 MainLoss 0.2233 AuxLoss 0.6496 Loss 0.4831 Accuracy 0.9189.
+[2025-10-20 07:54:19,025 INFO train.py line 282 26138] Epoch: [30/50][90/91] Data 0.000 (0.008) Batch 0.033 (0.043) Remain 00:01:17 MainLoss 0.2923 AuxLoss 0.4896 Loss 0.4882 Accuracy 0.8884.
+[2025-10-20 07:54:19,145 INFO train.py line 309 26138] Train result at epoch [30/50]: mIoU/mAcc/allAcc 0.7503/0.8324/0.9234.
+[2025-10-20 07:54:19,146 INFO train.py line 208 26138] Saving checkpoint to: exp/voc2012/pspnet50/model/train_epoch_30.pth
+[2025-10-20 07:54:20,841 INFO train.py line 282 26138] Epoch: [31/50][10/91] Data 0.002 (0.064) Batch 0.040 (0.102) Remain 00:03:05 MainLoss 0.3443 AuxLoss 0.5426 Loss 0.5614 Accuracy 0.8835.
+[2025-10-20 07:54:21,229 INFO train.py line 282 26138] Epoch: [31/50][20/91] Data 0.001 (0.033) Batch 0.038 (0.071) Remain 00:02:06 MainLoss 0.2372 AuxLoss 0.4259 Loss 0.4076 Accuracy 0.9268.
+[2025-10-20 07:54:21,577 INFO train.py line 282 26138] Epoch: [31/50][30/91] Data 0.001 (0.022) Batch 0.034 (0.059) Remain 00:01:44 MainLoss 0.2115 AuxLoss 0.4982 Loss 0.4108 Accuracy 0.9223.
+[2025-10-20 07:54:21,920 INFO train.py line 282 26138] Epoch: [31/50][40/91] Data 0.001 (0.017) Batch 0.034 (0.053) Remain 00:01:33 MainLoss 0.2609 AuxLoss 0.6678 Loss 0.5280 Accuracy 0.8894.
+[2025-10-20 07:54:22,262 INFO train.py line 282 26138] Epoch: [31/50][50/91] Data 0.001 (0.014) Batch 0.034 (0.049) Remain 00:01:26 MainLoss 0.2102 AuxLoss 0.5769 Loss 0.4410 Accuracy 0.9196.
+[2025-10-20 07:54:22,603 INFO train.py line 282 26138] Epoch: [31/50][60/91] Data 0.001 (0.011) Batch 0.034 (0.046) Remain 00:01:21 MainLoss 0.1085 AuxLoss 0.3346 Loss 0.2423 Accuracy 0.9721.
+[2025-10-20 07:54:22,940 INFO train.py line 282 26138] Epoch: [31/50][70/91] Data 0.000 (0.010) Batch 0.033 (0.045) Remain 00:01:18 MainLoss 0.3105 AuxLoss 0.5324 Loss 0.5234 Accuracy 0.9090.
+[2025-10-20 07:54:23,274 INFO train.py line 282 26138] Epoch: [31/50][80/91] Data 0.000 (0.009) Batch 0.033 (0.043) Remain 00:01:15 MainLoss 0.4178 AuxLoss 0.6482 Loss 0.6770 Accuracy 0.8676.
+[2025-10-20 07:54:23,608 INFO train.py line 282 26138] Epoch: [31/50][90/91] Data 0.000 (0.008) Batch 0.033 (0.042) Remain 00:01:12 MainLoss 0.2983 AuxLoss 0.4245 Loss 0.4681 Accuracy 0.9096.
+[2025-10-20 07:54:23,721 INFO train.py line 309 26138] Train result at epoch [31/50]: mIoU/mAcc/allAcc 0.7484/0.8284/0.9226.
+[2025-10-20 07:54:23,721 INFO train.py line 208 26138] Saving checkpoint to: exp/voc2012/pspnet50/model/train_epoch_31.pth
+[2025-10-20 07:54:25,356 INFO train.py line 282 26138] Epoch: [32/50][10/91] Data 0.001 (0.069) Batch 0.034 (0.105) Remain 00:03:00 MainLoss 0.2855 AuxLoss 0.4951 Loss 0.4835 Accuracy 0.8900.
+[2025-10-20 07:54:25,692 INFO train.py line 282 26138] Epoch: [32/50][20/91] Data 0.000 (0.035) Batch 0.034 (0.069) Remain 00:01:58 MainLoss 0.3716 AuxLoss 0.4427 Loss 0.5487 Accuracy 0.8687.
+[2025-10-20 07:54:26,028 INFO train.py line 282 26138] Epoch: [32/50][30/91] Data 0.001 (0.024) Batch 0.033 (0.057) Remain 00:01:37 MainLoss 0.2067 AuxLoss 0.5274 Loss 0.4177 Accuracy 0.9250.
+[2025-10-20 07:54:26,369 INFO train.py line 282 26138] Epoch: [32/50][40/91] Data 0.001 (0.018) Batch 0.034 (0.052) Remain 00:01:27 MainLoss 0.1460 AuxLoss 0.3679 Loss 0.2932 Accuracy 0.9496.
+[2025-10-20 07:54:26,710 INFO train.py line 282 26138] Epoch: [32/50][50/91] Data 0.001 (0.014) Batch 0.034 (0.048) Remain 00:01:20 MainLoss 0.2105 AuxLoss 0.4997 Loss 0.4103 Accuracy 0.9196.
+[2025-10-20 07:54:27,049 INFO train.py line 282 26138] Epoch: [32/50][60/91] Data 0.001 (0.012) Batch 0.034 (0.046) Remain 00:01:16 MainLoss 0.1936 AuxLoss 0.5935 Loss 0.4310 Accuracy 0.9360.
+[2025-10-20 07:54:27,384 INFO train.py line 282 26138] Epoch: [32/50][70/91] Data 0.001 (0.010) Batch 0.033 (0.044) Remain 00:01:12 MainLoss 0.1155 AuxLoss 0.3616 Loss 0.2601 Accuracy 0.9615.
+[2025-10-20 07:54:27,719 INFO train.py line 282 26138] Epoch: [32/50][80/91] Data 0.000 (0.009) Batch 0.033 (0.043) Remain 00:01:10 MainLoss 0.2330 AuxLoss 0.4576 Loss 0.4160 Accuracy 0.9183.
+[2025-10-20 07:54:28,053 INFO train.py line 282 26138] Epoch: [32/50][90/91] Data 0.000 (0.008) Batch 0.033 (0.042) Remain 00:01:08 MainLoss 0.3976 AuxLoss 0.5562 Loss 0.6201 Accuracy 0.8630.
+[2025-10-20 07:54:28,164 INFO train.py line 309 26138] Train result at epoch [32/50]: mIoU/mAcc/allAcc 0.7513/0.8395/0.9227.
+[2025-10-20 07:54:28,165 INFO train.py line 208 26138] Saving checkpoint to: exp/voc2012/pspnet50/model/train_epoch_32.pth
+[2025-10-20 07:54:29,835 INFO train.py line 282 26138] Epoch: [33/50][10/91] Data 0.001 (0.069) Batch 0.040 (0.108) Remain 00:02:55 MainLoss 0.1736 AuxLoss 0.5848 Loss 0.4075 Accuracy 0.9420.
+[2025-10-20 07:54:30,215 INFO train.py line 282 26138] Epoch: [33/50][20/91] Data 0.001 (0.035) Batch 0.035 (0.073) Remain 00:01:57 MainLoss 0.3660 AuxLoss 0.4835 Loss 0.5594 Accuracy 0.9014.
+[2025-10-20 07:54:30,578 INFO train.py line 282 26138] Epoch: [33/50][30/91] Data 0.001 (0.024) Batch 0.036 (0.061) Remain 00:01:37 MainLoss 0.3280 AuxLoss 0.4493 Loss 0.5077 Accuracy 0.8894.
+[2025-10-20 07:54:30,941 INFO train.py line 282 26138] Epoch: [33/50][40/91] Data 0.001 (0.018) Batch 0.037 (0.055) Remain 00:01:27 MainLoss 0.2660 AuxLoss 0.5423 Loss 0.4829 Accuracy 0.9052.
+[2025-10-20 07:54:31,306 INFO train.py line 282 26138] Epoch: [33/50][50/91] Data 0.001 (0.015) Batch 0.036 (0.051) Remain 00:01:20 MainLoss 0.2099 AuxLoss 0.6063 Loss 0.4524 Accuracy 0.9136.
+[2025-10-20 07:54:31,667 INFO train.py line 282 26138] Epoch: [33/50][60/91] Data 0.001 (0.012) Batch 0.034 (0.048) Remain 00:01:16 MainLoss 0.2463 AuxLoss 0.4073 Loss 0.4092 Accuracy 0.9280.
+[2025-10-20 07:54:31,999 INFO train.py line 282 26138] Epoch: [33/50][70/91] Data 0.000 (0.011) Batch 0.033 (0.046) Remain 00:01:12 MainLoss 0.1433 AuxLoss 0.6192 Loss 0.3909 Accuracy 0.9466.
+[2025-10-20 07:54:32,330 INFO train.py line 282 26138] Epoch: [33/50][80/91] Data 0.001 (0.009) Batch 0.033 (0.045) Remain 00:01:09 MainLoss 0.1533 AuxLoss 0.6488 Loss 0.4128 Accuracy 0.9485.
+[2025-10-20 07:54:32,662 INFO train.py line 282 26138] Epoch: [33/50][90/91] Data 0.000 (0.008) Batch 0.033 (0.043) Remain 00:01:07 MainLoss 0.2186 AuxLoss 0.3424 Loss 0.3556 Accuracy 0.9344.
+[2025-10-20 07:54:32,773 INFO train.py line 309 26138] Train result at epoch [33/50]: mIoU/mAcc/allAcc 0.7471/0.8336/0.9235.
+[2025-10-20 07:54:32,774 INFO train.py line 208 26138] Saving checkpoint to: exp/voc2012/pspnet50/model/train_epoch_33.pth
+[2025-10-20 07:54:34,580 INFO train.py line 282 26138] Epoch: [34/50][10/91] Data 0.001 (0.071) Batch 0.036 (0.107) Remain 00:02:43 MainLoss 0.2160 AuxLoss 0.6659 Loss 0.4823 Accuracy 0.9269.
+[2025-10-20 07:54:34,922 INFO train.py line 282 26138] Epoch: [34/50][20/91] Data 0.000 (0.036) Batch 0.034 (0.070) Remain 00:01:47 MainLoss 0.1473 AuxLoss 0.3685 Loss 0.2947 Accuracy 0.9484.
+[2025-10-20 07:54:35,262 INFO train.py line 282 26138] Epoch: [34/50][30/91] Data 0.001 (0.024) Batch 0.034 (0.058) Remain 00:01:28 MainLoss 0.1453 AuxLoss 0.3793 Loss 0.2970 Accuracy 0.9562.
+[2025-10-20 07:54:35,603 INFO train.py line 282 26138] Epoch: [34/50][40/91] Data 0.001 (0.018) Batch 0.034 (0.052) Remain 00:01:18 MainLoss 0.2047 AuxLoss 0.3123 Loss 0.3296 Accuracy 0.9379.
+[2025-10-20 07:54:35,944 INFO train.py line 282 26138] Epoch: [34/50][50/91] Data 0.001 (0.015) Batch 0.034 (0.049) Remain 00:01:12 MainLoss 0.3105 AuxLoss 0.5010 Loss 0.5109 Accuracy 0.8941.
+[2025-10-20 07:54:36,292 INFO train.py line 282 26138] Epoch: [34/50][60/91] Data 0.001 (0.013) Batch 0.035 (0.046) Remain 00:01:08 MainLoss 0.2084 AuxLoss 0.4943 Loss 0.4061 Accuracy 0.9308.
+[2025-10-20 07:54:36,631 INFO train.py line 282 26138] Epoch: [34/50][70/91] Data 0.001 (0.011) Batch 0.035 (0.045) Remain 00:01:05 MainLoss 0.4877 AuxLoss 0.6782 Loss 0.7590 Accuracy 0.8976.
+[2025-10-20 07:54:36,964 INFO train.py line 282 26138] Epoch: [34/50][80/91] Data 0.001 (0.010) Batch 0.033 (0.043) Remain 00:01:03 MainLoss 0.2923 AuxLoss 0.5009 Loss 0.4926 Accuracy 0.8819.
+[2025-10-20 07:54:37,300 INFO train.py line 282 26138] Epoch: [34/50][90/91] Data 0.001 (0.009) Batch 0.033 (0.042) Remain 00:01:01 MainLoss 0.1792 AuxLoss 0.3271 Loss 0.3101 Accuracy 0.9401.
+[2025-10-20 07:54:37,418 INFO train.py line 309 26138] Train result at epoch [34/50]: mIoU/mAcc/allAcc 0.7686/0.8484/0.9288.
+[2025-10-20 07:54:37,419 INFO train.py line 208 26138] Saving checkpoint to: exp/voc2012/pspnet50/model/train_epoch_34.pth
+[2025-10-20 07:54:39,227 INFO train.py line 282 26138] Epoch: [35/50][10/91] Data 0.001 (0.078) Batch 0.034 (0.112) Remain 00:02:42 MainLoss 0.2754 AuxLoss 0.6835 Loss 0.5488 Accuracy 0.8915.
+[2025-10-20 07:54:39,570 INFO train.py line 282 26138] Epoch: [35/50][20/91] Data 0.001 (0.040) Batch 0.035 (0.073) Remain 00:01:45 MainLoss 0.2674 AuxLoss 0.6843 Loss 0.5411 Accuracy 0.9076.
+[2025-10-20 07:54:39,912 INFO train.py line 282 26138] Epoch: [35/50][30/91] Data 0.001 (0.027) Batch 0.034 (0.060) Remain 00:01:25 MainLoss 0.1837 AuxLoss 0.5014 Loss 0.3843 Accuracy 0.9360.
+[2025-10-20 07:54:40,254 INFO train.py line 282 26138] Epoch: [35/50][40/91] Data 0.000 (0.020) Batch 0.034 (0.054) Remain 00:01:16 MainLoss 0.2000 AuxLoss 0.4436 Loss 0.3774 Accuracy 0.9316.
+[2025-10-20 07:54:40,594 INFO train.py line 282 26138] Epoch: [35/50][50/91] Data 0.001 (0.016) Batch 0.034 (0.050) Remain 00:01:10 MainLoss 0.1839 AuxLoss 0.5060 Loss 0.3863 Accuracy 0.9385.
+[2025-10-20 07:54:40,936 INFO train.py line 282 26138] Epoch: [35/50][60/91] Data 0.001 (0.014) Batch 0.034 (0.047) Remain 00:01:05 MainLoss 0.2147 AuxLoss 0.4930 Loss 0.4119 Accuracy 0.9232.
+[2025-10-20 07:54:41,270 INFO train.py line 282 26138] Epoch: [35/50][70/91] Data 0.000 (0.012) Batch 0.033 (0.045) Remain 00:01:02 MainLoss 0.1441 AuxLoss 0.3421 Loss 0.2810 Accuracy 0.9555.
+[2025-10-20 07:54:41,601 INFO train.py line 282 26138] Epoch: [35/50][80/91] Data 0.000 (0.010) Batch 0.033 (0.044) Remain 00:01:00 MainLoss 0.2088 AuxLoss 0.5790 Loss 0.4403 Accuracy 0.9171.
+[2025-10-20 07:54:41,937 INFO train.py line 282 26138] Epoch: [35/50][90/91] Data 0.000 (0.009) Batch 0.033 (0.043) Remain 00:00:58 MainLoss 0.1771 AuxLoss 0.3305 Loss 0.3093 Accuracy 0.9446.
+[2025-10-20 07:54:42,045 INFO train.py line 309 26138] Train result at epoch [35/50]: mIoU/mAcc/allAcc 0.7510/0.8348/0.9260.
+[2025-10-20 07:54:42,045 INFO train.py line 208 26138] Saving checkpoint to: exp/voc2012/pspnet50/model/train_epoch_35.pth
+[2025-10-20 07:54:43,753 INFO train.py line 282 26138] Epoch: [36/50][10/91] Data 0.001 (0.071) Batch 0.034 (0.106) Remain 00:02:23 MainLoss 0.1951 AuxLoss 0.4675 Loss 0.3821 Accuracy 0.9353.
+[2025-10-20 07:54:44,098 INFO train.py line 282 26138] Epoch: [36/50][20/91] Data 0.001 (0.036) Batch 0.035 (0.070) Remain 00:01:34 MainLoss 0.1527 AuxLoss 0.3376 Loss 0.2877 Accuracy 0.9546.
+[2025-10-20 07:54:44,437 INFO train.py line 282 26138] Epoch: [36/50][30/91] Data 0.001 (0.024) Batch 0.034 (0.058) Remain 00:01:17 MainLoss 0.1749 AuxLoss 0.4516 Loss 0.3556 Accuracy 0.9419.
+[2025-10-20 07:54:44,775 INFO train.py line 282 26138] Epoch: [36/50][40/91] Data 0.000 (0.018) Batch 0.033 (0.052) Remain 00:01:08 MainLoss 0.2011 AuxLoss 0.5188 Loss 0.4086 Accuracy 0.9276.
+[2025-10-20 07:54:45,115 INFO train.py line 282 26138] Epoch: [36/50][50/91] Data 0.001 (0.015) Batch 0.034 (0.048) Remain 00:01:03 MainLoss 0.2939 AuxLoss 0.7744 Loss 0.6037 Accuracy 0.8906.
+[2025-10-20 07:54:45,453 INFO train.py line 282 26138] Epoch: [36/50][60/91] Data 0.001 (0.012) Batch 0.034 (0.046) Remain 00:00:59 MainLoss 0.1336 AuxLoss 0.2800 Loss 0.2456 Accuracy 0.9582.
+[2025-10-20 07:54:45,786 INFO train.py line 282 26138] Epoch: [36/50][70/91] Data 0.001 (0.011) Batch 0.033 (0.044) Remain 00:00:57 MainLoss 0.2694 AuxLoss 0.4071 Loss 0.4322 Accuracy 0.8998.
+[2025-10-20 07:54:46,118 INFO train.py line 282 26138] Epoch: [36/50][80/91] Data 0.000 (0.009) Batch 0.033 (0.043) Remain 00:00:54 MainLoss 0.0983 AuxLoss 0.3305 Loss 0.2305 Accuracy 0.9724.
+[2025-10-20 07:54:46,450 INFO train.py line 282 26138] Epoch: [36/50][90/91] Data 0.001 (0.009) Batch 0.033 (0.042) Remain 00:00:53 MainLoss 0.2727 AuxLoss 0.4256 Loss 0.4429 Accuracy 0.8944.
+[2025-10-20 07:54:46,567 INFO train.py line 309 26138] Train result at epoch [36/50]: mIoU/mAcc/allAcc 0.7602/0.8476/0.9260.
+[2025-10-20 07:54:46,568 INFO train.py line 208 26138] Saving checkpoint to: exp/voc2012/pspnet50/model/train_epoch_36.pth
+[2025-10-20 07:54:48,271 INFO train.py line 282 26138] Epoch: [37/50][10/91] Data 0.001 (0.068) Batch 0.035 (0.104) Remain 00:02:10 MainLoss 0.1324 AuxLoss 0.2698 Loss 0.2403 Accuracy 0.9537.
+[2025-10-20 07:54:48,612 INFO train.py line 282 26138] Epoch: [37/50][20/91] Data 0.001 (0.034) Batch 0.034 (0.069) Remain 00:01:26 MainLoss 0.1273 AuxLoss 0.3294 Loss 0.2591 Accuracy 0.9547.
+[2025-10-20 07:54:48,954 INFO train.py line 282 26138] Epoch: [37/50][30/91] Data 0.001 (0.023) Batch 0.034 (0.057) Remain 00:01:11 MainLoss 0.1855 AuxLoss 0.5486 Loss 0.4049 Accuracy 0.9231.
+[2025-10-20 07:54:49,295 INFO train.py line 282 26138] Epoch: [37/50][40/91] Data 0.001 (0.018) Batch 0.034 (0.051) Remain 00:01:03 MainLoss 0.2439 AuxLoss 0.3565 Loss 0.3865 Accuracy 0.9157.
+[2025-10-20 07:54:49,636 INFO train.py line 282 26138] Epoch: [37/50][50/91] Data 0.001 (0.014) Batch 0.034 (0.048) Remain 00:00:58 MainLoss 0.6343 AuxLoss 0.8673 Loss 0.9812 Accuracy 0.8391.
+[2025-10-20 07:54:49,976 INFO train.py line 282 26138] Epoch: [37/50][60/91] Data 0.001 (0.012) Batch 0.034 (0.046) Remain 00:00:55 MainLoss 0.2109 AuxLoss 0.4250 Loss 0.3809 Accuracy 0.9219.
+[2025-10-20 07:54:50,309 INFO train.py line 282 26138] Epoch: [37/50][70/91] Data 0.001 (0.010) Batch 0.033 (0.044) Remain 00:00:52 MainLoss 0.1958 AuxLoss 0.3192 Loss 0.3235 Accuracy 0.9152.
+[2025-10-20 07:54:50,640 INFO train.py line 282 26138] Epoch: [37/50][80/91] Data 0.000 (0.009) Batch 0.033 (0.043) Remain 00:00:50 MainLoss 0.5855 AuxLoss 0.6766 Loss 0.8561 Accuracy 0.8992.
+[2025-10-20 07:54:50,972 INFO train.py line 282 26138] Epoch: [37/50][90/91] Data 0.000 (0.008) Batch 0.033 (0.042) Remain 00:00:49 MainLoss 0.2048 AuxLoss 0.4261 Loss 0.3752 Accuracy 0.9433.
+[2025-10-20 07:54:51,078 INFO train.py line 309 26138] Train result at epoch [37/50]: mIoU/mAcc/allAcc 0.7744/0.8570/0.9305.
+[2025-10-20 07:54:51,078 INFO train.py line 208 26138] Saving checkpoint to: exp/voc2012/pspnet50/model/train_epoch_37.pth
+[2025-10-20 07:54:52,695 INFO train.py line 282 26138] Epoch: [38/50][10/91] Data 0.001 (0.066) Batch 0.036 (0.101) Remain 00:01:58 MainLoss 0.1436 AuxLoss 0.2428 Loss 0.2407 Accuracy 0.9491.
+[2025-10-20 07:54:53,035 INFO train.py line 282 26138] Epoch: [38/50][20/91] Data 0.001 (0.033) Batch 0.034 (0.068) Remain 00:01:18 MainLoss 0.2765 AuxLoss 0.4937 Loss 0.4740 Accuracy 0.8810.
+[2025-10-20 07:54:53,377 INFO train.py line 282 26138] Epoch: [38/50][30/91] Data 0.001 (0.023) Batch 0.034 (0.057) Remain 00:01:05 MainLoss 0.2294 AuxLoss 0.5036 Loss 0.4308 Accuracy 0.9241.
+[2025-10-20 07:54:53,716 INFO train.py line 282 26138] Epoch: [38/50][40/91] Data 0.001 (0.017) Batch 0.034 (0.051) Remain 00:00:58 MainLoss 0.1401 AuxLoss 0.3619 Loss 0.2848 Accuracy 0.9499.
+[2025-10-20 07:54:54,057 INFO train.py line 282 26138] Epoch: [38/50][50/91] Data 0.001 (0.014) Batch 0.034 (0.048) Remain 00:00:53 MainLoss 0.2332 AuxLoss 0.3708 Loss 0.3815 Accuracy 0.9210.
+[2025-10-20 07:54:54,399 INFO train.py line 282 26138] Epoch: [38/50][60/91] Data 0.001 (0.012) Batch 0.034 (0.045) Remain 00:00:50 MainLoss 0.1398 AuxLoss 0.4292 Loss 0.3114 Accuracy 0.9566.
+[2025-10-20 07:54:54,733 INFO train.py line 282 26138] Epoch: [38/50][70/91] Data 0.000 (0.010) Batch 0.033 (0.044) Remain 00:00:48 MainLoss 0.1189 AuxLoss 0.4873 Loss 0.3138 Accuracy 0.9722.
+[2025-10-20 07:54:55,064 INFO train.py line 282 26138] Epoch: [38/50][80/91] Data 0.000 (0.009) Batch 0.033 (0.042) Remain 00:00:46 MainLoss 0.2247 AuxLoss 0.3836 Loss 0.3782 Accuracy 0.9247.
+[2025-10-20 07:54:55,396 INFO train.py line 282 26138] Epoch: [38/50][90/91] Data 0.001 (0.008) Batch 0.033 (0.041) Remain 00:00:45 MainLoss 0.1676 AuxLoss 0.5195 Loss 0.3754 Accuracy 0.9471.
+[2025-10-20 07:54:55,506 INFO train.py line 309 26138] Train result at epoch [38/50]: mIoU/mAcc/allAcc 0.7616/0.8436/0.9282.
+[2025-10-20 07:54:55,506 INFO train.py line 208 26138] Saving checkpoint to: exp/voc2012/pspnet50/model/train_epoch_38.pth
+[2025-10-20 07:54:57,276 INFO train.py line 282 26138] Epoch: [39/50][10/91] Data 0.001 (0.075) Batch 0.034 (0.109) Remain 00:01:58 MainLoss 0.1498 AuxLoss 0.3118 Loss 0.2745 Accuracy 0.9434.
+[2025-10-20 07:54:57,613 INFO train.py line 282 26138] Epoch: [39/50][20/91] Data 0.000 (0.038) Batch 0.034 (0.072) Remain 00:01:16 MainLoss 0.1938 AuxLoss 0.4793 Loss 0.3855 Accuracy 0.9338.
+[2025-10-20 07:54:57,954 INFO train.py line 282 26138] Epoch: [39/50][30/91] Data 0.001 (0.026) Batch 0.034 (0.059) Remain 00:01:02 MainLoss 0.1853 AuxLoss 0.3572 Loss 0.3282 Accuracy 0.9365.
+[2025-10-20 07:54:58,292 INFO train.py line 282 26138] Epoch: [39/50][40/91] Data 0.001 (0.019) Batch 0.034 (0.053) Remain 00:00:55 MainLoss 0.2088 AuxLoss 0.4008 Loss 0.3692 Accuracy 0.9241.
+[2025-10-20 07:54:58,633 INFO train.py line 282 26138] Epoch: [39/50][50/91] Data 0.001 (0.016) Batch 0.033 (0.049) Remain 00:00:51 MainLoss 0.1553 AuxLoss 0.3643 Loss 0.3010 Accuracy 0.9428.
+[2025-10-20 07:54:58,977 INFO train.py line 282 26138] Epoch: [39/50][60/91] Data 0.001 (0.013) Batch 0.034 (0.047) Remain 00:00:48 MainLoss 0.1648 AuxLoss 0.2987 Loss 0.2843 Accuracy 0.9406.
+[2025-10-20 07:54:59,310 INFO train.py line 282 26138] Epoch: [39/50][70/91] Data 0.001 (0.011) Batch 0.033 (0.045) Remain 00:00:45 MainLoss 0.2113 AuxLoss 0.6432 Loss 0.4686 Accuracy 0.9298.
+[2025-10-20 07:54:59,642 INFO train.py line 282 26138] Epoch: [39/50][80/91] Data 0.000 (0.010) Batch 0.033 (0.043) Remain 00:00:43 MainLoss 0.2020 AuxLoss 0.4491 Loss 0.3816 Accuracy 0.9344.
+[2025-10-20 07:54:59,975 INFO train.py line 282 26138] Epoch: [39/50][90/91] Data 0.001 (0.009) Batch 0.033 (0.042) Remain 00:00:42 MainLoss 0.1603 AuxLoss 0.3157 Loss 0.2866 Accuracy 0.9519.
+[2025-10-20 07:55:00,087 INFO train.py line 309 26138] Train result at epoch [39/50]: mIoU/mAcc/allAcc 0.7733/0.8505/0.9292.
+[2025-10-20 07:55:00,088 INFO train.py line 208 26138] Saving checkpoint to: exp/voc2012/pspnet50/model/train_epoch_39.pth
+[2025-10-20 07:55:01,874 INFO train.py line 282 26138] Epoch: [40/50][10/91] Data 0.000 (0.073) Batch 0.034 (0.110) Remain 00:01:49 MainLoss 0.2306 AuxLoss 0.4838 Loss 0.4242 Accuracy 0.9149.
+[2025-10-20 07:55:02,215 INFO train.py line 282 26138] Epoch: [40/50][20/91] Data 0.001 (0.037) Batch 0.034 (0.072) Remain 00:01:10 MainLoss 0.1464 AuxLoss 0.4326 Loss 0.3194 Accuracy 0.9510.
+[2025-10-20 07:55:02,555 INFO train.py line 282 26138] Epoch: [40/50][30/91] Data 0.001 (0.025) Batch 0.034 (0.059) Remain 00:00:57 MainLoss 0.2405 AuxLoss 0.4753 Loss 0.4307 Accuracy 0.9105.
+[2025-10-20 07:55:02,892 INFO train.py line 282 26138] Epoch: [40/50][40/91] Data 0.001 (0.019) Batch 0.034 (0.053) Remain 00:00:50 MainLoss 0.2296 AuxLoss 0.4871 Loss 0.4244 Accuracy 0.9203.
+[2025-10-20 07:55:03,229 INFO train.py line 282 26138] Epoch: [40/50][50/91] Data 0.001 (0.015) Batch 0.034 (0.049) Remain 00:00:46 MainLoss 0.1876 AuxLoss 0.4000 Loss 0.3476 Accuracy 0.9449.
+[2025-10-20 07:55:03,568 INFO train.py line 282 26138] Epoch: [40/50][60/91] Data 0.001 (0.013) Batch 0.033 (0.047) Remain 00:00:43 MainLoss 0.2624 AuxLoss 0.4213 Loss 0.4309 Accuracy 0.9089.
+[2025-10-20 07:55:03,900 INFO train.py line 282 26138] Epoch: [40/50][70/91] Data 0.000 (0.011) Batch 0.033 (0.045) Remain 00:00:41 MainLoss 0.1438 AuxLoss 0.3172 Loss 0.2706 Accuracy 0.9515.
+[2025-10-20 07:55:04,232 INFO train.py line 282 26138] Epoch: [40/50][80/91] Data 0.001 (0.010) Batch 0.033 (0.043) Remain 00:00:39 MainLoss 0.2675 AuxLoss 0.4177 Loss 0.4346 Accuracy 0.8906.
+[2025-10-20 07:55:04,562 INFO train.py line 282 26138] Epoch: [40/50][90/91] Data 0.000 (0.009) Batch 0.033 (0.042) Remain 00:00:38 MainLoss 0.2848 AuxLoss 0.4447 Loss 0.4627 Accuracy 0.9093.
+[2025-10-20 07:55:04,674 INFO train.py line 309 26138] Train result at epoch [40/50]: mIoU/mAcc/allAcc 0.7709/0.8491/0.9296.
+[2025-10-20 07:55:04,675 INFO train.py line 208 26138] Saving checkpoint to: exp/voc2012/pspnet50/model/train_epoch_40.pth
+[2025-10-20 07:55:06,418 INFO train.py line 282 26138] Epoch: [41/50][10/91] Data 0.001 (0.071) Batch 0.039 (0.109) Remain 00:01:37 MainLoss 0.4032 AuxLoss 0.5263 Loss 0.6137 Accuracy 0.8518.
+[2025-10-20 07:55:06,814 INFO train.py line 282 26138] Epoch: [41/50][20/91] Data 0.001 (0.036) Batch 0.035 (0.074) Remain 00:01:05 MainLoss 0.2118 AuxLoss 0.5427 Loss 0.4289 Accuracy 0.9090.
+[2025-10-20 07:55:07,170 INFO train.py line 282 26138] Epoch: [41/50][30/91] Data 0.000 (0.024) Batch 0.034 (0.061) Remain 00:00:53 MainLoss 0.1379 AuxLoss 0.4485 Loss 0.3173 Accuracy 0.9617.
+[2025-10-20 07:55:07,510 INFO train.py line 282 26138] Epoch: [41/50][40/91] Data 0.001 (0.018) Batch 0.034 (0.054) Remain 00:00:47 MainLoss 0.2930 AuxLoss 0.5453 Loss 0.5111 Accuracy 0.8788.
+[2025-10-20 07:55:07,851 INFO train.py line 282 26138] Epoch: [41/50][50/91] Data 0.001 (0.015) Batch 0.034 (0.050) Remain 00:00:43 MainLoss 0.2227 AuxLoss 0.3239 Loss 0.3522 Accuracy 0.9322.
+[2025-10-20 07:55:08,191 INFO train.py line 282 26138] Epoch: [41/50][60/91] Data 0.001 (0.012) Batch 0.034 (0.048) Remain 00:00:40 MainLoss 0.2587 AuxLoss 0.8521 Loss 0.5995 Accuracy 0.9136.
+[2025-10-20 07:55:08,526 INFO train.py line 282 26138] Epoch: [41/50][70/91] Data 0.001 (0.011) Batch 0.033 (0.046) Remain 00:00:38 MainLoss 0.1180 AuxLoss 0.3460 Loss 0.2564 Accuracy 0.9600.
+[2025-10-20 07:55:08,861 INFO train.py line 282 26138] Epoch: [41/50][80/91] Data 0.000 (0.009) Batch 0.034 (0.044) Remain 00:00:36 MainLoss 0.2396 AuxLoss 0.6129 Loss 0.4848 Accuracy 0.9003.
+[2025-10-20 07:55:09,198 INFO train.py line 282 26138] Epoch: [41/50][90/91] Data 0.001 (0.008) Batch 0.034 (0.043) Remain 00:00:35 MainLoss 0.1419 AuxLoss 0.4219 Loss 0.3106 Accuracy 0.9538.
+[2025-10-20 07:55:09,312 INFO train.py line 309 26138] Train result at epoch [41/50]: mIoU/mAcc/allAcc 0.7759/0.8577/0.9324.
+[2025-10-20 07:55:09,312 INFO train.py line 208 26138] Saving checkpoint to: exp/voc2012/pspnet50/model/train_epoch_41.pth
+[2025-10-20 07:55:10,943 INFO train.py line 282 26138] Epoch: [42/50][10/91] Data 0.001 (0.068) Batch 0.034 (0.101) Remain 00:01:22 MainLoss 0.1951 AuxLoss 0.4225 Loss 0.3641 Accuracy 0.9236.
+[2025-10-20 07:55:11,284 INFO train.py line 282 26138] Epoch: [42/50][20/91] Data 0.001 (0.034) Batch 0.034 (0.068) Remain 00:00:54 MainLoss 0.2413 AuxLoss 0.6832 Loss 0.5146 Accuracy 0.9138.
+[2025-10-20 07:55:11,624 INFO train.py line 282 26138] Epoch: [42/50][30/91] Data 0.001 (0.023) Batch 0.034 (0.056) Remain 00:00:44 MainLoss 0.2742 AuxLoss 0.4653 Loss 0.4603 Accuracy 0.9355.
+[2025-10-20 07:55:11,963 INFO train.py line 282 26138] Epoch: [42/50][40/91] Data 0.001 (0.018) Batch 0.034 (0.051) Remain 00:00:39 MainLoss 0.0890 AuxLoss 0.3859 Loss 0.2433 Accuracy 0.9768.
+[2025-10-20 07:55:12,303 INFO train.py line 282 26138] Epoch: [42/50][50/91] Data 0.001 (0.014) Batch 0.034 (0.047) Remain 00:00:36 MainLoss 0.1271 AuxLoss 0.2342 Loss 0.2207 Accuracy 0.9576.
+[2025-10-20 07:55:12,645 INFO train.py line 282 26138] Epoch: [42/50][60/91] Data 0.001 (0.012) Batch 0.034 (0.045) Remain 00:00:34 MainLoss 0.1811 AuxLoss 0.3034 Loss 0.3024 Accuracy 0.9382.
+[2025-10-20 07:55:12,978 INFO train.py line 282 26138] Epoch: [42/50][70/91] Data 0.000 (0.010) Batch 0.033 (0.044) Remain 00:00:32 MainLoss 0.4380 AuxLoss 0.7192 Loss 0.7257 Accuracy 0.8080.
+[2025-10-20 07:55:13,310 INFO train.py line 282 26138] Epoch: [42/50][80/91] Data 0.001 (0.009) Batch 0.033 (0.042) Remain 00:00:31 MainLoss 0.1450 AuxLoss 0.3088 Loss 0.2685 Accuracy 0.9515.
+[2025-10-20 07:55:13,642 INFO train.py line 282 26138] Epoch: [42/50][90/91] Data 0.001 (0.008) Batch 0.033 (0.041) Remain 00:00:30 MainLoss 0.1533 AuxLoss 0.3373 Loss 0.2882 Accuracy 0.9556.
+[2025-10-20 07:55:13,749 INFO train.py line 309 26138] Train result at epoch [42/50]: mIoU/mAcc/allAcc 0.7692/0.8464/0.9302.
+[2025-10-20 07:55:13,749 INFO train.py line 208 26138] Saving checkpoint to: exp/voc2012/pspnet50/model/train_epoch_42.pth
+[2025-10-20 07:55:15,544 INFO train.py line 282 26138] Epoch: [43/50][10/91] Data 0.001 (0.076) Batch 0.039 (0.115) Remain 00:01:22 MainLoss 0.1355 AuxLoss 0.3204 Loss 0.2636 Accuracy 0.9604.
+[2025-10-20 07:55:15,936 INFO train.py line 282 26138] Epoch: [43/50][20/91] Data 0.001 (0.038) Batch 0.039 (0.077) Remain 00:00:54 MainLoss 0.1735 AuxLoss 0.4920 Loss 0.3703 Accuracy 0.9208.
+[2025-10-20 07:55:16,336 INFO train.py line 282 26138] Epoch: [43/50][30/91] Data 0.001 (0.026) Batch 0.039 (0.065) Remain 00:00:45 MainLoss 0.1908 AuxLoss 0.4600 Loss 0.3749 Accuracy 0.9383.
+[2025-10-20 07:55:16,725 INFO train.py line 282 26138] Epoch: [43/50][40/91] Data 0.001 (0.020) Batch 0.041 (0.058) Remain 00:00:40 MainLoss 0.1514 AuxLoss 0.2627 Loss 0.2564 Accuracy 0.9489.
+[2025-10-20 07:55:17,071 INFO train.py line 282 26138] Epoch: [43/50][50/91] Data 0.001 (0.016) Batch 0.034 (0.054) Remain 00:00:36 MainLoss 0.1746 AuxLoss 0.5828 Loss 0.4077 Accuracy 0.9457.
+[2025-10-20 07:55:17,410 INFO train.py line 282 26138] Epoch: [43/50][60/91] Data 0.001 (0.013) Batch 0.034 (0.050) Remain 00:00:33 MainLoss 0.2200 AuxLoss 0.2863 Loss 0.3346 Accuracy 0.9316.
+[2025-10-20 07:55:17,747 INFO train.py line 282 26138] Epoch: [43/50][70/91] Data 0.000 (0.012) Batch 0.034 (0.048) Remain 00:00:31 MainLoss 0.1394 AuxLoss 0.4395 Loss 0.3152 Accuracy 0.9604.
+[2025-10-20 07:55:18,083 INFO train.py line 282 26138] Epoch: [43/50][80/91] Data 0.001 (0.010) Batch 0.034 (0.046) Remain 00:00:29 MainLoss 0.1834 AuxLoss 0.5816 Loss 0.4161 Accuracy 0.9495.
+[2025-10-20 07:55:18,419 INFO train.py line 282 26138] Epoch: [43/50][90/91] Data 0.000 (0.009) Batch 0.034 (0.045) Remain 00:00:28 MainLoss 0.1518 AuxLoss 0.3476 Loss 0.2908 Accuracy 0.9474.
+[2025-10-20 07:55:18,529 INFO train.py line 309 26138] Train result at epoch [43/50]: mIoU/mAcc/allAcc 0.7834/0.8598/0.9340.
+[2025-10-20 07:55:18,529 INFO train.py line 208 26138] Saving checkpoint to: exp/voc2012/pspnet50/model/train_epoch_43.pth
+[2025-10-20 07:55:20,261 INFO train.py line 282 26138] Epoch: [44/50][10/91] Data 0.000 (0.072) Batch 0.034 (0.106) Remain 00:01:06 MainLoss 0.2022 AuxLoss 0.4218 Loss 0.3709 Accuracy 0.9270.
+[2025-10-20 07:55:20,601 INFO train.py line 282 26138] Epoch: [44/50][20/91] Data 0.000 (0.036) Batch 0.034 (0.070) Remain 00:00:43 MainLoss 0.1656 AuxLoss 0.3910 Loss 0.3219 Accuracy 0.9459.
+[2025-10-20 07:55:20,945 INFO train.py line 282 26138] Epoch: [44/50][30/91] Data 0.000 (0.024) Batch 0.034 (0.058) Remain 00:00:35 MainLoss 0.1278 AuxLoss 0.3837 Loss 0.2813 Accuracy 0.9567.
+[2025-10-20 07:55:21,285 INFO train.py line 282 26138] Epoch: [44/50][40/91] Data 0.001 (0.018) Batch 0.034 (0.052) Remain 00:00:31 MainLoss 0.2012 AuxLoss 0.5846 Loss 0.4350 Accuracy 0.9310.
+[2025-10-20 07:55:21,631 INFO train.py line 282 26138] Epoch: [44/50][50/91] Data 0.000 (0.015) Batch 0.034 (0.049) Remain 00:00:28 MainLoss 0.1817 AuxLoss 0.2955 Loss 0.2999 Accuracy 0.9304.
+[2025-10-20 07:55:21,972 INFO train.py line 282 26138] Epoch: [44/50][60/91] Data 0.001 (0.013) Batch 0.034 (0.046) Remain 00:00:26 MainLoss 0.1141 AuxLoss 0.2004 Loss 0.1942 Accuracy 0.9665.
+[2025-10-20 07:55:22,307 INFO train.py line 282 26138] Epoch: [44/50][70/91] Data 0.000 (0.011) Batch 0.033 (0.044) Remain 00:00:25 MainLoss 0.2432 AuxLoss 0.4702 Loss 0.4313 Accuracy 0.9088.
+[2025-10-20 07:55:22,642 INFO train.py line 282 26138] Epoch: [44/50][80/91] Data 0.000 (0.010) Batch 0.033 (0.043) Remain 00:00:23 MainLoss 0.1706 AuxLoss 0.4326 Loss 0.3437 Accuracy 0.9366.
+[2025-10-20 07:55:22,977 INFO train.py line 282 26138] Epoch: [44/50][90/91] Data 0.000 (0.009) Batch 0.034 (0.042) Remain 00:00:22 MainLoss 0.0925 AuxLoss 0.1936 Loss 0.1700 Accuracy 0.9709.
+[2025-10-20 07:55:23,093 INFO train.py line 309 26138] Train result at epoch [44/50]: mIoU/mAcc/allAcc 0.7763/0.8556/0.9301.
+[2025-10-20 07:55:23,093 INFO train.py line 208 26138] Saving checkpoint to: exp/voc2012/pspnet50/model/train_epoch_44.pth
+[2025-10-20 07:55:24,564 INFO train.py line 282 26138] Epoch: [45/50][10/91] Data 0.001 (0.063) Batch 0.034 (0.096) Remain 00:00:51 MainLoss 0.1573 AuxLoss 0.4661 Loss 0.3437 Accuracy 0.9364.
+[2025-10-20 07:55:24,902 INFO train.py line 282 26138] Epoch: [45/50][20/91] Data 0.001 (0.032) Batch 0.034 (0.065) Remain 00:00:34 MainLoss 0.1588 AuxLoss 0.2834 Loss 0.2722 Accuracy 0.9481.
+[2025-10-20 07:55:25,240 INFO train.py line 282 26138] Epoch: [45/50][30/91] Data 0.001 (0.021) Batch 0.034 (0.055) Remain 00:00:28 MainLoss 0.2172 AuxLoss 0.4165 Loss 0.3839 Accuracy 0.9259.
+[2025-10-20 07:55:25,582 INFO train.py line 282 26138] Epoch: [45/50][40/91] Data 0.001 (0.016) Batch 0.034 (0.050) Remain 00:00:25 MainLoss 0.2584 AuxLoss 0.3906 Loss 0.4147 Accuracy 0.9039.
+[2025-10-20 07:55:25,922 INFO train.py line 282 26138] Epoch: [45/50][50/91] Data 0.001 (0.013) Batch 0.035 (0.046) Remain 00:00:23 MainLoss 0.1816 AuxLoss 0.3023 Loss 0.3025 Accuracy 0.9547.
+[2025-10-20 07:55:26,266 INFO train.py line 282 26138] Epoch: [45/50][60/91] Data 0.001 (0.011) Batch 0.034 (0.044) Remain 00:00:21 MainLoss 0.1331 AuxLoss 0.1971 Loss 0.2119 Accuracy 0.9547.
+[2025-10-20 07:55:26,602 INFO train.py line 282 26138] Epoch: [45/50][70/91] Data 0.000 (0.010) Batch 0.033 (0.043) Remain 00:00:20 MainLoss 0.1358 AuxLoss 0.6060 Loss 0.3782 Accuracy 0.9466.
+[2025-10-20 07:55:26,935 INFO train.py line 282 26138] Epoch: [45/50][80/91] Data 0.001 (0.008) Batch 0.033 (0.042) Remain 00:00:19 MainLoss 0.1538 AuxLoss 0.3390 Loss 0.2894 Accuracy 0.9561.
+[2025-10-20 07:55:27,269 INFO train.py line 282 26138] Epoch: [45/50][90/91] Data 0.000 (0.008) Batch 0.034 (0.041) Remain 00:00:18 MainLoss 0.1680 AuxLoss 0.5781 Loss 0.3992 Accuracy 0.9370.
+[2025-10-20 07:55:27,385 INFO train.py line 309 26138] Train result at epoch [45/50]: mIoU/mAcc/allAcc 0.7946/0.8695/0.9386.
+[2025-10-20 07:55:27,385 INFO train.py line 208 26138] Saving checkpoint to: exp/voc2012/pspnet50/model/train_epoch_45.pth
+[2025-10-20 07:55:29,075 INFO train.py line 282 26138] Epoch: [46/50][10/91] Data 0.002 (0.068) Batch 0.042 (0.107) Remain 00:00:47 MainLoss 0.1783 AuxLoss 0.3499 Loss 0.3183 Accuracy 0.9304.
+[2025-10-20 07:55:29,456 INFO train.py line 282 26138] Epoch: [46/50][20/91] Data 0.001 (0.035) Batch 0.036 (0.073) Remain 00:00:31 MainLoss 0.1786 AuxLoss 0.4351 Loss 0.3526 Accuracy 0.9427.
+[2025-10-20 07:55:29,824 INFO train.py line 282 26138] Epoch: [46/50][30/91] Data 0.000 (0.023) Batch 0.034 (0.061) Remain 00:00:25 MainLoss 0.2165 AuxLoss 0.3846 Loss 0.3704 Accuracy 0.9293.
+[2025-10-20 07:55:30,164 INFO train.py line 282 26138] Epoch: [46/50][40/91] Data 0.000 (0.018) Batch 0.034 (0.054) Remain 00:00:22 MainLoss 0.2155 AuxLoss 0.3725 Loss 0.3645 Accuracy 0.9355.
+[2025-10-20 07:55:30,503 INFO train.py line 282 26138] Epoch: [46/50][50/91] Data 0.000 (0.014) Batch 0.034 (0.050) Remain 00:00:20 MainLoss 0.1263 AuxLoss 0.4038 Loss 0.2878 Accuracy 0.9666.
+[2025-10-20 07:55:30,844 INFO train.py line 282 26138] Epoch: [46/50][60/91] Data 0.001 (0.012) Batch 0.034 (0.047) Remain 00:00:18 MainLoss 0.1126 AuxLoss 0.3215 Loss 0.2412 Accuracy 0.9659.
+[2025-10-20 07:55:31,182 INFO train.py line 282 26138] Epoch: [46/50][70/91] Data 0.001 (0.010) Batch 0.034 (0.045) Remain 00:00:17 MainLoss 0.1719 AuxLoss 0.3206 Loss 0.3001 Accuracy 0.9538.
+[2025-10-20 07:55:31,517 INFO train.py line 282 26138] Epoch: [46/50][80/91] Data 0.000 (0.009) Batch 0.033 (0.044) Remain 00:00:16 MainLoss 0.1037 AuxLoss 0.3258 Loss 0.2341 Accuracy 0.9593.
+[2025-10-20 07:55:31,852 INFO train.py line 282 26138] Epoch: [46/50][90/91] Data 0.000 (0.008) Batch 0.034 (0.043) Remain 00:00:15 MainLoss 0.1589 AuxLoss 0.3483 Loss 0.2982 Accuracy 0.9518.
+[2025-10-20 07:55:31,958 INFO train.py line 309 26138] Train result at epoch [46/50]: mIoU/mAcc/allAcc 0.7847/0.8563/0.9339.
+[2025-10-20 07:55:31,959 INFO train.py line 208 26138] Saving checkpoint to: exp/voc2012/pspnet50/model/train_epoch_46.pth
+[2025-10-20 07:55:33,770 INFO train.py line 282 26138] Epoch: [47/50][10/91] Data 0.001 (0.073) Batch 0.037 (0.115) Remain 00:00:40 MainLoss 0.1766 AuxLoss 0.3371 Loss 0.3114 Accuracy 0.9380.
+[2025-10-20 07:55:34,144 INFO train.py line 282 26138] Epoch: [47/50][20/91] Data 0.001 (0.037) Batch 0.036 (0.076) Remain 00:00:26 MainLoss 0.1735 AuxLoss 0.5258 Loss 0.3839 Accuracy 0.9405.
+[2025-10-20 07:55:34,488 INFO train.py line 282 26138] Epoch: [47/50][30/91] Data 0.001 (0.025) Batch 0.034 (0.062) Remain 00:00:20 MainLoss 0.1776 AuxLoss 0.3504 Loss 0.3177 Accuracy 0.9411.
+[2025-10-20 07:55:34,831 INFO train.py line 282 26138] Epoch: [47/50][40/91] Data 0.001 (0.019) Batch 0.034 (0.055) Remain 00:00:17 MainLoss 0.1701 AuxLoss 0.4610 Loss 0.3545 Accuracy 0.9463.
+[2025-10-20 07:55:35,175 INFO train.py line 282 26138] Epoch: [47/50][50/91] Data 0.001 (0.015) Batch 0.034 (0.051) Remain 00:00:16 MainLoss 0.2164 AuxLoss 0.3942 Loss 0.3741 Accuracy 0.9189.
+[2025-10-20 07:55:35,522 INFO train.py line 282 26138] Epoch: [47/50][60/91] Data 0.001 (0.013) Batch 0.034 (0.048) Remain 00:00:14 MainLoss 0.3082 AuxLoss 0.4672 Loss 0.4951 Accuracy 0.8922.
+[2025-10-20 07:55:35,856 INFO train.py line 282 26138] Epoch: [47/50][70/91] Data 0.001 (0.011) Batch 0.033 (0.046) Remain 00:00:13 MainLoss 0.3518 AuxLoss 0.7120 Loss 0.6367 Accuracy 0.8938.
+[2025-10-20 07:55:36,189 INFO train.py line 282 26138] Epoch: [47/50][80/91] Data 0.001 (0.010) Batch 0.033 (0.045) Remain 00:00:12 MainLoss 0.1366 AuxLoss 0.2474 Loss 0.2356 Accuracy 0.9528.
+[2025-10-20 07:55:36,521 INFO train.py line 282 26138] Epoch: [47/50][90/91] Data 0.001 (0.009) Batch 0.033 (0.043) Remain 00:00:11 MainLoss 0.1550 AuxLoss 0.3069 Loss 0.2777 Accuracy 0.9478.
+[2025-10-20 07:55:36,629 INFO train.py line 309 26138] Train result at epoch [47/50]: mIoU/mAcc/allAcc 0.7920/0.8663/0.9375.
+[2025-10-20 07:55:36,630 INFO train.py line 208 26138] Saving checkpoint to: exp/voc2012/pspnet50/model/train_epoch_47.pth
+[2025-10-20 07:55:38,138 INFO train.py line 282 26138] Epoch: [48/50][10/91] Data 0.001 (0.068) Batch 0.034 (0.103) Remain 00:00:27 MainLoss 0.1874 AuxLoss 0.3783 Loss 0.3387 Accuracy 0.9236.
+[2025-10-20 07:55:38,479 INFO train.py line 282 26138] Epoch: [48/50][20/91] Data 0.001 (0.034) Batch 0.034 (0.068) Remain 00:00:17 MainLoss 0.1690 AuxLoss 0.3883 Loss 0.3243 Accuracy 0.9537.
+[2025-10-20 07:55:38,822 INFO train.py line 282 26138] Epoch: [48/50][30/91] Data 0.001 (0.023) Batch 0.034 (0.057) Remain 00:00:13 MainLoss 0.0881 AuxLoss 0.2911 Loss 0.2045 Accuracy 0.9690.
+[2025-10-20 07:55:39,163 INFO train.py line 282 26138] Epoch: [48/50][40/91] Data 0.001 (0.018) Batch 0.035 (0.051) Remain 00:00:11 MainLoss 0.2255 AuxLoss 0.4632 Loss 0.4108 Accuracy 0.9259.
+[2025-10-20 07:55:39,525 INFO train.py line 282 26138] Epoch: [48/50][50/91] Data 0.001 (0.014) Batch 0.034 (0.048) Remain 00:00:10 MainLoss 0.2046 AuxLoss 0.4381 Loss 0.3798 Accuracy 0.9228.
+[2025-10-20 07:55:39,887 INFO train.py line 282 26138] Epoch: [48/50][60/91] Data 0.001 (0.012) Batch 0.035 (0.046) Remain 00:00:09 MainLoss 0.2393 AuxLoss 0.3801 Loss 0.3914 Accuracy 0.9011.
+[2025-10-20 07:55:40,227 INFO train.py line 282 26138] Epoch: [48/50][70/91] Data 0.001 (0.010) Batch 0.034 (0.045) Remain 00:00:09 MainLoss 0.1817 AuxLoss 0.3800 Loss 0.3337 Accuracy 0.9326.
+[2025-10-20 07:55:40,563 INFO train.py line 282 26138] Epoch: [48/50][80/91] Data 0.000 (0.009) Batch 0.034 (0.043) Remain 00:00:08 MainLoss 0.1630 AuxLoss 0.4148 Loss 0.3289 Accuracy 0.9492.
+[2025-10-20 07:55:40,899 INFO train.py line 282 26138] Epoch: [48/50][90/91] Data 0.000 (0.008) Batch 0.034 (0.042) Remain 00:00:07 MainLoss 0.1334 AuxLoss 0.6051 Loss 0.3755 Accuracy 0.9572.
+[2025-10-20 07:55:41,005 INFO train.py line 309 26138] Train result at epoch [48/50]: mIoU/mAcc/allAcc 0.7825/0.8577/0.9348.
+[2025-10-20 07:55:41,006 INFO train.py line 208 26138] Saving checkpoint to: exp/voc2012/pspnet50/model/train_epoch_48.pth
+[2025-10-20 07:55:42,754 INFO train.py line 282 26138] Epoch: [49/50][10/91] Data 0.001 (0.071) Batch 0.034 (0.109) Remain 00:00:18 MainLoss 0.1213 AuxLoss 0.2661 Loss 0.2277 Accuracy 0.9677.
+[2025-10-20 07:55:43,096 INFO train.py line 282 26138] Epoch: [49/50][20/91] Data 0.001 (0.036) Batch 0.034 (0.071) Remain 00:00:11 MainLoss 0.1539 AuxLoss 0.3167 Loss 0.2806 Accuracy 0.9431.
+[2025-10-20 07:55:43,444 INFO train.py line 282 26138] Epoch: [49/50][30/91] Data 0.001 (0.024) Batch 0.035 (0.059) Remain 00:00:08 MainLoss 0.1314 AuxLoss 0.3089 Loss 0.2550 Accuracy 0.9514.
+[2025-10-20 07:55:43,785 INFO train.py line 282 26138] Epoch: [49/50][40/91] Data 0.000 (0.018) Batch 0.034 (0.053) Remain 00:00:07 MainLoss 0.2142 AuxLoss 0.4890 Loss 0.4098 Accuracy 0.9122.
+[2025-10-20 07:55:44,128 INFO train.py line 282 26138] Epoch: [49/50][50/91] Data 0.001 (0.015) Batch 0.034 (0.049) Remain 00:00:06 MainLoss 0.1308 AuxLoss 0.3561 Loss 0.2732 Accuracy 0.9623.
+[2025-10-20 07:55:44,468 INFO train.py line 282 26138] Epoch: [49/50][60/91] Data 0.001 (0.013) Batch 0.034 (0.047) Remain 00:00:05 MainLoss 0.1288 AuxLoss 0.3264 Loss 0.2593 Accuracy 0.9579.
+[2025-10-20 07:55:44,803 INFO train.py line 282 26138] Epoch: [49/50][70/91] Data 0.000 (0.011) Batch 0.033 (0.045) Remain 00:00:05 MainLoss 0.1625 AuxLoss 0.3980 Loss 0.3217 Accuracy 0.9362.
+[2025-10-20 07:55:45,139 INFO train.py line 282 26138] Epoch: [49/50][80/91] Data 0.000 (0.010) Batch 0.034 (0.043) Remain 00:00:04 MainLoss 0.2591 AuxLoss 0.4879 Loss 0.4542 Accuracy 0.9011.
+[2025-10-20 07:55:45,475 INFO train.py line 282 26138] Epoch: [49/50][90/91] Data 0.001 (0.009) Batch 0.033 (0.042) Remain 00:00:03 MainLoss 0.1953 AuxLoss 0.4992 Loss 0.3949 Accuracy 0.9388.
+[2025-10-20 07:55:45,577 INFO train.py line 309 26138] Train result at epoch [49/50]: mIoU/mAcc/allAcc 0.7960/0.8701/0.9391.
+[2025-10-20 07:55:45,578 INFO train.py line 208 26138] Saving checkpoint to: exp/voc2012/pspnet50/model/train_epoch_49.pth
+[2025-10-20 07:55:47,252 INFO train.py line 282 26138] Epoch: [50/50][10/91] Data 0.001 (0.068) Batch 0.034 (0.103) Remain 00:00:08 MainLoss 0.2182 AuxLoss 0.6164 Loss 0.4647 Accuracy 0.9290.
+[2025-10-20 07:55:47,590 INFO train.py line 282 26138] Epoch: [50/50][20/91] Data 0.001 (0.034) Batch 0.034 (0.068) Remain 00:00:04 MainLoss 0.2604 AuxLoss 0.2989 Loss 0.3800 Accuracy 0.8917.
+[2025-10-20 07:55:47,928 INFO train.py line 282 26138] Epoch: [50/50][30/91] Data 0.001 (0.023) Batch 0.034 (0.057) Remain 00:00:03 MainLoss 0.1340 AuxLoss 0.4796 Loss 0.3258 Accuracy 0.9459.
+[2025-10-20 07:55:48,267 INFO train.py line 282 26138] Epoch: [50/50][40/91] Data 0.001 (0.017) Batch 0.034 (0.051) Remain 00:00:02 MainLoss 0.1017 AuxLoss 0.1771 Loss 0.1725 Accuracy 0.9653.
+[2025-10-20 07:55:48,604 INFO train.py line 282 26138] Epoch: [50/50][50/91] Data 0.000 (0.014) Batch 0.033 (0.048) Remain 00:00:01 MainLoss 0.1490 AuxLoss 0.2855 Loss 0.2632 Accuracy 0.9485.
+[2025-10-20 07:55:48,942 INFO train.py line 282 26138] Epoch: [50/50][60/91] Data 0.001 (0.012) Batch 0.034 (0.045) Remain 00:00:01 MainLoss 0.3042 AuxLoss 0.5416 Loss 0.5209 Accuracy 0.8652.
+[2025-10-20 07:55:49,276 INFO train.py line 282 26138] Epoch: [50/50][70/91] Data 0.001 (0.010) Batch 0.033 (0.044) Remain 00:00:00 MainLoss 0.2815 AuxLoss 0.6616 Loss 0.5461 Accuracy 0.8834.
+[2025-10-20 07:55:49,611 INFO train.py line 282 26138] Epoch: [50/50][80/91] Data 0.001 (0.009) Batch 0.034 (0.042) Remain 00:00:00 MainLoss 0.1406 AuxLoss 0.2648 Loss 0.2465 Accuracy 0.9504.
+[2025-10-20 07:55:49,945 INFO train.py line 282 26138] Epoch: [50/50][90/91] Data 0.000 (0.008) Batch 0.033 (0.041) Remain 00:00:00 MainLoss 0.2353 AuxLoss 0.4701 Loss 0.4233 Accuracy 0.9169.
+[2025-10-20 07:55:50,051 INFO train.py line 309 26138] Train result at epoch [50/50]: mIoU/mAcc/allAcc 0.7817/0.8626/0.9332.
+[2025-10-20 07:55:50,052 INFO train.py line 208 26138] Saving checkpoint to: exp/voc2012/pspnet50/model/train_epoch_50.pth
