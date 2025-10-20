@@ -26,7 +26,7 @@ class PPM(nn.Module):
 
 
 class PSPNet(nn.Module):
-    def __init__(self, bins=(1, 2, 3, 6), dropout=0.1, classes=2, zoom_factor=32, use_ppm=True, backbone_name = "facebook/dinov3-convnext-tiny-pretrain-lvd1689m", criterion=nn.CrossEntropyLoss(ignore_index=255)):
+    def __init__(self, bins=(1, 2, 3, 6), dropout=0.1, classes=2, zoom_factor=32, use_ppm=True, backbone_name = "facebook/dinov3-convnext-tiny-pretrain-lvd1689m", freeze_layers = [0,1,2], criterion=nn.CrossEntropyLoss(ignore_index=255)):
         super(PSPNet, self).__init__()
         assert 768 % len(bins) == 0
         assert classes > 1
@@ -41,7 +41,11 @@ class PSPNet(nn.Module):
         for layer in self.hidden_layers:
             for param in layer.parameters():
                 param.requires_grad = True
-
+        self.freeze_layers = set(freeze_layers)
+        for i, layer in enumerate(self.hidden_layers):
+            if i in self.freeze_layers:
+                for param in layer.parameters():
+                    param.requires_grad = False
         fea_dim = 768
         if use_ppm:
             self.ppm = PPM(fea_dim, int(fea_dim/len(bins)), bins)
