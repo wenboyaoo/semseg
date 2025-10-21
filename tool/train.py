@@ -58,8 +58,8 @@ def main_process():
 
 def check(args):
     assert args.classes > 1
-    assert args.zoom_factor == 32
-    assert (args.train_h) % 32 == 0 and (args.train_w) % 32 == 0
+    assert args.zoom_factor in [1, 2, 4, 8]
+    assert (args.train_h) % 8 == 0 and (args.train_w) % 8 == 0
     assert args.split in ['train','val','test']
     assert args.arch == 'psp'
 
@@ -182,9 +182,9 @@ def main_worker(gpu, ngpus_per_node, argss):
     train_loader = torch.utils.data.DataLoader(train_data, batch_size=args.batch_size, shuffle=(train_sampler is None), num_workers=args.workers, pin_memory=True, sampler=train_sampler, drop_last=True)
     if args.evaluate:
         val_transform = transform.Compose([
-            transform.ApplyHFProcessor(dataset.dino_processor),
-            transform.ToLabelTensor(),
-        ])
+            transform.Crop([args.train_h, args.train_w], crop_type='center', padding=mean, ignore_label=args.ignore_label),
+            transform.ToTensor(),
+            transform.Normalize(mean=mean, std=std)])
         val_data = dataset.SemData(split='val', data_root=args.data_root, data_list=args.val_list, transform=val_transform)
         if args.distributed:
             val_sampler = torch.utils.data.distributed.DistributedSampler(val_data)
@@ -234,6 +234,11 @@ def train(train_loader, model, optimizer, epoch):
     max_iter = args.epochs * len(train_loader)
     for i, (input, target) in enumerate(train_loader):
         data_time.update(time.time() - end)
+        if args.zoom_factor != 8:
+            h = int(target.size()[1] / 8 * args.zoom_factor)
+            w = int(target.size()[2] / 8 * args.zoom_factor)
+            # 'nearest' mode doesn't support align_corners mode and 'bilinear' mode is fine for downsampling
+            target = F.interpolate(target.unsqueeze(1).float(), size=(h, w), mode='bilinear', align_corners=True).squeeze(1).long()
         input = input.cuda(non_blocking=True)
         target = target.cuda(non_blocking=True)
         output, main_loss, aux_loss = model(input, target)

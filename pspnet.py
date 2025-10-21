@@ -26,18 +26,23 @@ class PPM(nn.Module):
 
 
 class PSPNet(nn.Module):
-    def __init__(self, bins=(1, 2, 3, 6), dropout=0.1, classes=2, zoom_factor=32, use_ppm=True, backbone_name = "facebook/dinov3-convnext-tiny-pretrain-lvd1689m", freeze_layers = [0,1,2], criterion=nn.CrossEntropyLoss(ignore_index=255)):
+    def __init__(self, bins=(1, 2, 3, 6), dropout=0.1, classes=2, zoom_factor=8, use_ppm=True, backbone_name = "facebook/dinov3-convnext-tiny-pretrain-lvd1689m", freeze_layers = [0,1], criterion=nn.CrossEntropyLoss(ignore_index=255)):
         super(PSPNet, self).__init__()
         assert 768 % len(bins) == 0
         assert classes > 1
-        assert zoom_factor == 32
+        assert zoom_factor in [1,2,4,8]
         self.zoom_factor = zoom_factor
         self.use_ppm = use_ppm
         self.criterion = criterion
-        self.zoom_factor = zoom_factor
+
         self.backbone_name = backbone_name
         self.backbone = AutoModel.from_pretrained(self.backbone_name, output_hidden_states=True)
+        conv1 = self.backbone.stages[2].downsample_layers[1]
+        conv2 = self.backbone.stages[3].downsample_layers[1]
+        conv1.dilation, conv1.padding, conv1.stride = (2,2), (1,1), (1,1)
+        conv2.dilation, conv2.padding, conv2.stride = (4,4), (2,2), (1,1)
         self.hidden_layers = list(self.backbone.stages)
+
         for layer in self.hidden_layers:
             for param in layer.parameters():
                 param.requires_grad = True
@@ -46,6 +51,7 @@ class PSPNet(nn.Module):
             if i in self.freeze_layers:
                 for param in layer.parameters():
                     param.requires_grad = False
+
         fea_dim = 768
         if use_ppm:
             self.ppm = PPM(fea_dim, int(fea_dim/len(bins)), bins)
@@ -68,9 +74,9 @@ class PSPNet(nn.Module):
 
     def forward(self, x, y=None):
         x_size = x.size()
-        assert (x_size[2]) % 32 == 0 and (x_size[3]) % 32 == 0
-        h = x_size[2]
-        w = x_size[3]
+        assert (x_size[2]) % 8 == 0 and (x_size[3]) % 8 == 0
+        h = int(x_size[2] / 8 * self.zoom_factor)
+        w = int(x_size[3] / 8 * self.zoom_factor)
 
         x = self.hidden_layers[0](x)
         x = self.hidden_layers[1](x)
@@ -95,7 +101,7 @@ class PSPNet(nn.Module):
 
 if __name__ == '__main__':
     input = torch.rand(4, 3, 224, 224)
-    model = PSPNet(bins=(1, 2, 3, 6), dropout=0.1, classes=21, zoom_factor=32, use_ppm=True)
+    model = PSPNet(bins=(1, 2, 3, 6), dropout=0.1, classes=21, zoom_factor=8, use_ppm=True)
     model.eval()
     print(model)
     output = model(input)
