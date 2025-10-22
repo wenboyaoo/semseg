@@ -207,9 +207,6 @@ def main_worker(gpu, ngpus_per_node, argss):
             filename = args.save_path + '/train_epoch_' + str(epoch_log) + '.pth'
             logger.info('Saving checkpoint to: ' + filename)
             torch.save({'epoch': epoch_log, 'state_dict': model.state_dict(), 'optimizer': optimizer.state_dict()}, filename)
-            if epoch_log / args.save_freq > 2:
-                deletename = args.save_path + '/train_epoch_' + str(epoch_log - args.save_freq * 2) + '.pth'
-                os.remove(deletename)
         if args.evaluate:
             loss_val, mIoU_val, mAcc_val, allAcc_val = validate(val_loader, model, criterion)
             if main_process():
