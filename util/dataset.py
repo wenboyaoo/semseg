@@ -63,8 +63,8 @@ class SemData(Dataset):
         image = cv2.imread(image_path, cv2.IMREAD_COLOR)  # BGR 3 channel ndarray wiht shape H * W * 3
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)  # convert cv2 read image from BGR order to RGB order
         image = np.float32(image)
-        #label = cv2.imread(label_path, cv2.IMREAD_GRAYSCALE)  # GRAY 1 channel ndarray with shape H * W
-        label = np.array(Image.open(label_path)) 
+        label = cv2.imread(label_path, cv2.IMREAD_GRAYSCALE)  # GRAY 1 channel ndarray with shape H * W
+        #label = np.array(Image.open(label_path)) 
         if image.shape[0] != label.shape[0] or image.shape[1] != label.shape[1]:
             raise (RuntimeError("Image & label shape mismatch: " + image_path + " " + label_path + "\n"))
         if self.transform is not None:

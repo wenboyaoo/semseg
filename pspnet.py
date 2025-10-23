@@ -26,11 +26,12 @@ class PPM(nn.Module):
 
 
 class PSPNet(nn.Module):
-    def __init__(self, bins=(1, 2, 3, 6), dropout=0.1, classes=2, zoom_factor=8, use_ppm=True, backbone_name = "facebook/dinov3-convnext-tiny-pretrain-lvd1689m", freeze_layers = [0,1], criterion=nn.CrossEntropyLoss(ignore_index=255)):
+    def __init__(self, bins=(1, 2, 3, 6), dropout=0.1, classes=21, zoom_factor=8, use_ppm=True, backbone_name = "facebook/dinov3-convnext-tiny-pretrain-lvd1689m", freeze_layers = 2, criterion=nn.CrossEntropyLoss(ignore_index=255)):
         super(PSPNet, self).__init__()
         assert 768 % len(bins) == 0
         assert classes > 1
         assert zoom_factor in [1,2,4,8]
+        assert freeze_layers in [0,1,2,3,4]
         self.zoom_factor = zoom_factor
         self.use_ppm = use_ppm
         self.criterion = criterion
@@ -42,15 +43,14 @@ class PSPNet(nn.Module):
         conv1.dilation, conv1.padding, conv1.stride = (2,2), (1,1), (1,1)
         conv2.dilation, conv2.padding, conv2.stride = (4,4), (2,2), (1,1)
         self.hidden_layers = list(self.backbone.stages)
+        self.freeze_layers = freeze_layers
 
         for layer in self.hidden_layers:
             for param in layer.parameters():
                 param.requires_grad = True
-        self.freeze_layers = set(freeze_layers)
-        for i, layer in enumerate(self.hidden_layers):
-            if i in self.freeze_layers:
-                for param in layer.parameters():
-                    param.requires_grad = False
+        for i in range(self.freeze_layers):
+            for param in self.hidden_layers[i].parameters():
+                param.requires_grad = False
 
         fea_dim = 768
         if use_ppm:

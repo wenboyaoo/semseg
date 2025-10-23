@@ -61,7 +61,7 @@ def check(args):
     assert args.zoom_factor in [1, 2, 4, 8]
     assert (args.train_h) % 8 == 0 and (args.train_w) % 8 == 0
     assert args.split in ['train','val','test']
-    assert args.arch == 'psp'
+    assert args.freeze_layers in [0,1,2,3,4]
 
 def main():
     args = get_parser()
@@ -103,16 +103,16 @@ def main_worker(gpu, ngpus_per_node, argss):
         dist.init_process_group(backend=args.dist_backend, init_method=args.dist_url, world_size=args.world_size, rank=args.rank)
 
     criterion = nn.CrossEntropyLoss(ignore_index=args.ignore_label)
-    model = PSPNet(classes=args.classes, zoom_factor=args.zoom_factor,criterion=criterion)
+    model = PSPNet(classes=args.classes, zoom_factor=args.zoom_factor, freeze_layers=args.freeze_layers, criterion=criterion)
     modules_ori = model.hidden_layers
     modules_new = [model.ppm, model.cls, model.aux]
     params_list = []
-    for module in modules_ori:
-        params_list.append(dict(params=module.parameters(), lr=args.base_lr))
-    for module in modules_new:
-        params_list.append(dict(params=module.parameters(), lr=args.base_lr * 10))
+    params_list = [
+    {"params": [p for module in modules_ori for p in module.parameters()], "lr": args.base_lr, "name": "modules_ori"},
+    {"params": [p for module in modules_new for p in module.parameters()], "lr": args.base_lr * 10, "name": "modules_new"}
+    ]
     args.index_split = 5
-    optimizer = torch.optim.SGD(params_list, lr=args.base_lr, momentum=args.momentum, weight_decay=args.weight_decay)
+    optimizer = torch.optim.AdamW(params=params_list, weight_decay=args.weight_decay)
     if args.sync_bn:
         model = nn.SyncBatchNorm.convert_sync_batchnorm(model)
 

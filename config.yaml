@@ -5,7 +5,7 @@ DATA:
   classes: 21
 
 TRAIN:
-  arch: psp
+  freeze_layers: 2
   sync_bn: False  # adopt sync_bn or not
   train_h: 224
   train_w: 224
@@ -21,11 +21,11 @@ TRAIN:
   batch_size: 32  # batch size for training
   batch_size_val: 32  # batch size for validation during training, memory and speed tradeoff
   base_lr: 0.01
-  epochs: 200
+  epochs: 50
   start_epoch: 0
   power: 0.9
   momentum: 0.9
-  weight_decay: 0.0001
+  weight_decay: 0.01
   manual_seed:
   print_freq: 10
   save_freq: 1
@@ -51,7 +51,7 @@ TEST:
   index_start: 0  # evaluation start index in list
   index_step: 0  # evaluation step index in list, 0 means to end
   test_gpu: [0]
-  model_path: exp/model/train_epoch_200.pth  # evaluation model path
-  save_folder: exp/result/epoch_200/val/ss  # results save folder
+  model_path: exp/model/train_epoch_50.pth  # evaluation model path
+  save_folder: exp/result/epoch_50/val/ss  # results save folder
   colors_path: data/voc2012/voc2012_colors.txt  # path of dataset colors
   names_path: data/voc2012/voc2012_names.txt  # path of dataset category names
