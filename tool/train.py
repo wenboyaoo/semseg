@@ -196,9 +196,10 @@ def main_worker(gpu, ngpus_per_node, argss):
         epoch_log = epoch + 1
         if args.distributed:
             train_sampler.set_epoch(epoch)
-        loss_train, mIoU_train, mAcc_train, allAcc_train = train(train_loader, model, optimizer, epoch)
+        loss_train, grad_norm_train, mIoU_train, mAcc_train, allAcc_train = train(train_loader, model, optimizer, epoch)
         if main_process():
             writer.add_scalar('loss_train', loss_train, epoch_log)
+            writer.add_scalar('grad_norm_train', grad_norm_train, epoch_log)
             writer.add_scalar('mIoU_train', mIoU_train, epoch_log)
             writer.add_scalar('mAcc_train', mAcc_train, epoch_log)
             writer.add_scalar('allAcc_train', allAcc_train, epoch_log)
@@ -215,13 +216,23 @@ def main_worker(gpu, ngpus_per_node, argss):
                 writer.add_scalar('mAcc_val', mAcc_val, epoch_log)
                 writer.add_scalar('allAcc_val', allAcc_val, epoch_log)
 
-
+def calc_grad_norm(model):
+    total_norm = 0
+    for p in model.parameters():
+        if p.grad is not None:
+            param_norm = p.grad.detach().data.norm(2)
+            total_norm += param_norm.item() ** 2
+            param_count += 1
+    total_norm = total_norm ** (1./2)
+    return total_norm
+    
 def train(train_loader, model, optimizer, epoch):
     batch_time = AverageMeter()
     data_time = AverageMeter()
     main_loss_meter = AverageMeter()
     aux_loss_meter = AverageMeter()
     loss_meter = AverageMeter()
+    grad_norm_meter = AverageMeter()
     intersection_meter = AverageMeter()
     union_meter = AverageMeter()
     target_meter = AverageMeter()
@@ -242,9 +253,12 @@ def train(train_loader, model, optimizer, epoch):
         if not args.multiprocessing_distributed:
             main_loss, aux_loss = torch.mean(main_loss), torch.mean(aux_loss)
         loss = main_loss + args.aux_weight * aux_loss
-
         optimizer.zero_grad()
         loss.backward()
+
+        grad_norm = calc_grad_norm(model)
+        grad_norm_meter.update(grad_norm, input.size(0))
+
         optimizer.step()
 
         n = input.size(0)
@@ -295,9 +309,11 @@ def train(train_loader, model, optimizer, epoch):
                                                           main_loss_meter=main_loss_meter,
                                                           aux_loss_meter=aux_loss_meter,
                                                           loss_meter=loss_meter,
+                                                          grad_norm_meter = grad_norm_meter,
                                                           accuracy=accuracy))
         if main_process():
             writer.add_scalar('loss_train_batch', main_loss_meter.val, current_iter)
+            writer.add_scalar('grad_norm_batch', grad_norm_meter.val, current_iter)
             writer.add_scalar('mIoU_train_batch', np.mean(intersection / (union + 1e-10)), current_iter)
             writer.add_scalar('mAcc_train_batch', np.mean(intersection / (target + 1e-10)), current_iter)
             writer.add_scalar('allAcc_train_batch', accuracy, current_iter)
@@ -309,7 +325,7 @@ def train(train_loader, model, optimizer, epoch):
     allAcc = sum(intersection_meter.sum) / (sum(target_meter.sum) + 1e-10)
     if main_process():
         logger.info('Train result at epoch [{}/{}]: mIoU/mAcc/allAcc {:.4f}/{:.4f}/{:.4f}.'.format(epoch+1, args.epochs, mIoU, mAcc, allAcc))
-    return main_loss_meter.avg, mIoU, mAcc, allAcc
+    return main_loss_meter.avg, grad_norm, mIoU, mAcc, allAcc, 
 
 
 def validate(val_loader, model, criterion):
