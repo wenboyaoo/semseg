@@ -23,7 +23,7 @@ TRAIN:
   batch_size: 32  # batch size for training
   batch_size_val: 32  # batch size for validation during training, memory and speed tradeoff
   lovasz_weight: 0.5
-  lr: 0.0005
+  lr: 0.01
   epochs: 50
   start_epoch: 0
   power: 0.9
