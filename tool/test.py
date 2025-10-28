@@ -73,7 +73,7 @@ def main():
     names = [line.rstrip('\n') for line in open(args.names_path)]
 
     if not args.has_prediction:
-        model = PSPNet(classes=args.classes)
+        model = model = PSPNet(classes=args.classes, backbone_name=args.backbone_name, use_FiLM=args.use_FiLM, use_fpn=args.use_fpn)
         logger.info(model)
         model = torch.nn.DataParallel(model).cuda()
         cudnn.benchmark = True
