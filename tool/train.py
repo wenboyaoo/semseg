@@ -18,7 +18,6 @@ import torch.distributed as dist
 from tensorboardX import SummaryWriter
 
 from pspnet import PSPNet
-from util.lovasz_losses import CeLovaszLoss
 from util import dataset, transform, config
 from util.util import AverageMeter, poly_learning_rate, intersectionAndUnionGPU, find_free_port
 
@@ -95,7 +94,7 @@ def main_worker(gpu, ngpus_per_node, argss):
             args.rank = args.rank * ngpus_per_node + gpu
         dist.init_process_group(backend=args.dist_backend, init_method=args.dist_url, world_size=args.world_size, rank=args.rank)
 
-    criterion = CeLovaszLoss(lovasz_weight=args.lovasz_weight, ignore=args.ignore_label)
+    criterion = nn.CrossEntropyLoss(ignore_index=args.ignore_label)
     model = PSPNet(classes=args.classes, backbone_name=args.backbone_name, criterion=criterion, use_FiLM=args.use_FiLM, use_fpn=args.use_fpn)
     if args.use_fpn:
         modules = [model.fpn, model.ppm, model.cls]
