@@ -42,17 +42,9 @@ def get_logger():
     return logger
 
 
-def check(args):
-    assert args.classes > 1
-    assert args.zoom_factor in [1, 2, 4, 8]
-    assert (args.train_h) % 8 == 0 and (args.train_w) % 8 == 0
-    assert args.split in ['train','val','test']
-    assert args.freeze_layers in [0,1,2,3,4]
-
 def main():
     global args, logger
     args = get_parser()
-    check(args)
     logger = get_logger()
     os.environ["CUDA_VISIBLE_DEVICES"] = ','.join(str(x) for x in args.test_gpu)
     logger.info(args)
@@ -81,7 +73,7 @@ def main():
     names = [line.rstrip('\n') for line in open(args.names_path)]
 
     if not args.has_prediction:
-        model = PSPNet(classes=args.classes, zoom_factor=args.zoom_factor)
+        model = PSPNet(classes=args.classes)
         logger.info(model)
         model = torch.nn.DataParallel(model).cuda()
         cudnn.benchmark = True

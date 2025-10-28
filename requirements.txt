@@ -5,5 +5,6 @@ transformers>=4.56.0
 huggingface_hub>=0.24.2
 opencv-python>=4.8
 pyyaml>=6.0
-hf_transfer
-tensorboard
+Pillow>=8.0.0
+numpy>=1.21.0
+tensorboard>=2.8.0
