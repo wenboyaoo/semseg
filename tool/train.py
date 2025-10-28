@@ -96,7 +96,10 @@ def main_worker(gpu, ngpus_per_node, argss):
 
     criterion = nn.CrossEntropyLoss(ignore_index=args.ignore_label)
     model = PSPNet(classes=args.classes, backbone_name=args.backbone_name, criterion=criterion, use_FiLM=args.use_FiLM, use_fpn=args.use_fpn)
-    modules = [model.fpn, model.ppm, model.cls]
+    if args.use_fpn:
+        modules = [model.fpn, model.ppm, model.cls]
+    else:
+        modules = [model.ppm, model.cls]
     params_list = []
     for module in modules:
         params_list.append(dict(params=module.parameters(), lr=args.lr))
