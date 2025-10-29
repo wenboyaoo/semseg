@@ -95,7 +95,7 @@ def main_worker(gpu, ngpus_per_node, argss):
         dist.init_process_group(backend=args.dist_backend, init_method=args.dist_url, world_size=args.world_size, rank=args.rank)
 
     criterion = nn.CrossEntropyLoss(ignore_index=args.ignore_label)
-    model = PSPNet(classes=args.classes, backbone_name=args.backbone_name, criterion=criterion, use_FiLM=args.use_FiLM, use_fpn=args.use_fpn)
+    model = PSPNet(classes=args.classes, backbone_name=args.backbone_name, criterion=criterion, use_fpn=args.use_fpn, use_ppm=args.use_ppm)
     if args.use_fpn:
         modules = [model.fpn, model.ppm, model.cls]
     else:

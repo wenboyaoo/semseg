@@ -7,7 +7,7 @@ DATA:
 TRAIN:
   backbone_name: facebook/dinov3-convnext-tiny-pretrain-lvd1689m
   use_fpn: True
-  use_FiLM: True
+  use_ppm: True
   token_length: 768
   sync_bn: False  # adopt sync_bn or not
   train_h: 224

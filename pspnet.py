@@ -4,30 +4,12 @@ from torch import nn
 import torch.nn.functional as F
 from transformers import AutoModel
 
-class FiLM(nn.Module):
-    def __init__(self, token_length=768, hidden_dim=256, output_dim=2048):
-        super().__init__()
-        self.net = nn.Sequential(
-            nn.Linear(token_length, hidden_dim),
-            nn.ReLU(),
-            nn.Linear(hidden_dim, output_dim)
-        )
-
-    def forward(self, token):
-        params = self.net(token)
-        gamma, beta = torch.chunk(params, 2, dim=-1)
-        return gamma, beta
-
 
 class PPM(nn.Module):
-    def __init__(self, in_dim, reduction_dim, bins, use_FiLM=True, token_length=768):
+    def __init__(self, in_dim, reduction_dim, bins):
         super(PPM, self).__init__()
         self.features = []
-        self.use_FiLM = use_FiLM
-        self.token_length = token_length
         self.concat_channels = in_dim + len(bins) * reduction_dim
-        if self.use_FiLM:
-            self.film = FiLM(token_length=self.token_length, output_dim=2*self.concat_channels)
         for bin in bins:
             self.features.append(nn.Sequential(
                 nn.AdaptiveAvgPool2d(bin),
@@ -37,7 +19,7 @@ class PPM(nn.Module):
             ))
         self.features = nn.ModuleList(self.features)
 
-    def forward(self, x, token):
+    def forward(self, x):
         x_size = x.size()
         out = [x]
         for f in self.features:
@@ -45,36 +27,27 @@ class PPM(nn.Module):
             upsampled_feat = F.interpolate(pyramid_feat, x_size[2:], mode='bilinear', align_corners=False)
             out.append(upsampled_feat)
         out = torch.cat(out, 1)
-        if self.use_FiLM:
-            gamma, beta = self.film(token)
-            gamma = gamma.unsqueeze(-1).unsqueeze(-1)
-            beta = beta.unsqueeze(-1).unsqueeze(-1)
-            out = gamma * out + beta
     
         return out
 
 
 class PSPNet(nn.Module):
-    def __init__(self, bins=(1, 2, 3, 6), dropout=0.1, classes=2, use_fpn=True, use_ppm=True, use_FiLM=True, token_length=768, backbone_name = "facebook/dinov3-convnext-tiny-pretrain-lvd1689m", criterion=nn.CrossEntropyLoss(ignore_index=255)):
+    def __init__(self, bins=(1, 2, 3, 6), dropout=0.1, classes=2, use_fpn=True, use_ppm=True, backbone_name = "facebook/dinov3-convnext-tiny-pretrain-lvd1689m", criterion=nn.CrossEntropyLoss(ignore_index=255)):
         super(PSPNet, self).__init__()
-        assert 512 % len(bins) == 0
+        assert 768 % len(bins) == 0
         assert classes > 1
         self.use_ppm = use_ppm
         self.use_fpn = use_fpn
-        self.use_FiLM = use_FiLM
-        self.token_length = token_length
         self.criterion = criterion
-        self.backbone_name = backbone_name
 
-        self.backbone = AutoModel.from_pretrained(self.backbone_name, output_hidden_states=True).eval()
+        self.backbone = AutoModel.from_pretrained(backbone_name, output_hidden_states=True).eval()
         if self.use_fpn:
-            self.fpn = torchvision.ops.FeaturePyramidNetwork([96, 192, 384, 768], 1024)
-            fea_dim = 1024
+            fea_dim = 2048
+            self.fpn = torchvision.ops.FeaturePyramidNetwork([96, 192, 384, 768], fea_dim)
         else:
             fea_dim = 768
-            bins = (1,2,3,4)
         if use_ppm:
-            self.ppm = PPM(fea_dim, int(fea_dim/len(bins)), bins, use_FiLM=self.use_FiLM, token_length=self.token_length)
+            self.ppm = PPM(fea_dim, int(fea_dim/len(bins)), bins)
             fea_dim *= 2
         self.cls = nn.Sequential(
             nn.Conv2d(fea_dim, 512, kernel_size=3, padding=1, bias=False),
@@ -98,7 +71,7 @@ class PSPNet(nn.Module):
             x = list(hiddeen_states.values())[-1]
         token = output.last_hidden_state[:, 0, :]
         if self.use_ppm:
-            x = self.ppm(x,token)
+            x = self.ppm(x)
         x = self.cls(x)
         x = F.interpolate(x, size=(h, w), mode='bilinear', align_corners=False)
         if self.training:
@@ -109,7 +82,7 @@ class PSPNet(nn.Module):
 
 if __name__ == '__main__':
     input = torch.rand(4, 3, 224, 224)
-    model = PSPNet(bins=(1, 2, 3, 6), dropout=0.1, classes=21, use_ppm=True, use_FiLM=False, use_fpn=False)
+    model = PSPNet(bins=(1, 2, 3, 6), dropout=0.1, classes=21, use_ppm=True, use_fpn=True)
     model.eval()
     print(model)
     output = model(input)
