@@ -42,7 +42,7 @@ class PSPNet(nn.Module):
 
         self.backbone = AutoModel.from_pretrained(backbone_name, output_hidden_states=True).eval()
         if self.use_fpn:
-            fea_dim = 512
+            fea_dim = 1024
             self.fpn = torchvision.ops.FeaturePyramidNetwork([96, 192, 384, 768], fea_dim)
         else:
             fea_dim = 768
